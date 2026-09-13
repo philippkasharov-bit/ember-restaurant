@@ -17,7 +17,10 @@
 
   // грузим после отрисовки первого экрана, показываем плавно, когда кадр готов
   const start = () => { v.load(); v.play().catch(() => v.remove()); };
-  v.addEventListener('playing', () => v.classList.add('on'), { once: true });
+  // замедляем пламя: живое, но спокойное, без мелкого мерцания
+  const SLOW = .5;
+  v.defaultPlaybackRate = SLOW;
+  v.addEventListener('playing', () => { v.playbackRate = SLOW; v.classList.add('on'); });
   if (document.readyState === 'complete') setTimeout(start, 200); else addEventListener('load', () => setTimeout(start, 200));
 
   // при прокрутке огонь гаснет; вне экрана ролик на паузе
