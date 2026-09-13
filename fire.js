@@ -26,21 +26,21 @@
     // тепло тянется к курсору
     float pull=exp(-6.*length((uv-m)*vec2(ar,1.)))*.35;
     float base=fbm(vec2(q.x*2.2,q.y*3.-t*1.1))+fbm(vec2(q.x*4.5+t*.2,q.y*6.-t*2.));
-    float heat=clamp((.8-uv.y*2.1)+base*.6-.62+pull,0.,1.);
+    float heat=clamp((.95-uv.y*1.9)+base*.6-.55+pull,0.,1.);
     // у самого края огонь уходит в тёмные угли, чтобы стык с секцией был невидим
-    heat*=smoothstep(0.,.22,uv.y)*.85+.15*smoothstep(0.,.05,uv.y);
+    heat*=mix(.25,1.,smoothstep(0.,.18,uv.y));
     heat*=1.-cool*.8;
     vec3 col=mix(vec3(.05,.02,.01),vec3(.62,.16,.03),smoothstep(.15,.55,heat));
     col=mix(col,vec3(.95,.48,.12),smoothstep(.5,.8,heat));
     col=mix(col,vec3(1.,.72,.38),smoothstep(.85,1.,heat));
-    float a=smoothstep(.12,.7,heat)*.7;
+    float a=smoothstep(.1,.65,heat)*.82;
     // искры
     float sp=0.;
     for(int i=0;i<3;i++){
       float fi=float(i); vec2 g=vec2(q.x*(18.+fi*9.),uv.y*(10.+fi*5.)-t*(1.2+fi*.5));
       vec2 id=floor(g), f=fract(g)-.5; float r=h(id+fi);
       f.x+=sin(t*2.+r*6.28)*.25;
-      sp+=step(.93,r)*smoothstep(.09,0.,length(f))*(1.-uv.y)*(1.-cool);
+      sp+=step(.93,r)*smoothstep(.09,0.,length(f))*(1.-uv.y)*smoothstep(.04,.15,uv.y)*(1.-cool);
     }
     col+=vec3(1.,.6,.2)*sp; a=max(a,sp);
     gl_FragColor=vec4(col,a);
