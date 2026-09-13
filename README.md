@@ -14,3 +14,6 @@
 
 ---
 Концепт-проект. Дизайн и разработка — PCash.
+
+## Материалы
+Видео огня: [Pexels, «A blazing fire against black background»](https://www.pexels.com/video/a-blazing-fire-against-black-background-5659678/), бесплатная лицензия Pexels. Перекодировано в бесшовную петлю (WebM/MP4).
