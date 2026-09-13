@@ -12,7 +12,7 @@
   v.muted = v.loop = v.playsInline = true;
   v.setAttribute('aria-hidden', 'true');
   v.preload = 'none';
-  v.innerHTML = '<source src="fire.webm" type="video/webm"><source src="fire.mp4" type="video/mp4">';
+  v.innerHTML = '<source src="fire.webm?v=2" type="video/webm"><source src="fire.mp4?v=2" type="video/mp4">';
   hero.prepend(v);
 
   // грузим после отрисовки первого экрана, показываем плавно, когда кадр готов
