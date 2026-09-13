@@ -26,12 +26,14 @@
     // тепло тянется к курсору
     float pull=exp(-6.*length((uv-m)*vec2(ar,1.)))*.35;
     float base=fbm(vec2(q.x*2.2,q.y*3.-t*1.1))+fbm(vec2(q.x*4.5+t*.2,q.y*6.-t*2.));
-    float heat=clamp((1.05-uv.y*1.9)+base*.55-.55+pull,0.,1.);
+    float heat=clamp((.8-uv.y*2.1)+base*.6-.62+pull,0.,1.);
+    // у самого края огонь уходит в тёмные угли, чтобы стык с секцией был невидим
+    heat*=smoothstep(0.,.22,uv.y)*.85+.15*smoothstep(0.,.05,uv.y);
     heat*=1.-cool*.8;
     vec3 col=mix(vec3(.05,.02,.01),vec3(.62,.16,.03),smoothstep(.15,.55,heat));
     col=mix(col,vec3(.95,.48,.12),smoothstep(.5,.8,heat));
-    col=mix(col,vec3(1.,.82,.5),smoothstep(.8,.98,heat));
-    float a=smoothstep(.12,.6,heat)*.9;
+    col=mix(col,vec3(1.,.72,.38),smoothstep(.85,1.,heat));
+    float a=smoothstep(.12,.7,heat)*.7;
     // искры
     float sp=0.;
     for(int i=0;i<3;i++){
