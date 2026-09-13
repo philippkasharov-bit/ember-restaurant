@@ -1,5 +1,8 @@
 <!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>EMBER — ресторан на открытом огне</title><meta name="description" content="Ресторан EMBER в Москве: мясо и овощи на углях, сезонное меню от шефа, винная карта из 200 позиций.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>">
+<meta name="theme-color" content="#e8a85c">
+<meta property="og:type" content="website"><meta property="og:title" content="EMBER — ресторан на открытом огне"><meta property="og:description" content="Ресторан EMBER в Москве: мясо и овощи на углях, сезонное меню от шефа, винная карта из 200 позиций."><meta property="og:image" content="og.jpg"><meta name="twitter:card" content="summary_large_image">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=Manrope:wght@400;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;box-sizing:border-box}html{scroll-behavior:smooth}body{background:#0d0b09;color:#eee3d0;font-family:Manrope,sans-serif;line-height:1.6}
@@ -45,6 +48,8 @@ footer{border-top:1px solid #eee3d01a;padding:40px 6vw;display:flex;justify-cont
  section{padding:80px 0}.nums{gap:28px}
 }
 @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+
+:focus-visible{outline:3px solid #e8a85c;outline-offset:3px}.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 </style></head><body>
 <header><a class="logo" href="#">EMBER</a>
 <nav><a href="#about">О нас</a><a href="#menu">Меню</a><a href="#events">События</a><a href="#reserve">Контакты</a></nav>
@@ -84,7 +89,7 @@ footer{border-top:1px solid #eee3d01a;padding:40px 6vw;display:flex;justify-cont
 <section id="reserve" style="padding-top:0"><div class="wrap"><div class="reserve reveal">
 <div><div class="kicker">Бронирование</div><h2>Ждём вас<br><i>у огня</i></h2>
 <p style="opacity:.7">ул. Пятницкая, 18 · ежедневно 12:00–00:00<br>+7 (495) 000-00-00</p></div>
-<form><input required placeholder="Имя"><input required type="tel" placeholder="Телефон">
+<form><input aria-label="Имя" required placeholder="Имя"><input aria-label="Телефон" required type="tel" autocomplete="tel" placeholder="Телефон">
 <input required type="date" aria-label="Дата"><select aria-label="Гостей"><option>2 гостя</option><option>3–4 гостя</option><option>5+ гостей</option></select>
 <button class="btn full">Забронировать</button></form>
 </div></div></section>
