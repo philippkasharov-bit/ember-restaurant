@@ -5,7 +5,7 @@
 <meta property="og:type" content="website"><meta property="og:title" content="EMBER — ресторан на открытом огне"><meta property="og:description" content="Ресторан EMBER в Москве: мясо и овощи на углях, сезонное меню от шефа, винная карта из 200 позиций."><meta property="og:image" content="https://philippkasharov-bit.github.io/ember-restaurant/og.jpg"><meta property="og:url" content="https://philippkasharov-bit.github.io/ember-restaurant/"><meta name="twitter:card" content="summary_large_image">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=Manrope:wght@400;600&display=swap" rel="stylesheet">
 <style>
-*{margin:0;box-sizing:border-box}html{scroll-behavior:smooth}body{background:#0d0b09;color:#eee3d0;font-family:Manrope,sans-serif;line-height:1.6}
+*{margin:0;box-sizing:border-box}[hidden]{display:none!important}html{scroll-behavior:smooth}body{background:#0d0b09;color:#eee3d0;font-family:Manrope,sans-serif;line-height:1.6}
 a{color:inherit;text-decoration:none}img{max-width:100%}
 .wrap{max-width:1200px;margin:auto;padding:0 6vw}
 header{display:flex;justify-content:space-between;align-items:center;padding:24px 6vw;position:fixed;inset:0 0 auto;z-index:10;background:linear-gradient(#0d0b09ee,#0d0b0900)}
@@ -50,6 +50,7 @@ footer{border-top:1px solid #eee3d01a;padding:40px 6vw;display:flex;justify-cont
 @media(prefers-reduced-motion:reduce){.js .reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
 
 :focus-visible{outline:3px solid #e8a85c;outline-offset:3px}.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.guests{display:flex;align-items:center;gap:14px;padding:10px 2px;border-bottom:1px solid #eee3d044}.guests span{color:#a59c8c;flex:1}.g-btn{width:36px;height:36px;border:1px solid #c9a15b88;background:none;color:#e8c07a;font-size:18px;cursor:pointer;transition:background .2s}.g-btn:hover{background:#c9a15b22}.g-btn:disabled{opacity:.35;cursor:not-allowed}#g-val{min-width:2ch;text-align:center;font-size:18px}.guests small{flex-basis:100%;color:#a59c8c;font-size:12px}.guests{flex-wrap:wrap}.status{margin-top:18px;display:inline-flex;align-items:center;gap:10px;font-size:14px}.status:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--st,#6b6358)}.status[data-open=true]{--st:#7fd18b}.status[data-open=false]{--st:#e0795a}.reserve a[href^=tel]{color:#e8c07a;border-bottom:1px solid #c9a15b55}
 </style></head><body>
 <header><a class="logo" href="#">EMBER</a>
 <nav><a href="#about">О нас</a><a href="#menu">Меню</a><a href="#events">События</a><a href="#reserve">Контакты</a></nav>
@@ -88,12 +89,69 @@ footer{border-top:1px solid #eee3d01a;padding:40px 6vw;display:flex;justify-cont
 
 <section id="reserve" style="padding-top:0"><div class="wrap"><div class="reserve reveal">
 <div><h2>Ждём вас<br><i>у огня</i></h2>
-<p class="muted">ул. Пятницкая, 18 · ежедневно 12:00–00:00<br>+7 (495) 000-00-00</p></div>
-<form><input aria-label="Имя" required placeholder="Имя"><input aria-label="Телефон" required type="tel" autocomplete="tel" placeholder="Телефон">
-<input required type="date" aria-label="Дата"><select aria-label="Гостей"><option>2 гостя</option><option>3–4 гостя</option><option>5+ гостей</option></select>
-<button class="btn full">Забронировать</button></form>
+<p class="muted">ул. Пятницкая, 18 · ежедневно 12:00–00:00<br><a href="tel:+74950000000">+7 (495) 000-00-00</a></p><p class="status" id="open-status" aria-live="polite"></p></div>
+<form id="book" data-success="{name}, стол на {guests} забронирован: {when}. Пришлём подтверждение по телефону.">
+<input name="name" aria-label="Имя" required autocomplete="given-name" placeholder="Имя"><input name="phone" aria-label="Телефон" required type="tel" autocomplete="tel" inputmode="tel" pattern="[\d\s()+-]{10,}" placeholder="Телефон">
+<input name="date" id="b-date" required type="date" aria-label="Дата"><select name="time" id="b-time" required aria-label="Время"></select>
+<div class="guests full" role="group" aria-label="Количество гостей"><span>Гостей</span><button type="button" class="g-btn" data-d="-1" aria-label="Меньше гостей">−</button><output id="g-val" aria-live="polite">2</output><button type="button" class="g-btn" data-d="1" aria-label="Больше гостей">+</button><small id="g-note"></small></div>
+<input type="hidden" name="guests" id="g-hidden" value="2 гостей"><input type="hidden" name="when" id="b-when">
+<button class="btn full" type="submit">Забронировать</button></form>
 </div></div></section>
 
 <footer><span>© 2026 EMBER</span><span>Концепт-проект · дизайн и разработка PCash</span></footer>
-<script src="shared.js?v=2"></script>
+<script src="shared.js?v=3"></script>
+<script>
+(() => {
+  const TZ = 'Europe/Moscow', OPEN = 12, CLOSE = 24;
+  const mskNow = () => new Date(new Date().toLocaleString('en-US', { timeZone: TZ }));
+  const pad = n => String(n).padStart(2, '0');
+  const iso = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+
+  // статус «открыто / закрыто» по московскому времени
+  const st = document.getElementById('open-status');
+  const paint = () => {
+    const h = mskNow().getHours(), open = h >= OPEN && h < CLOSE;
+    st.dataset.open = open;
+    st.textContent = open ? 'Сейчас открыто · до 00:00' : 'Сейчас закрыто · откроемся в 12:00';
+  };
+  paint(); setInterval(paint, 60000);
+
+  // дата: не раньше сегодня и не дальше 60 дней; время: только будущие слоты
+  const date = document.getElementById('b-date'), time = document.getElementById('b-time');
+  const now = mskNow(), max = new Date(now); max.setDate(max.getDate() + 60);
+  date.min = iso(now); date.max = iso(max); date.value = iso(now);
+  const fillTimes = () => {
+    const today = date.value === iso(mskNow()), cur = mskNow();
+    const earliest = today ? cur.getHours() * 60 + cur.getMinutes() + 60 : 0;
+    time.innerHTML = '';
+    for (let m = OPEN * 60; m <= (CLOSE - 2) * 60; m += 30) {
+      if (m < earliest) continue;
+      time.add(new Option(`${pad(Math.floor(m / 60))}:${pad(m % 60)}`));
+    }
+    if (!time.options.length) time.add(new Option('Нет свободного времени — выберите другую дату', ''));
+  };
+  date.addEventListener('change', fillTimes); fillTimes();
+
+  // гости 1–12, для 9+ подсказка про банкетный зал
+  let g = 2;
+  const val = document.getElementById('g-val'), hid = document.getElementById('g-hidden'), note = document.getElementById('g-note');
+  const btns = document.querySelectorAll('.g-btn');
+  const word = n => (n % 10 === 1 && n % 100 !== 11) ? 'гостя' : 'гостей';
+  const setG = n => {
+    g = Math.min(12, Math.max(1, n));
+    val.textContent = g; hid.value = `${g} ${word(g)}`;
+    btns[0].disabled = g === 1; btns[1].disabled = g === 12;
+    note.textContent = g >= 9 ? 'Для компании от 9 человек предложим закрытый зал.' : '';
+  };
+  btns.forEach(b => b.addEventListener('click', () => setG(g + Number(b.dataset.d)))); setG(2);
+
+  // человекочитаемая дата для подтверждения
+  const form = document.getElementById('book');
+  form.addEventListener('submit', () => {
+    const d = new Date(date.value + 'T00:00');
+    document.getElementById('b-when').value = `${d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', weekday: 'long' })} в ${time.value}`;
+  }, true);
+  form.addEventListener('demo:sent', () => setTimeout(() => { date.value = iso(mskNow()); fillTimes(); setG(2); }, 0));
+})();
+</script>
 </body></html>

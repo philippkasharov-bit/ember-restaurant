@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-  document.querySelectorAll('form').forEach(f => {
+  document.querySelectorAll('form:not([data-demo])').forEach(f => {
     const btn = f.querySelector('button');
     const label = btn.textContent;
     const msg = document.createElement('p');
@@ -46,7 +46,10 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         btn.textContent = 'Заявка отправлена ✓';
         msg.dataset.state = 'ok';
-        msg.textContent = 'Спасибо! Мы перезвоним в течение 15 минут.';
+        const data = Object.fromEntries(new FormData(f));
+        const tpl = f.dataset.success || 'Спасибо! Мы перезвоним в течение 15 минут.';
+        msg.textContent = tpl.replace(/\{(\w+)\}/g, (_, k) => data[k] || '');
+        f.dispatchEvent(new CustomEvent('demo:sent', { detail: data }));
         f.reset();
         setTimeout(() => { btn.disabled = false; btn.textContent = label; }, 4000);
       }, 900);
