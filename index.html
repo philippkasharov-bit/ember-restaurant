@@ -51,6 +51,17 @@ footer{border-top:1px solid #eee3d01a;padding:40px 6vw;display:flex;justify-cont
 
 :focus-visible{outline:3px solid #e8a85c;outline-offset:3px}.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .guests{display:flex;align-items:center;gap:14px;padding:10px 2px;border-bottom:1px solid #eee3d044}.guests span{color:#a59c8c;flex:1}.g-btn{width:36px;height:36px;border:1px solid #c9a15b88;background:none;color:#e8c07a;font-size:18px;cursor:pointer;transition:background .2s}.g-btn:hover{background:#c9a15b22}.g-btn:disabled{opacity:.35;cursor:not-allowed}#g-val{min-width:2ch;text-align:center;font-size:18px}.guests small{flex-basis:100%;color:#a59c8c;font-size:12px}.guests{flex-wrap:wrap}.status{margin-top:18px;display:inline-flex;align-items:center;gap:10px;font-size:14px}.status:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--st,#6b6358)}.status[data-open=true]{--st:#7fd18b}.status[data-open=false]{--st:#e0795a}.reserve a[href^=tel]{color:#e8c07a;border-bottom:1px solid #c9a15b55}
+.fire{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;mix-blend-mode:screen}
+.hero>div{position:relative;z-index:1}
+.hero h1{text-shadow:0 2px 30px rgba(13,11,9,.6)}
+.hero h1 i{display:inline-block;background:none}
+@media(prefers-reduced-motion:no-preference){
+ .js .hero h1,.js .hero p,.js .hero .btn{animation:rise 1.4s cubic-bezier(.16,1,.3,1) both}
+ .js .hero h1 i{animation:ignite 2.2s cubic-bezier(.16,1,.3,1) .35s both}
+ .js .hero p:not(.where){animation-delay:.5s}.js .hero .btn{animation-delay:.7s}.js .hero .where{animation:rise 1.4s cubic-bezier(.16,1,.3,1) .85s both}
+}
+@keyframes rise{from{opacity:0;transform:translateY(22px);filter:blur(6px)}}
+@keyframes ignite{from{opacity:0;color:#5a2a10;filter:blur(10px)}55%{color:#ffb35c}}
 </style></head><body>
 <header><a class="logo" href="#">EMBER</a>
 <nav><a href="#about">О нас</a><a href="#menu">Меню</a><a href="#events">События</a><a href="#reserve">Контакты</a></nav>
@@ -99,7 +110,7 @@ footer{border-top:1px solid #eee3d01a;padding:40px 6vw;display:flex;justify-cont
 </div></div></section>
 
 <footer><span>© 2026 EMBER</span><span>Концепт-проект · дизайн и разработка PCash · <a href="case-study.html" style="text-decoration:underline">Кейс</a></span></footer>
-<script src="shared.js?v=4"></script>
+<script src="shared.js?v=4"></script><script src="fire.js" defer></script>
 <script>
 (() => {
   const TZ = 'Europe/Moscow', OPEN = 12, CLOSE = 24;
