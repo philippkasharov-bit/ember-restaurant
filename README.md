@@ -1,6 +1,6 @@
 # EMBER — лендинг ресторана
 
-**Демо:** https://philippkasharov-bit.github.io/ember-restaurant/
+**Кейс-стади:** [case-study.html](case-study.html) · **Демо:** https://philippkasharov-bit.github.io/ember-restaurant/
 
 Концепт лендинга ресторана на открытом огне: тёмная премиальная стилистика, меню, события, форма бронирования.
 

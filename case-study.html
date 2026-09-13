@@ -1,0 +1,77 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Кейс: EMBER — сайт ресторана на открытом огне</title>
+<meta name="description" content="Концепт лендинга для ресторана, где продаёт атмосфера: огонь, дым и ощущение вечера, который хочется повторить. Задача сайта: довести гостя от первого впечатления до забронированного стола меньше чем за минуту.">
+<meta property="og:title" content="Кейс: EMBER — сайт ресторана на открытом огне"><meta property="og:image" content="https://philippkasharov-bit.github.io/ember-restaurant/case/desktop.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Golos+Text:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;box-sizing:border-box}
+:root{--ink:#17140f;--muted:#5d5850;--line:#e6e1d8;--bg:#fbfaf7;--accent:#b8741a;--soft:#f6ead9}
+body{font-family:'Golos Text',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65;font-size:17px}
+a{color:inherit}
+.wrap{max-width:1080px;margin:auto;padding:0 6vw}
+.top{display:flex;justify-content:space-between;align-items:center;padding:22px 0;font-size:14px;color:var(--muted)}
+.top a{text-decoration:none}.top a:hover{color:var(--ink)}
+h1,h2,h3{font-family:'Cormorant Garamond',Georgia,serif;line-height:1.08;letter-spacing:-.01em;text-wrap:balance}
+h1{font-size:clamp(40px,6vw,76px);margin:48px 0 24px;max-width:16ch}
+h2{font-size:clamp(28px,3.4vw,42px);margin-bottom:22px}
+h3{font-size:21px;margin-bottom:6px}
+.lead{font-size:clamp(19px,2vw,23px);color:var(--muted);max-width:58ch}
+.links{display:flex;gap:12px;flex-wrap:wrap;margin:32px 0 44px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:10px;text-decoration:none;font-weight:600;border:1px solid var(--ink);transition:background .2s,color .2s}
+.btn.primary{background:var(--ink);color:var(--bg)}.btn:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+dl{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+dl div{padding:18px 18px 18px 0}dl div+div{padding-left:18px;border-left:1px solid var(--line)}
+dt{font-size:13px;color:var(--muted)}dd{font-weight:500}
+figure{margin:56px 0}figure img{width:100%;display:block;border-radius:14px;border:1px solid var(--line);box-shadow:0 18px 40px rgba(23,20,15,.08)}
+figcaption{font-size:14px;color:var(--muted);margin-top:12px}
+.duo{display:grid;grid-template-columns:2.2fr 1fr;gap:24px;align-items:start}
+section{padding:56px 0;border-top:1px solid var(--line)}
+.cols{display:grid;grid-template-columns:.9fr 1.4fr;gap:60px}
+.cols p+p{margin-top:14px}
+.cards{list-style:none;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:2px solid var(--ink)}
+.cards li{padding:22px 22px 0 0}.cards li+li{padding-left:22px;border-left:1px solid var(--line)}
+.cards p,.dec p{color:var(--muted);font-size:16px}
+.dec{list-style:none;padding:0;display:grid;gap:28px}
+.dec li{display:grid;grid-template-columns:.9fr 1.4fr;gap:60px;padding-top:26px;border-top:1px solid var(--line)}
+.feat{padding-left:1.1em;display:grid;gap:12px}.feat li::marker{color:var(--accent)}
+.stat{background:var(--soft);border-radius:14px;padding:26px 28px;margin-top:22px}
+.stat b{display:block;font-family:'Cormorant Garamond',Georgia,serif;font-size:24px;margin-bottom:6px}
+.note{font-size:15px;color:var(--muted);background:#f1ede5;border-radius:10px;padding:12px 16px;margin-top:22px}
+footer{padding:40px 0 60px;border-top:1px solid var(--line);color:var(--muted);font-size:14px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+@media(max-width:820px){dl{grid-template-columns:1fr 1fr}dl div:nth-child(3){padding-left:0;border-left:0}.duo,.cols,.dec li,.cards{grid-template-columns:1fr;gap:18px}.cards li,.cards li+li{padding:20px 0;border-left:0;border-bottom:1px solid var(--line)}}
+</style></head><body>
+<div class="wrap">
+<header class="top"><a href="./">← Открыть сайт</a><span>Кейс · PCash</span></header>
+<h1>EMBER — сайт ресторана на открытом огне</h1>
+<p class="lead">Концепт лендинга для ресторана, где продаёт атмосфера: огонь, дым и ощущение вечера, который хочется повторить. Задача сайта: довести гостя от первого впечатления до забронированного стола меньше чем за минуту.</p>
+<div class="links"><a class="btn primary" href="./">Смотреть живой сайт</a><a class="btn" href="https://github.com/philippkasharov-bit/ember-restaurant">Код на GitHub</a></div>
+<dl><div><dt>Тип</dt><dd>Лендинг ресторана, концепт</dd></div><div><dt>Роль</dt><dd>UX/UI-дизайн, фронтенд, копирайтинг, арт-дирекшн фото</dd></div><div><dt>Стек</dt><dd>HTML, CSS, JavaScript без фреймворков</dd></div><div><dt>Год</dt><dd>2026</dd></div></dl>
+
+<figure><img src="case/desktop.jpg" alt="Первый экран сайта EMBER — сайт ресторана на открытом огне на компьютере" width="1440" height="900" loading="eager"><figcaption>Первый экран на компьютере</figcaption></figure>
+
+<section class="cols"><h2>Задача</h2><div><p>Сайты ресторанов обычно либо перегружены (PDF-меню, слайдеры, всплывающие окна), либо превращаются в визитку без действия. Гость приходит с одним вопросом: «хочу сюда сегодня, есть ли стол?», а ответ спрятан за звонком.</p><p>Для ресторана с сильной концепцией сайт должен сначала передать настроение, а затем не мешать бронированию: без лишних шагов, без выбора прошедшего времени и без сюрпризов с большой компанией.</p><p class="note">Это концепт-проект: заказчик и отзывы вымышлены, а решения и функциональность — настоящие и работают на опубликованном сайте.</p></div></section>
+
+<section><h2>Для кого</h2><ul class="cards"><li><h3>Пара на вечер</h3><p>Решает здесь и сейчас с телефона. Нужны: атмосфера за 3 секунды, цены, свободное время сегодня.</p></li><li><h3>Организатор события</h3><p>Ищет площадку для 8–40 человек. Нужны: форматы событий, закрытый зал, понятный следующий шаг.</p></li><li><h3>Гурман</h3><p>Сравнивает рестораны. Нужны: кухня, шеф, происхождение продуктов, отзывы.</p></li></ul></section>
+
+<section><h2>Ключевые решения</h2><ul class="dec"><li><h3>Тёмная тема из сценария, а не из категории</h3><p>Сайт открывают вечером и в полумраке. Тёмный фон с тёплым золотом повторяет свет углей и не слепит. Контраст второстепенного текста поднят до читаемого: тёмная тема не оправдание серому по чёрному.</p></li><li><h3>Типографика как интерьер</h3><p>Cormorant Garamond с курсивом для заголовков даёт ресторанную «рукописность», а Manrope в тексте даёт чистую читаемость цен и описаний. Цены вынесены вправо и выровнены, чтобы меню сканировалось, как в карте.</p></li><li><h3>Фото вместо декора</h3><p>От декоративных градиентов отказался в пользу сгенерированных фото с единой светотенью: огонь, шеф, зал. Каждое фото отвечает на вопрос гостя, а не заполняет место.</p></li><li><h3>Меню без PDF</h3><p>Пять позиций сезонного меню прямо на странице. Этого достаточно, чтобы понять кухню и чек, без загрузки файла на телефоне.</p></li></ul></section>
+
+<figure class="duo"><div><img src="case/detail.jpg" alt="Бронирование: подсказка про закрытый зал для большой компании и подтверждение с деталями" loading="lazy"><figcaption>Бронирование: подсказка про закрытый зал для большой компании и подтверждение с деталями</figcaption></div><div><img src="case/mobile.jpg" alt="Мобильная версия" loading="lazy"><figcaption>Мобильная версия</figcaption></div></figure>
+
+<section class="cols"><h2>Что работает</h2><ul class="feat"><li>Бронирование с валидной логикой: дата не раньше сегодня и не дальше 60 дней, время только из будущих слотов по московскому времени, если на сегодня мест нет — подсказка выбрать другую дату.</li><li>Счётчик гостей 1–12 с доступными кнопками; от 9 человек форма сама предлагает закрытый зал. Это мягкий апсейл банкета.</li><li>Живой статус «Сейчас открыто / закрыто» с временем открытия, обновляется каждую минуту.</li><li>Подтверждение с деталями брони человеческим языком: «Максим, стол на 10 гостей: воскресенье, 13 сентября в 15:30».</li><li>Ошибки называют поле и возвращают фокус в него; состояния «Отправляем…» и «Готово» не дают отправить форму дважды.</li></ul></section>
+
+<section class="cols"><h2>Качество</h2><div>
+<p>Сайт свёрстан на чистых HTML, CSS и JavaScript: без фреймворков и сборки. Страница открывается мгновенно и легко переносится на любой хостинг или CMS.</p>
+<ul class="feat" style="margin-top:14px">
+<li>Адаптивная вёрстка от 360 px, мобильное меню с закрытием по Esc.</li>
+<li>Доступность: видимый фокус, подписи у всех полей, роли и живые области для экранных дикторов, учёт настройки «уменьшить движение».</li>
+<li>Контент виден без JavaScript: анимации появления включаются только когда скрипт загрузился.</li>
+<li>SEO и превью ссылок: описание страницы, Open Graph-картинка, иконка вкладки.</li>
+</ul>
+<div class="stat"><b>16 КБ HTML, 5 КБ JavaScript, 6 фото ≈ 840 КБ</b>Самое тяжёлое — фото первого экрана (≈330 КБ). Следующий шаг — WebP/AVIF и адаптивные размеры через srcset: ожидаемо минус половина веса.</div>
+</div></section>
+
+<section class="cols"><h2>Что дальше</h2><ul class="feat"><li>Подключить реальный сервис бронирования (например, через API) вместо демо-отправки.</li><li>Перевести изображения в WebP/AVIF и добавить srcset.</li><li>A/B-тест: бронирование в первом экране против текущей схемы «атмосфера → бронь».</li></ul></section>
+</div>
+<div class="wrap"><footer><span>Дизайн и разработка — PCash, 2026</span><a href="./">Открыть сайт →</a></footer></div>
+</body></html>
