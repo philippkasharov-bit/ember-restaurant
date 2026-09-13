@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
   document.querySelectorAll('form:not([data-demo])').forEach(f => {
-    const btn = f.querySelector('button');
+    const btn = f.querySelector('button[type=submit], button:not([type])');
     const label = btn.textContent;
     const msg = document.createElement('p');
     msg.className = 'form-msg';
