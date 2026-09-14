@@ -101,7 +101,7 @@ html:not(.js) .ornament svg{opacity:1;transform:none}
 
 /* ===== Полоса-цитата ===== */
 .band{position:relative;overflow:hidden;padding:170px 0;isolation:isolate}
-.band-bg{position:absolute;inset:-18% 0;background:linear-gradient(180deg,var(--bg),rgba(13,11,9,.55) 30%,rgba(13,11,9,.55) 70%,var(--bg)),url(interior.jpg) center/cover;z-index:-1;transform:translateY(var(--by,0))}
+.band-bg{position:absolute;inset:-18% 0;background:url(interior.jpg) center/cover;z-index:-2;transform:translateY(var(--by,0))}.band::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,var(--bg) 0,rgba(13,11,9,.6) 26%,rgba(13,11,9,.6) 74%,var(--bg) 100%)}
 .js .quote p .w{display:inline-block;opacity:.14;transition:opacity .7s}
 .js .quote p .w.lit{opacity:1}
 
