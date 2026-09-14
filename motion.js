@@ -108,7 +108,7 @@
   const evTick = () => {
     evRaf = 0;
     const travel = +evSec.dataset.travel || 0;
-    evCur += (evTarget - evCur) * 0.085;
+    evCur += (evTarget - evCur) * 0.16;
     if (Math.abs(evTarget - evCur) < 0.0005) evCur = evTarget;
     evList.style.setProperty('--tx', (-evCur * travel).toFixed(1) + 'px');
     const mid = innerWidth / 2;
@@ -181,6 +181,38 @@
     }
   };
   addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+
+  // --- кинематографичная прокрутка: Lenis на ПК с мышью ---
+  const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  let lenis = null;
+  if (!reduce && fine && window.Lenis) {
+    lenis = new Lenis({ lerp: 0.075, wheelMultiplier: 0.9, smoothWheel: true });
+    const root = document.documentElement;
+    let vel = 0;
+    const raf = time => {
+      lenis.raf(time);
+      vel += ((lenis.velocity || 0) - vel) * 0.1;
+      root.style.setProperty('--vel', Math.max(-6, Math.min(6, vel / 12)).toFixed(3));
+      requestAnimationFrame(raf);
+    };
+    requestAnimationFrame(raf);
+    lenis.on('scroll', onScroll);
+    // меню на телефоне и прочие оверлеи: блокируем прокрутку
+    new MutationObserver(() => document.querySelector('header nav.open') ? lenis.stop() : lenis.start())
+      .observe(document.querySelector('header nav'), { attributes: true, attributeFilter: ['class'] });
+  }
+
+  // лёгкий параллакс заголовков глав
+  const heads = [...document.querySelectorAll('.chapter h2')];
+  const headTick = () => {
+    const vh = innerHeight;
+    heads.forEach(h => {
+      const r = h.getBoundingClientRect();
+      if (r.bottom < -100 || r.top > vh + 100) return;
+      h.style.setProperty('--hy', (((r.top + r.height / 2) - vh / 2) * -0.08).toFixed(1));
+    });
+  };
+  if (!reduce) { addEventListener('scroll', () => requestAnimationFrame(headTick), { passive: true }); headTick(); }
   addEventListener('resize', () => { setupEvents(); onScroll(); });
   onScroll();
 
@@ -191,7 +223,9 @@
     const el = document.querySelector(id); if (!el) return;
     e.preventDefault();
     header.dataset.hidden = 'false';
-    scrollTo({ top: el.getBoundingClientRect().top + scrollY - 60, behavior: reduce ? 'auto' : 'smooth' });
+    const top = el.getBoundingClientRect().top + scrollY - 60;
+    if (lenis) lenis.scrollTo(top, { duration: 1.6, easing: x => 1 - Math.pow(1 - x, 4) });
+    else scrollTo({ top, behavior: reduce ? 'auto' : 'smooth' });
     history.replaceState(null, '', id);
   }));
 })();

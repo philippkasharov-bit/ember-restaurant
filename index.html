@@ -216,6 +216,18 @@ html:not(.js) .ornament svg{opacity:1;transform:none}
 .events.hscroll .ev{transition:opacity .6s,transform .8s cubic-bezier(.16,1,.3,1)!important;opacity:var(--o,1)!important;transform:scale(var(--s,1))!important;transform-origin:50% 60%}
 @media(prefers-reduced-motion:reduce){.js .reserve::before{clip-path:none;transform:none;transition:none}.js .reserve>*{opacity:1;transform:none;filter:none;transition:none}}
 
+/* ===== Кино-прокрутка ===== */
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+.lenis.lenis-stopped{overflow:hidden}
+/* изображения слегка «тянутся» за скоростью прокрутки */
+.photo,.ev-frame,.band-bg{transform-origin:50% 50%}
+.js .photo{transform:skewY(calc(var(--vel,0) * .35deg))}
+.js .ev-frame{transform:skewY(calc(var(--vel,0) * .25deg))}
+/* заголовки глав наезжают на камеру */
+.js .chapter h2{transform:translateY(calc(var(--hy,0) * 1px));}
+@media(prefers-reduced-motion:reduce){.js .photo,.js .ev-frame,.js .chapter h2{transform:none}}
+
 </style></head><body><a class="skip-link" href="#main">Перейти к содержанию</a>
 <header class="site-header" data-state="top"><a class="logo" href="#" aria-label="EMBER — наверх"><svg class="logo-mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5c.7 3.4 5.2 5.9 5.2 11A5.2 5.2 0 0 1 12 19a5.2 5.2 0 0 1-5.2-5.5c0-2.6 1.4-4 2.5-5.1.2 1.7.9 2.8 2 3.2.2-3.2.1-6 .7-9.1Z"/></svg><span>EMBER</span></a>
 <nav aria-label="Разделы"><a href="#about">О нас</a><a href="#menu">Меню</a><a href="#events">События</a><a href="#reserve">Бронь</a></nav>
@@ -266,7 +278,7 @@ html:not(.js) .ornament svg{opacity:1;transform:none}
 </main>
 <a class="dock" href="#reserve" aria-hidden="true" tabindex="-1">Забронировать стол</a>
 <footer><span>© 2026 EMBER</span><span>Концепт-проект · дизайн и разработка PCash · <a href="case-study.html" style="text-decoration:underline;display:inline-block;padding:12px 4px">Кейс</a></span></footer>
-<script src="shared.js?v=4"></script><script src="fire.js?v=6" defer></script><script src="motion.js?v=4" defer></script>
+<script src="shared.js?v=4"></script><script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script><script src="fire.js?v=6" defer></script><script src="motion.js?v=5" defer></script>
 <script>
 (() => {
   const TZ = 'Europe/Moscow', OPEN = 12, CLOSE = 24;
