@@ -171,6 +171,41 @@ html:not(.js) .ornament svg{opacity:1;transform:none}
  html:has(header nav.open){overflow:hidden}
 }
 
+/* ===== 1. Остывание первого экрана ===== */
+.hero{background:var(--bg)!important;isolation:isolate}
+.hero::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(13,11,9,.55),rgba(13,11,9,.75) 60%,var(--bg)),url(hero.jpg) center/cover;transform:scale(calc(1 + var(--cool,0) * .15));filter:saturate(calc(1 - var(--cool,0) * .55)) brightness(calc(1 - var(--cool,0) * .45));transform-origin:50% 60%}
+.hero>div{transform:translateY(calc(var(--cool,0) * -120px));opacity:calc(1 - var(--cool,0) * 1.3)}
+
+/* ===== 3. Горизонтальная лента событий (только ПК) ===== */
+.events.hscroll{padding-bottom:0}
+.events.hscroll .pin{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+.events.hscroll .ornament{margin-bottom:40px}
+.events.hscroll .events-list{display:flex;gap:40px;border-top:0;margin-top:40px;padding:0 6vw;width:max-content;transform:translateX(var(--tx,0px));will-change:transform}
+.events.hscroll .ev{width:min(62vw,860px);padding:0!important;border:0!important;opacity:1!important;transform:none!important}
+.events.hscroll .ev-img{height:52vh}
+.events.hscroll .ev b{font-size:40px;margin-top:6px}
+.events.hscroll .ev p{font-size:17px;max-width:46ch}
+.ev-count{display:none}
+.events.hscroll .ev-count{display:flex;gap:10px;align-items:center;padding:30px 6vw 0;color:var(--dim);font-size:13px;letter-spacing:2px}
+.ev-count i{display:block;width:160px;height:1px;background:#eee3d022;position:relative}
+.ev-count i::after{content:"";position:absolute;inset:0;background:var(--gold);transform-origin:left;transform:scaleX(var(--ep,0))}
+
+/* ===== 6. Вход в зал: фото раскрывается, как двери ===== */
+.js .reserve{clip-path:inset(0 calc(50% - 50% * var(--door,1)) round 2px)}
+.js .reserve>*{opacity:clamp(0, calc(var(--door,1) * 2.2 - 1.1), 1);transform:translateY(calc((1 - var(--door,1)) * 30px))}
+
+/* ===== 9. Кнопка брони на телефоне ===== */
+.dock{display:none}
+@media(max-width:860px){
+ .dock{display:flex;position:fixed;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:9;height:54px;align-items:center;justify-content:center;background:var(--gold);color:var(--bg);font-weight:600;font-size:13px;letter-spacing:2px;text-transform:uppercase;box-shadow:0 12px 30px rgba(0,0,0,.45);transform:translateY(140%);transition:transform .6s cubic-bezier(.16,1,.3,1)}
+ .dock[data-show=true]{transform:none}
+ footer{padding-bottom:96px}
+}
+@media(prefers-reduced-motion:reduce){
+ .hero::before,.hero>div{transform:none!important;filter:none!important;opacity:1!important}
+ .js .reserve{clip-path:none!important}.js .reserve>*{opacity:1!important;transform:none!important}
+}
+
 </style></head><body><a class="skip-link" href="#main">Перейти к содержанию</a>
 <header class="site-header" data-state="top"><a class="logo" href="#" aria-label="EMBER — наверх"><svg class="logo-mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5c.7 3.4 5.2 5.9 5.2 11A5.2 5.2 0 0 1 12 19a5.2 5.2 0 0 1-5.2-5.5c0-2.6 1.4-4 2.5-5.1.2 1.7.9 2.8 2 3.2.2-3.2.1-6 .7-9.1Z"/></svg><span>EMBER</span></a>
 <nav aria-label="Разделы"><a href="#about">О нас</a><a href="#menu">Меню</a><a href="#events">События</a><a href="#reserve">Бронь</a></nav>
@@ -219,8 +254,9 @@ html:not(.js) .ornament svg{opacity:1;transform:none}
 </div></div></section>
 
 </main>
+<a class="dock" href="#reserve" aria-hidden="true" tabindex="-1">Забронировать стол</a>
 <footer><span>© 2026 EMBER</span><span>Концепт-проект · дизайн и разработка PCash · <a href="case-study.html" style="text-decoration:underline;display:inline-block;padding:12px 4px">Кейс</a></span></footer>
-<script src="shared.js?v=4"></script><script src="fire.js?v=6" defer></script><script src="motion.js?v=2" defer></script>
+<script src="shared.js?v=4"></script><script src="fire.js?v=6" defer></script><script src="motion.js?v=3" defer></script>
 <script>
 (() => {
   const TZ = 'Europe/Moscow', OPEN = 12, CLOSE = 24;

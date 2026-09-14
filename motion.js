@@ -60,6 +60,43 @@
   }, { rootMargin: '-45% 0px -50% 0px' });
   secs.forEach(s => navIo.observe(s));
 
+  // --- горизонтальная лента событий (ПК, без «уменьшить движение») ---
+  const evSec = document.getElementById('events');
+  const evList = evSec && evSec.querySelector('.events-list');
+  let evCount = null;
+  const desktop = matchMedia('(min-width: 1024px)');
+  const setupEvents = () => {
+    if (!evSec) return;
+    const on = desktop.matches && !reduce;
+    if (on && !evSec.classList.contains('hscroll')) {
+      const pin = document.createElement('div'); pin.className = 'pin';
+      while (evSec.firstChild) pin.appendChild(evSec.firstChild);
+      evSec.appendChild(pin);
+      evCount = document.createElement('div'); evCount.className = 'ev-count';
+      evCount.innerHTML = '<span>01</span><i></i><span>0' + evList.children.length + '</span>';
+      pin.querySelector('.wrap').appendChild(evCount);
+      evSec.classList.add('hscroll');
+    }
+    if (!on && evSec.classList.contains('hscroll')) {
+      const pin = evSec.querySelector('.pin');
+      evCount && evCount.remove();
+      while (pin.firstChild) evSec.insertBefore(pin.firstChild, pin);
+      pin.remove(); evSec.classList.remove('hscroll'); evSec.style.height = ''; evList.style.removeProperty('--tx');
+    }
+    if (on) {
+      const travel = Math.max(0, evList.scrollWidth - innerWidth);
+      evSec.style.height = (innerHeight + travel) + 'px';
+      evSec.dataset.travel = travel;
+    }
+  };
+  setupEvents();
+  desktop.addEventListener('change', () => { setupEvents(); onScroll(); });
+
+  // --- кнопка брони на телефоне ---
+  const dock = document.querySelector('.dock');
+  const reserve = document.getElementById('reserve');
+  const heroEl = document.querySelector('.hero');
+
   // --- прокрутка: шапка, прогресс, параллакс, цитата ---
   const photo = document.querySelector('[data-parallax]');
   const bandBg = document.querySelector('[data-parallax-bg]');
@@ -83,7 +120,38 @@
       return true;
     });
 
+    if (dock) {
+      const rr = reserve.getBoundingClientRect();
+      const show = y > heroEl.offsetHeight * 0.7 && rr.top > vh * 0.9 && !menuOpen;
+      dock.dataset.show = show;
+    }
+
     if (reduce) return;
+
+    // 1. остывание первого экрана
+    const cool = Math.min(1, Math.max(0, y / (heroEl.offsetHeight * 0.9)));
+    heroEl.style.setProperty('--cool', cool.toFixed(3));
+
+    // 3. горизонтальная лента
+    if (evSec && evSec.classList.contains('hscroll')) {
+      const travel = +evSec.dataset.travel || 0;
+      const r = evSec.getBoundingClientRect();
+      const k = Math.min(1, Math.max(0, -r.top / Math.max(1, travel)));
+      evList.style.setProperty('--tx', (-k * travel).toFixed(1) + 'px');
+      if (evCount) {
+        evCount.querySelector('i').style.setProperty('--ep', k.toFixed(3));
+        evCount.firstElementChild.textContent = '0' + (1 + Math.min(evList.children.length - 1, Math.floor(k * evList.children.length)));
+      }
+    }
+
+    // 6. вход в зал
+    const box = reserve && reserve.querySelector('.reserve');
+    if (box) {
+      const r = box.getBoundingClientRect();
+      const door = Math.min(1, Math.max(0, (vh * 0.95 - r.top) / (vh * 0.55)));
+      box.style.setProperty('--door', door.toFixed(3));
+    }
+
     if (photo) {
       const r = photo.getBoundingClientRect();
       const k = (r.top + r.height / 2 - vh / 2) / vh;
@@ -100,7 +168,7 @@
     }
   };
   addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
-  addEventListener('resize', onScroll);
+  addEventListener('resize', () => { setupEvents(); onScroll(); });
   onScroll();
 
   // якорные ссылки: учитываем высоту шапки
