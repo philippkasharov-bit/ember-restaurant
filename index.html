@@ -64,44 +64,138 @@ footer{border-top:1px solid #eee3d01a;padding:40px 6vw;display:flex;justify-cont
 @keyframes rise{from{opacity:0;transform:translateY(22px);filter:blur(6px)}}
 @keyframes ignite{from{opacity:0;color:#5a2a10;filter:blur(10px)}55%{color:#ffb35c}}
 .skip-link{position:absolute;left:12px;top:-60px;z-index:100;padding:10px 16px;background:#fff;color:#000;border-radius:8px;font-weight:600}.skip-link:focus{top:12px}
+/* ===== Шапка ===== */
+.site-header{--h:84px;height:var(--h);padding:0 6vw;background:transparent;transition:transform .6s cubic-bezier(.16,1,.3,1),background-color .5s}
+.site-header::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,transparent,#c9a15b66 20%,#c9a15b66 80%,transparent);opacity:0;transition:opacity .5s}
+.site-header[data-state=solid]{--h:68px;background:rgba(13,11,9,.8);-webkit-backdrop-filter:blur(14px) saturate(1.2);backdrop-filter:blur(14px) saturate(1.2)}
+.site-header[data-state=solid]::after{opacity:1}
+.site-header[data-hidden=true]{transform:translateY(-100%)}
+.logo{display:inline-flex;align-items:center;gap:12px}
+.logo span{transition:letter-spacing .6s cubic-bezier(.16,1,.3,1)}
+.logo-mark{width:22px;height:22px;fill:none;stroke:var(--ember);stroke-width:1.5;stroke-linejoin:round;transition:transform .6s cubic-bezier(.16,1,.3,1)}
+.logo:hover .logo-mark{transform:translateY(-2px) scale(1.1)}
+.logo:hover span{letter-spacing:11px}
+nav a{position:relative;padding:8px 0}
+nav a::after{content:"";position:absolute;left:0;right:0;bottom:2px;height:1px;background:var(--gold);transform:scaleX(0);transition:transform .5s cubic-bezier(.16,1,.3,1)}
+nav a:hover::after,nav a[aria-current=true]::after{transform:scaleX(1)}
+nav a[aria-current=true]{opacity:1;color:var(--ink)}
+.book{position:relative;overflow:hidden;isolation:isolate}
+.book::before{content:"";position:absolute;inset:0;background:var(--gold);transform:translateY(101%);transition:transform .5s cubic-bezier(.16,1,.3,1);z-index:-1}
+.book:hover{background:transparent;color:var(--bg)}
+.book:hover::before{transform:none}
+.progress{position:absolute;left:0;bottom:0;height:1px;width:100%;background:linear-gradient(90deg,#7c2d12,var(--ember));transform-origin:left;transform:scaleX(var(--p,0));z-index:1}
+
+/* ===== Главы и разделители ===== */
+.chapter{position:relative}
+section.chapter{padding-top:90px}
+.ornament{display:flex;align-items:center;justify-content:center;gap:22px;max-width:1200px;margin:0 auto 90px;padding:0 6vw}
+.ornament i{flex:1;height:1px;background:linear-gradient(90deg,transparent,#c9a15b55);transform:scaleX(0);transform-origin:right;transition:transform 1.4s cubic-bezier(.16,1,.3,1)}
+.ornament i:last-child{background:linear-gradient(90deg,#c9a15b55,transparent);transform-origin:left}
+.ornament svg{width:22px;height:22px;fill:none;stroke:var(--gold);stroke-width:1.2;opacity:0;transform:translateY(8px);transition:opacity 1s .4s,transform 1s .4s cubic-bezier(.16,1,.3,1)}
+.ornament.in i{transform:none}
+.ornament.in svg{opacity:1;transform:none}
+html:not(.js) .ornament i{transform:none}
+html:not(.js) .ornament svg{opacity:1;transform:none}
+.menu-sec{background:#110d0a}
+.menu-head{position:sticky;top:120px;align-self:start}
+
+/* ===== Полоса-цитата ===== */
+.band{position:relative;overflow:hidden;padding:170px 0;isolation:isolate}
+.band-bg{position:absolute;inset:-18% 0;background:linear-gradient(180deg,var(--bg),rgba(13,11,9,.55) 30%,rgba(13,11,9,.55) 70%,var(--bg)),url(interior.jpg) center/cover;z-index:-1;transform:translateY(var(--by,0))}
+.js .quote p .w{display:inline-block;opacity:.14;transition:opacity .7s}
+.js .quote p .w.lit{opacity:1}
+
+/* ===== Язык анимаций: всё поднимается, как тепло ===== */
+.js [data-anim=lines] .ln{display:block;overflow:hidden;padding-bottom:.1em;margin-bottom:-.1em}
+.js [data-anim=lines] .ln>span{display:block;transform:translateY(110%);transition:transform 1.2s var(--ld,0s) cubic-bezier(.16,1,.3,1)}
+.js [data-anim=lines].in .ln>span{transform:none}
+.js [data-anim=fade]{opacity:0;transform:translateY(24px);transition:opacity 1.1s .25s cubic-bezier(.16,1,.3,1),transform 1.1s .25s cubic-bezier(.16,1,.3,1)}
+.js [data-anim=fade].in{opacity:1;transform:none}
+.photo{background:#1a120c!important}
+.photo::before{content:"";position:absolute;inset:-8% 0;background:linear-gradient(180deg,transparent 55%,rgba(13,11,9,.85)),url(chef.jpg) center/cover;transform:translateY(var(--py,0px)) scale(1);transition:scale 1.8s cubic-bezier(.16,1,.3,1)}
+.js [data-anim=unveil]{clip-path:inset(100% 0 0 0);transition:clip-path 1.6s cubic-bezier(.77,0,.18,1)}
+.js [data-anim=unveil]::before{scale:1.14}
+.js [data-anim=unveil].in{clip-path:inset(0 0 0 0)}
+.js [data-anim=unveil].in::before{scale:1}
+.item{position:relative;border-bottom:0!important}
+.item::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,#c9a15b88,#eee3d01a);transform-origin:left;transition:transform 1.2s calc(var(--d,0s) + .2s) cubic-bezier(.16,1,.3,1)}
+.js [data-anim=item]{opacity:0;transform:translateY(18px);transition:opacity .9s var(--d,0s) cubic-bezier(.16,1,.3,1),transform .9s var(--d,0s) cubic-bezier(.16,1,.3,1)}
+.js [data-anim=item]::after{transform:scaleX(0)}
+.js [data-anim=item].in{opacity:1;transform:none}
+.js [data-anim=item].in::after{transform:none}
+.item>div{transition:transform .5s cubic-bezier(.16,1,.3,1)}
+.item:hover>div{transform:translateX(10px)}
+.item span{transition:color .4s}
+.item:hover span{color:#ffcf8a}
+.js [data-anim=card]{opacity:0;transform:translateY(40px);transition:opacity 1.1s var(--d,0s) cubic-bezier(.16,1,.3,1),transform 1.1s var(--d,0s) cubic-bezier(.16,1,.3,1)}
+.js [data-anim=card].in{opacity:1;transform:none}
+.ev-frame{overflow:hidden;margin-bottom:22px}
+.ev-img{margin-bottom:0!important;transition:transform 1.4s cubic-bezier(.16,1,.3,1),filter .8s}
+.ev:hover .ev-img{transform:scale(1.06);filter:saturate(1.1) brightness(1.05)}
+.nums b{font-variant-numeric:tabular-nums}
+
+@media(max-width:860px){
+ .site-header{--h:68px}
+ .menu-head{position:static}
+ nav{inset:0;height:100svh;padding:110px 8vw 40px;justify-content:flex-start;gap:6px;background:rgba(13,11,9,.97)}
+ nav a{font-family:'Cormorant Garamond',serif;font-size:44px;letter-spacing:0;text-transform:none;opacity:0;transform:translateY(20px);transition:opacity .6s,transform .6s cubic-bezier(.16,1,.3,1)}
+ nav.open a{opacity:1;transform:none}
+ nav.open a:nth-child(2){transition-delay:.06s}
+ nav.open a:nth-child(3){transition-delay:.12s}
+ nav.open a:nth-child(4){transition-delay:.18s}
+ nav a::after{display:none}
+ .burger{position:relative;z-index:12}
+ .ornament{margin-bottom:56px}
+ section.chapter{padding-top:60px}
+ .band{padding:110px 0}
+}
+@media(prefers-reduced-motion:reduce){
+ .js [data-anim],.js [data-anim] .ln>span{opacity:1!important;transform:none!important;clip-path:none!important;transition:none!important}
+ .js [data-anim=unveil]::before{scale:1}
+ .js [data-anim=item]::after{transform:none}
+ .ornament i,.ornament svg{transform:none;opacity:1;transition:none}
+ .site-header[data-hidden=true]{transform:none}
+ .js .quote p .w{opacity:1}
+}
+
 </style></head><body><a class="skip-link" href="#main">Перейти к содержанию</a>
-<header><a class="logo" href="#">EMBER</a>
-<nav><a href="#about">О нас</a><a href="#menu">Меню</a><a href="#events">События</a><a href="#reserve">Контакты</a></nav>
-<a class="book" href="#reserve">Бронь</a><button class="burger" aria-label="Открыть меню" aria-expanded="false"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></header>
+<header class="site-header" data-state="top"><a class="logo" href="#" aria-label="EMBER — наверх"><svg class="logo-mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5c.7 3.4 5.2 5.9 5.2 11A5.2 5.2 0 0 1 12 19a5.2 5.2 0 0 1-5.2-5.5c0-2.6 1.4-4 2.5-5.1.2 1.7.9 2.8 2 3.2.2-3.2.1-6 .7-9.1Z"/></svg><span>EMBER</span></a>
+<nav aria-label="Разделы"><a href="#about">О нас</a><a href="#menu">Меню</a><a href="#events">События</a><a href="#reserve">Бронь</a></nav>
+<a class="book" href="#reserve"><span>Забронировать</span></a><i class="progress" aria-hidden="true"></i><button class="burger" aria-label="Открыть меню" aria-expanded="false"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></header>
 
 <main id="main"><section class="hero"><div><h1>Кухня<br><i>живого огня</i></h1>
 <p>Мясо и овощи, приготовленные на углях из вишни и дуба. Сезонное меню от шефа и винная карта из 200 позиций.</p>
 <a class="btn" href="#reserve">Забронировать стол</a><p class="where">Пятницкая, 18 · открыты с 2019 года</p></div></section>
 
-<section id="about"><div class="wrap about">
-<div class="photo reveal" role="img" aria-label="Шеф ресторана у гриля"><span>Шеф Артём Волков</span></div>
-<div class="reveal"><h2>Огонь — <i>главный ингредиент</i></h2>
-<p class="muted">Мы отказались от газа и электрических плит. Всё, что попадает на тарелку, готовится в дровяной печи или на открытых углях. Продукты привозим от фермеров Тульской и Калужской областей, а меню меняется четыре раза в год.</p>
-<div class="nums"><div><b>6</b><small>лет у огня</small></div><div><b>200</b><small>вин в карте</small></div><div><b>4.9</b><small>рейтинг гостей</small></div></div></div>
+<section id="about" class="chapter"><div class="ornament" aria-hidden="true"><i></i><svg viewBox="0 0 24 24"><path d="M12 2.5c.7 3.4 5.2 5.9 5.2 11A5.2 5.2 0 0 1 12 19a5.2 5.2 0 0 1-5.2-5.5c0-2.6 1.4-4 2.5-5.1.2 1.7.9 2.8 2 3.2.2-3.2.1-6 .7-9.1Z"/></svg><i></i></div><div class="wrap about">
+<div class="photo" data-anim="unveil" data-parallax role="img" aria-label="Шеф ресторана у гриля"><span>Шеф Артём Волков</span></div>
+<div><h2 data-anim="lines">Огонь — <i>главный ингредиент</i></h2>
+<p class="muted" data-anim="fade">Мы отказались от газа и электрических плит. Всё, что попадает на тарелку, готовится в дровяной печи или на открытых углях. Продукты привозим от фермеров Тульской и Калужской областей, а меню меняется четыре раза в год.</p>
+<div class="nums" data-anim="fade"><div><b data-count="6">6</b><small>лет у огня</small></div><div><b data-count="200">200</b><small>вин в карте</small></div><div><b data-count="4.9">4.9</b><small>рейтинг гостей</small></div></div></div>
 </div></section>
 
-<section id="menu"><div class="wrap menu">
-<div><h2>Из печи<br>и с углей</h2><p class="muted">Осень 2026. Полное меню и винную карту пришлём по запросу.</p></div>
+<section id="menu" class="chapter menu-sec"><div class="ornament" aria-hidden="true"><i></i><svg viewBox="0 0 24 24"><path d="M12 2.5c.7 3.4 5.2 5.9 5.2 11A5.2 5.2 0 0 1 12 19a5.2 5.2 0 0 1-5.2-5.5c0-2.6 1.4-4 2.5-5.1.2 1.7.9 2.8 2 3.2.2-3.2.1-6 .7-9.1Z"/></svg><i></i></div><div class="wrap menu">
+<div class="menu-head"><h2 data-anim="lines">Из печи<br>и с углей</h2><p class="muted" data-anim="fade">Осень 2026. Полное меню и винную карту пришлём по запросу.</p></div>
 <div>
-<div class="item"><div>Стейк рибай на вишнёвых углях<small>300 г, соус из печёного перца</small></div><span>3 400 ₽</span></div>
-<div class="item"><div>Томлёная утиная ножка<small>груша, красное вино, пюре из сельдерея</small></div><span>1 900 ₽</span></div>
-<div class="item"><div>Форель горячего копчения<small>ольховая щепа, сливочный хрен</small></div><span>1 450 ₽</span></div>
-<div class="item"><div>Печёная свёкла с козьим сыром<small>фундук, гречишный мёд</small></div><span>890 ₽</span></div>
-<div class="item"><div>Яблоко из печи<small>карамель, мороженое на сливках</small></div><span>650 ₽</span></div>
+<div class="item" data-anim="item"><div>Стейк рибай на вишнёвых углях<small>300 г, соус из печёного перца</small></div><span>3 400 ₽</span></div>
+<div class="item" data-anim="item"><div>Томлёная утиная ножка<small>груша, красное вино, пюре из сельдерея</small></div><span>1 900 ₽</span></div>
+<div class="item" data-anim="item"><div>Форель горячего копчения<small>ольховая щепа, сливочный хрен</small></div><span>1 450 ₽</span></div>
+<div class="item" data-anim="item"><div>Печёная свёкла с козьим сыром<small>фундук, гречишный мёд</small></div><span>890 ₽</span></div>
+<div class="item" data-anim="item"><div>Яблоко из печи<small>карамель, мороженое на сливках</small></div><span>650 ₽</span></div>
 </div></div></section>
 
-<section class="events" id="events"><div class="wrap">
-<h2 class="reveal">Больше, чем ужин</h2>
+<section class="events chapter" id="events"><div class="ornament" aria-hidden="true"><i></i><svg viewBox="0 0 24 24"><path d="M12 2.5c.7 3.4 5.2 5.9 5.2 11A5.2 5.2 0 0 1 12 19a5.2 5.2 0 0 1-5.2-5.5c0-2.6 1.4-4 2.5-5.1.2 1.7.9 2.8 2 3.2.2-3.2.1-6 .7-9.1Z"/></svg><i></i></div><div class="wrap">
+<h2 data-anim="lines">Больше, чем <i>ужин</i></h2>
 <div class="events-list">
-<div class="ev"><div class="ev-img" style="background-image:url(event-chef.jpg)" role="img" aria-label="Ужин с шефом у открытой кухни"></div><b>Ужин с шефом</b><p>Сет из 7 подач у открытой кухни. Каждую пятницу, до 12 гостей.</p></div>
-<div class="ev"><div class="ev-img" style="background-image:url(event-wine.jpg)" role="img" aria-label="Сомелье наливает красное вино"></div><b>Винные вечера</b><p>Дегустация с сомелье и закусками с углей. Раз в две недели.</p></div>
-<div class="ev"><div class="ev-img" style="background-image:url(event-banquet.jpg)" role="img" aria-label="Банкетный стол со свечами"></div><b>Банкеты</b><p>Закрытый зал на 40 персон для праздников и деловых встреч.</p></div>
+<div class="ev" data-anim="card"><div class="ev-frame"><div class="ev-img" style="background-image:url(event-chef.jpg)" role="img" aria-label="Ужин с шефом у открытой кухни"></div></div><b>Ужин с шефом</b><p>Сет из 7 подач у открытой кухни. Каждую пятницу, до 12 гостей.</p></div>
+<div class="ev" data-anim="card"><div class="ev-frame"><div class="ev-img" style="background-image:url(event-wine.jpg)" role="img" aria-label="Сомелье наливает красное вино"></div></div><b>Винные вечера</b><p>Дегустация с сомелье и закусками с углей. Раз в две недели.</p></div>
+<div class="ev" data-anim="card"><div class="ev-frame"><div class="ev-img" style="background-image:url(event-banquet.jpg)" role="img" aria-label="Банкетный стол со свечами"></div></div><b>Банкеты</b><p>Закрытый зал на 40 персон для праздников и деловых встреч.</p></div>
 </div></div></section>
 
-<section><div class="wrap quote reveal"><p>«Лучший стейк в Москве, и дело не в пафосе, а в огне. Уходишь с ощущением, что поужинал у костра, только очень вкусно».</p><small>Мария К. · отзыв гостя</small></div></section>
+<section class="band" aria-label="Отзыв гостя"><div class="band-bg" data-parallax-bg aria-hidden="true"></div><div class="wrap quote"><p data-anim="words">«Лучший стейк в Москве, и дело не в пафосе, а в огне. Уходишь с ощущением, что поужинал у костра, только очень вкусно».</p><small>Мария К. · отзыв гостя</small></div></section>
 
-<section id="reserve" style="padding-top:0"><div class="wrap"><div class="reserve reveal">
-<div><h2>Ждём вас<br><i>у огня</i></h2>
+<section id="reserve" class="chapter"><div class="ornament" aria-hidden="true"><i></i><svg viewBox="0 0 24 24"><path d="M12 2.5c.7 3.4 5.2 5.9 5.2 11A5.2 5.2 0 0 1 12 19a5.2 5.2 0 0 1-5.2-5.5c0-2.6 1.4-4 2.5-5.1.2 1.7.9 2.8 2 3.2.2-3.2.1-6 .7-9.1Z"/></svg><i></i></div><div class="wrap"><div class="reserve" data-anim="fade">
+<div><h2 data-anim="lines">Ждём вас<br><i>у огня</i></h2>
 <p class="muted">ул. Пятницкая, 18 · ежедневно 12:00–00:00<br><a href="tel:+74950000000">+7 (495) 000-00-00</a></p><p class="status" id="open-status" aria-live="polite"></p></div>
 <form id="book" data-success="{name}, стол на {guests} забронирован: {when}. Пришлём подтверждение по телефону.">
 <input name="name" aria-label="Имя" required autocomplete="given-name" placeholder="Имя"><input name="phone" aria-label="Телефон" required type="tel" autocomplete="tel" inputmode="tel" pattern="[\d\s()+-]{10,}" placeholder="Телефон">
@@ -113,7 +207,7 @@ footer{border-top:1px solid #eee3d01a;padding:40px 6vw;display:flex;justify-cont
 
 </main>
 <footer><span>© 2026 EMBER</span><span>Концепт-проект · дизайн и разработка PCash · <a href="case-study.html" style="text-decoration:underline;display:inline-block;padding:12px 4px">Кейс</a></span></footer>
-<script src="shared.js?v=4"></script><script src="fire.js?v=6" defer></script>
+<script src="shared.js?v=4"></script><script src="fire.js?v=6" defer></script><script src="motion.js?v=1" defer></script>
 <script>
 (() => {
   const TZ = 'Europe/Moscow', OPEN = 12, CLOSE = 24;
