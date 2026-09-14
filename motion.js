@@ -67,7 +67,7 @@
   const desktop = matchMedia('(min-width: 1024px)');
   const setupEvents = () => {
     if (!evSec) return;
-    const on = desktop.matches && !reduce;
+    const on = desktop.matches && !reduce && !window.ScrollTrigger;
     if (on && !evSec.classList.contains('hscroll')) {
       const pin = document.createElement('div'); pin.className = 'pin';
       while (evSec.firstChild) pin.appendChild(evSec.firstChild);
@@ -89,7 +89,7 @@
       evSec.dataset.travel = travel;
     }
   };
-  setupEvents();
+  addEventListener('load', setupEvents);
   desktop.addEventListener('change', () => { setupEvents(); onScroll(); });
 
   // --- кнопка брони на телефоне ---
@@ -148,8 +148,7 @@
     if (reduce) return;
 
     // 1. остывание первого экрана
-    const cool = Math.min(1, Math.max(0, y / (heroEl.offsetHeight * 0.9)));
-    heroEl.style.setProperty('--cool', cool.toFixed(3));
+    if (!window.ScrollTrigger) { const cool = Math.min(1, Math.max(0, y / (heroEl.offsetHeight * 0.9))); heroEl.style.setProperty('--cool', cool.toFixed(3)); }
 
     // 3. горизонтальная лента
     if (evSec && evSec.classList.contains('hscroll')) {
@@ -165,7 +164,7 @@
     }
 
 
-    if (photo) {
+    if (photo && !window.ScrollTrigger) {
       const r = photo.getBoundingClientRect();
       const k = (r.top + r.height / 2 - vh / 2) / vh;
       photo.style.setProperty('--py', `${(k * -40).toFixed(1)}px`);
@@ -173,7 +172,7 @@
     if (band) {
       const r = band.getBoundingClientRect();
       const k = (r.top + r.height / 2 - vh / 2) / vh;
-      bandBg.style.setProperty('--by', `${(k * 90).toFixed(1)}px`);
+      if (!window.ScrollTrigger) bandBg.style.setProperty('--by', `${(k * 90).toFixed(1)}px`);
       // слова загораются, пока полоса проходит через центр экрана
       const prog = Math.min(1, Math.max(0, (vh * 0.9 - r.top) / (vh * 0.6)));
       const lit = Math.round(prog * words.length);
@@ -224,7 +223,8 @@
     e.preventDefault();
     header.dataset.hidden = 'false';
     const top = el.getBoundingClientRect().top + scrollY - 60;
-    if (lenis) lenis.scrollTo(top, { duration: 1.6, easing: x => 1 - Math.pow(1 - x, 4) });
+    if (window.__lenis) window.__lenis.scrollTo(top, { duration: 1.4 });
+    else if (lenis) lenis.scrollTo(top, { duration: 1.6 });
     else scrollTo({ top, behavior: reduce ? 'auto' : 'smooth' });
     history.replaceState(null, '', id);
   }));
