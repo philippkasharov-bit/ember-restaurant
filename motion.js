@@ -103,6 +103,25 @@
   const band = bandBg && bandBg.parentElement;
   let lastY = scrollY, ticking = false;
 
+  // плавная лента: позиция догоняет прокрутку с инерцией, фото внутри карточек смещаются медленнее
+  let evTarget = 0, evCur = 0, evRaf = 0;
+  const evTick = () => {
+    evRaf = 0;
+    const travel = +evSec.dataset.travel || 0;
+    evCur += (evTarget - evCur) * 0.085;
+    if (Math.abs(evTarget - evCur) < 0.0005) evCur = evTarget;
+    evList.style.setProperty('--tx', (-evCur * travel).toFixed(1) + 'px');
+    const mid = innerWidth / 2;
+    [...evList.children].forEach(card => {
+      const r = card.getBoundingClientRect();
+      const d = (r.left + r.width / 2 - mid) / innerWidth;
+      card.style.setProperty('--ix', (d * -90).toFixed(1) + 'px');
+      card.style.setProperty('--s', (1 - Math.min(.08, Math.abs(d) * .12)).toFixed(3));
+      card.style.setProperty('--o', (1 - Math.min(.55, Math.abs(d) * .9)).toFixed(3));
+    });
+    if (evCur !== evTarget) evRaf = requestAnimationFrame(evTick);
+  };
+
   const onScroll = () => {
     ticking = false;
     const y = scrollY, vh = innerHeight;
@@ -136,21 +155,15 @@
     if (evSec && evSec.classList.contains('hscroll')) {
       const travel = +evSec.dataset.travel || 0;
       const r = evSec.getBoundingClientRect();
-      const k = Math.min(1, Math.max(0, -r.top / Math.max(1, travel)));
-      evList.style.setProperty('--tx', (-k * travel).toFixed(1) + 'px');
+      evTarget = Math.min(1, Math.max(0, -r.top / Math.max(1, travel)));
+      if (!evRaf) evRaf = requestAnimationFrame(evTick);
+      const k = evTarget;
       if (evCount) {
         evCount.querySelector('i').style.setProperty('--ep', k.toFixed(3));
         evCount.firstElementChild.textContent = '0' + (1 + Math.min(evList.children.length - 1, Math.floor(k * evList.children.length)));
       }
     }
 
-    // 6. вход в зал
-    const box = reserve && reserve.querySelector('.reserve');
-    if (box) {
-      const r = box.getBoundingClientRect();
-      const door = Math.min(1, Math.max(0, (vh * 0.95 - r.top) / (vh * 0.55)));
-      box.style.setProperty('--door', door.toFixed(3));
-    }
 
     if (photo) {
       const r = photo.getBoundingClientRect();
