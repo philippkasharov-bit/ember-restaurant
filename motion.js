@@ -185,7 +185,7 @@
   // --- кинематографичная прокрутка: Lenis на ПК с мышью ---
   const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
   let lenis = null;
-  if (!reduce && fine && window.Lenis) {
+  if (false && !reduce && fine && window.Lenis) {
     lenis = new Lenis({ lerp: 0.075, wheelMultiplier: 0.9, smoothWheel: true });
     const root = document.documentElement;
     let vel = 0;
