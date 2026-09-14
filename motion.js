@@ -40,11 +40,13 @@
     entries.forEach(e => {
       if (!e.isIntersecting) return;
       e.target.classList.add('in');
+      pending = pending.filter(x => x !== e.target);
       e.target.querySelectorAll?.('[data-count]').forEach(count);
       io.unobserve(e.target);
     });
   }, { threshold: 0.18, rootMargin: '0px 0px -8% 0px' });
-  document.querySelectorAll('[data-anim], .ornament').forEach(el => io.observe(el));
+  let pending = [...document.querySelectorAll('[data-anim], .ornament')];
+  pending.forEach(el => io.observe(el));
 
   // --- активный раздел в навигации ---
   const links = [...document.querySelectorAll('header nav a')];
@@ -75,6 +77,12 @@
     lastY = y;
     header.style.setProperty('--p', max > 0 ? (y / max).toFixed(4) : 0);
 
+    // страховка: всё, что уже выше низа экрана, показываем даже при очень быстрой прокрутке
+    pending = pending.filter(el => {
+      if (el.getBoundingClientRect().top < vh * 0.92) { el.classList.add('in'); el.querySelectorAll?.('[data-count]').forEach(count); io.unobserve(el); return false; }
+      return true;
+    });
+
     if (reduce) return;
     if (photo) {
       const r = photo.getBoundingClientRect();
@@ -86,7 +94,7 @@
       const k = (r.top + r.height / 2 - vh / 2) / vh;
       bandBg.style.setProperty('--by', `${(k * 90).toFixed(1)}px`);
       // слова загораются, пока полоса проходит через центр экрана
-      const prog = Math.min(1, Math.max(0, (vh * 0.85 - r.top) / (r.height * 0.9)));
+      const prog = Math.min(1, Math.max(0, (vh * 0.9 - r.top) / (vh * 0.6)));
       const lit = Math.round(prog * words.length);
       words.forEach((w, i) => w.classList.toggle('lit', i < lit));
     }
