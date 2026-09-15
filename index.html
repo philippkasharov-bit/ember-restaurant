@@ -65,7 +65,7 @@ em{font-style:italic;font-family:var(--serif)}
 /* Manifesto */
 .light{background:var(--cream);color:var(--ink)}
 .manifesto{padding:clamp(90px,12vw,190px) var(--pad)}
-.mf-grid{display:grid;grid-template-columns:1.7fr 1fr;gap:clamp(40px,5vw,90px);align-items:center}.manifesto .mf-text{font-family:var(--serif);font-size:clamp(40px,5.3vw,92px);line-height:1.02;letter-spacing:-.015em;text-wrap:pretty}.mf-photo{margin:0}.mf-photo img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:2px}.mf-photo figcaption{margin-top:14px;color:#7a6d5e}
+.mf-grid{display:grid;grid-template-columns:1.7fr 1fr;gap:clamp(40px,5vw,90px);align-items:end}.manifesto .mf-text{font-family:var(--serif);font-weight:400;font-size:clamp(64px,8.6vw,150px);line-height:.92;letter-spacing:-.025em}.mf-text .i1{display:inline-block;padding-left:1.1em}.mf-text .i2{display:inline-block;padding-left:.4em;color:var(--rust)}.mf-sub{margin-top:clamp(28px,3vw,44px);max-width:34ch;font-size:clamp(17px,1.3vw,20px);color:#5c5044}.mf-photo{margin:0}.mf-photo img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:2px}.mf-photo figcaption{margin-top:14px;color:#7a6d5e}
 .manifesto p em{color:var(--rust)}
 .pill{display:inline-block;vertical-align:-.08em;width:2.3em;height:.86em;border-radius:999px;background:#2a1f16 center/cover;margin:0 .1em}
 .manifesto-foot{display:grid;grid-template-columns:repeat(3,1fr);margin-top:clamp(70px,9vw,140px);border-top:1px solid #1b151033}.stat{padding:28px 24px 0 0}.stat+.stat{padding-left:clamp(20px,3vw,48px);border-left:1px solid #1b151033}
@@ -263,7 +263,8 @@ form .btn{margin-top:34px;height:62px}
 
 <section class="light manifesto" aria-label="О ресторане">
  <div class="mf-grid">
- <p class="mf-text" data-rise>Мы отказались от газа <span class="pill" style="background-image:url(f-flame.jpg)" aria-hidden="true"></span> и плит. Всё, что попадает на тарелку, <em>знает огонь</em> вишни <span class="pill" style="background-image:url(f-steak.jpg)" aria-hidden="true"></span> и дуба.</p>
+ <h2 class="mf-text" data-split>Ни газа.<br><span class="i1">Ни плит.</span><br><em class="i2">Только огонь</em></h2>
+  <p class="mf-sub" data-rise>Всё, что попадает на тарелку, готовится на углях вишни и дуба.</p>
  <figure class="mf-photo" data-rise><img src="f-steak.jpg" alt="Стейк на решётке в дыму от углей" loading="lazy"><figcaption class="meta">Печь разогревается с 8 утра</figcaption></figure>
  </div>
  <div class="manifesto-foot">
