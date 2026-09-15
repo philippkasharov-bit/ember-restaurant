@@ -27,6 +27,30 @@ addEventListener('DOMContentLoaded', () => {
   }), { rootMargin: '-45% 0px -50% 0px' });
   links.forEach(a => { const s = document.querySelector(a.getAttribute('href')); s && nio.observe(s); });
 
+  // --- видео первого экрана: на ПК и хорошей сети, иначе остаётся кадр-постер ---
+  const hv = document.getElementById('hero-video');
+  const conn = navigator.connection;
+  if (hv && !reduce && matchMedia('(min-width: 861px)').matches && !(conn && (conn.saveData || /2g/.test(conn.effectiveType)))) {
+    hv.innerHTML = '<source src="hero.webm" type="video/webm"><source src="hero.mp4" type="video/mp4">';
+    hv.addEventListener('playing', () => hv.classList.add('on'), { once: true });
+    const go = () => { hv.load(); hv.play().catch(() => {}); };
+    document.readyState === 'complete' ? go() : addEventListener('load', go);
+    new IntersectionObserver(([e]) => e.isIntersecting ? hv.play().catch(() => {}) : hv.pause()).observe(hv);
+  }
+
+  // --- превью блюда рядом с курсором ---
+  const peek = document.querySelector('.dish-peek');
+  if (peek && matchMedia('(hover: hover)').matches) {
+    const pi = peek.querySelector('img');
+    let x = 0, y = 0, cx = 0, cy = 0, raf = 0;
+    const loop = () => { cx += (x - cx) * 0.18; cy += (y - cy) * 0.18; peek.style.left = cx + 'px'; peek.style.top = cy + 'px'; raf = peek.classList.contains('on') ? requestAnimationFrame(loop) : 0; };
+    document.querySelectorAll('.dish[data-img]').forEach(d => {
+      d.addEventListener('mouseenter', e => { pi.src = d.dataset.img; x = cx = e.clientX + 180; y = cy = e.clientY; peek.classList.add('on'); if (!raf) raf = requestAnimationFrame(loop); });
+      d.addEventListener('mousemove', e => { x = e.clientX + 180; y = e.clientY; });
+      d.addEventListener('mouseleave', () => peek.classList.remove('on'));
+    });
+  }
+
   if (reduce || !window.gsap || !window.ScrollTrigger) return;
   gsap.registerPlugin(ScrollTrigger);
 
@@ -57,14 +81,14 @@ addEventListener('DOMContentLoaded', () => {
 
   // --- первый экран: вход ---
   const intro = gsap.timeline({ defaults: { ease: E } });
-  intro.from('.hero-media img', { scale: 1.3, duration: 2.4 })
+  intro.from('.hero-media', { scale: 1.25, duration: 2.4 })
        .from('.wordmark span', { yPercent: 110, duration: 1.6, stagger: 0.07 }, 0.2)
        .from('.hero .ln > span', { yPercent: 110, duration: 1.3, stagger: 0.08 }, 0.7)
        .from('.hero [data-rise]', { y: 30, autoAlpha: 0, duration: 1.2, stagger: 0.12 }, 0.9);
 
   // --- первый экран: камера отъезжает, слово распадается ---
   gsap.timeline({ scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } })
-    .to('.hero-media img', { scale: 1.25, yPercent: 8, filter: 'brightness(.45) saturate(.6)', ease: 'none' }, 0)
+    .to('.hero-media', { scale: 1.2, yPercent: 8, filter: 'brightness(.45) saturate(.6)', ease: 'none' }, 0)
     .to('.wordmark span', { yPercent: (i) => -30 - i * 18, ease: 'none' }, 0)
     .to('.hero-top', { y: -80, autoAlpha: 0, ease: 'none' }, 0);
 
@@ -83,6 +107,13 @@ addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('[data-count]').forEach(b => {
     const to = parseFloat(b.dataset.count), dec = b.dataset.count.includes('.') ? 1 : 0, o = { v: 0 };
     gsap.to(o, { v: to, duration: 2, ease: 'power3.out', scrollTrigger: { trigger: b, start: 'top 90%' }, onUpdate: () => b.textContent = o.v.toFixed(dec) });
+  });
+
+  // --- кадры кухни: разная скорость и раскрытие ---
+  gsap.utils.toArray('.kitchen figure').forEach((f, i) => {
+    gsap.fromTo(f, { clipPath: 'inset(0 0 100% 0)' }, { clipPath: 'inset(0 0 0% 0)', duration: 1.6, ease: 'expo.inOut', delay: i * 0.1, scrollTrigger: { trigger: f, start: 'top 85%' } });
+    const img = f.querySelector('img');
+    gsap.fromTo(img, { yPercent: -+img.dataset.drift }, { yPercent: +img.dataset.drift, ease: 'none', scrollTrigger: { trigger: f, start: 'top bottom', end: 'bottom top', scrub: true } });
   });
 
   // --- фото шефа: занавес + параллакс ---

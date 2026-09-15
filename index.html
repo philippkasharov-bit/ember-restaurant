@@ -4,7 +4,7 @@
 <script>document.documentElement.classList.add('js')</script><meta name="theme-color" content="#0d0b09">
 <meta property="og:type" content="website"><meta property="og:title" content="EMBER — ресторан на открытом огне"><meta property="og:description" content="Ресторан EMBER в Москве: мясо и овощи на углях, сезонное меню от шефа, винная карта из 200 позиций."><meta property="og:image" content="https://philippkasharov-bit.github.io/ember-restaurant/og.jpg"><meta property="og:url" content="https://philippkasharov-bit.github.io/ember-restaurant/"><meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lenis@1.3.11/dist/lenis.css">
-<link rel="preload" as="image" href="hero.jpg" fetchpriority="high"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="image" href="hero-poster.jpg" fetchpriority="high"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -46,7 +46,7 @@ em{font-style:italic;font-family:var(--serif)}
 /* Hero */
 .hero{position:relative;height:100svh;min-height:640px;overflow:hidden;isolation:isolate;display:grid;grid-template-rows:1fr auto;padding:0 var(--pad) clamp(18px,2.4vw,36px)}
 .hero-media{position:absolute;inset:0;z-index:-3;overflow:hidden}
-.hero-media img{width:100%;height:100%;object-fit:cover;transform:scale(1.08)}
+.hero-media img,.hero-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.hero-media video{opacity:0;transition:opacity 1.2s ease}.hero-media video.on{opacity:1}
 .hero::after{content:"";position:absolute;inset:0;z-index:-2;background:linear-gradient(180deg,rgba(13,11,9,.6) 0,rgba(13,11,9,.15) 38%,rgba(13,11,9,.35) 62%,var(--night) 100%)}
 .fire{position:absolute;left:0;right:0;bottom:0;width:100%;height:78%;object-fit:cover;object-position:50% 100%;z-index:-1;pointer-events:none;mix-blend-mode:screen;opacity:0;transition:opacity 1.6s ease;-webkit-mask-image:linear-gradient(to top,transparent 0,#000 14%,#000 55%,transparent 100%);mask-image:linear-gradient(to top,transparent 0,#000 14%,#000 55%,transparent 100%)}
 .fire.on{opacity:.7}
@@ -208,6 +208,22 @@ form .btn{margin-top:34px;height:62px}
  .wordmark{font-size:clamp(80px,25vw,440px)}
  .hero{min-height:560px}.hero::after{background:linear-gradient(180deg,rgba(13,11,9,.6) 0,rgba(13,11,9,.2) 30%,rgba(13,11,9,.75) 58%,var(--night) 100%)}.hero-lead{font-size:30px}.chef-photo{min-height:56svh}
 }
+/* кадры кухни */
+.kitchen{position:relative;display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:auto auto;gap:clamp(12px,1.6vw,24px);padding:clamp(90px,10vw,150px) var(--pad);background:var(--night)}
+.kitchen figure{overflow:hidden;margin:0;background:#1a120c}
+.kitchen img{width:100%;height:118%;object-fit:cover;margin-top:-9%}
+.k1{grid-column:1/8;aspect-ratio:16/10}
+.k2{grid-column:8/13;aspect-ratio:4/5;margin-top:18%!important}
+.k3{grid-column:3/9;aspect-ratio:16/9;margin-top:-10%!important}
+.k-cap{grid-column:9/13;align-self:end;font-family:var(--serif);font-size:clamp(26px,2.4vw,40px);line-height:1.1}
+.k-cap em{color:var(--ember)}
+/* превью блюда */
+.menu{position:relative}
+.dish-peek{position:fixed;left:0;top:0;width:300px;aspect-ratio:4/5;margin:0;pointer-events:none;z-index:30;overflow:hidden;border-radius:2px;opacity:0;transform:translate(-50%,-50%) scale(.85);transition:opacity .35s,transform .5s var(--ease)}
+.dish-peek.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.dish-peek img{width:100%;height:100%;object-fit:cover}
+@media(hover:none),(max-width:860px){.dish-peek{display:none}}
+@media(max-width:860px){.kitchen{grid-template-columns:1fr 1fr}.k1{grid-column:1/-1}.k2{grid-column:1/2;margin-top:0!important}.k3{grid-column:2/3;margin-top:0!important;aspect-ratio:4/5}.k-cap{grid-column:1/-1}}
 </style></head><body>
 <a class="skip-link" href="#main">Перейти к содержанию</a>
 
@@ -221,7 +237,7 @@ form .btn{margin-top:34px;height:62px}
 
 <main id="main">
 <section class="hero" id="top">
- <div class="hero-media"><img src="hero.jpg" alt="" fetchpriority="high"></div>
+ <div class="hero-media"><img src="hero-poster.jpg" alt="" fetchpriority="high"><video id="hero-video" muted loop playsinline preload="none" poster="hero-poster.jpg" aria-hidden="true"></video></div>
  <div class="hero-top">
   <p class="hero-lead" data-split>Кухня <em>живого огня</em><br>на Пятницкой</p>
   <p class="hero-note" data-rise>Мясо и овощи на углях из вишни и дуба. Сезонное меню от шефа и винная карта из 200 позиций.</p>
@@ -231,7 +247,7 @@ form .btn{margin-top:34px;height:62px}
 </section>
 
 <section class="light manifesto" aria-label="О ресторане">
- <p data-rise>Мы отказались от газа <span class="pill" style="background-image:url(event-chef.jpg)" aria-hidden="true"></span> и плит. Всё, что попадает на тарелку, <em>знает огонь</em> вишни <span class="pill" style="background-image:url(hero.jpg)" aria-hidden="true"></span> и дуба.</p>
+ <p data-rise>Мы отказались от газа <span class="pill" style="background-image:url(f-flame.jpg)" aria-hidden="true"></span> и плит. Всё, что попадает на тарелку, <em>знает огонь</em> вишни <span class="pill" style="background-image:url(f-steak.jpg)" aria-hidden="true"></span> и дуба.</p>
  <div class="manifesto-foot">
   <div class="stat" data-rise><b data-count="6">6</b><span>лет у огня</span></div>
   <div class="stat" data-rise><b data-count="200">200</b><span>вин в карте</span></div>
@@ -253,16 +269,24 @@ form .btn{margin-top:34px;height:62px}
  </div>
 </section>
 
+<section class="kitchen" aria-label="Кухня">
+ <figure class="k1"><img src="f-flare.jpg" alt="Пламя поднимается над стейком на гриле" loading="lazy" data-drift="-6"></figure>
+ <figure class="k2"><img src="f-tongs.jpg" alt="Повар переворачивает стейк щипцами" loading="lazy" data-drift="8"></figure>
+ <figure class="k3"><img src="f-grill.jpg" alt="Мясо на решётке над раскалёнными углями" loading="lazy" data-drift="-4"></figure>
+ <p class="k-cap">Каждое утро печь разогревается <em>четыре часа</em>, прежде чем на решётку ляжет первый стейк.</p>
+</section>
+
 <section class="light menu" id="menu">
  <div class="menu-head"><h2 data-split>Из печи<br><em>и с углей</em></h2><p data-rise>Сезонное меню, осень 2026. Полную карту и винный лист пришлём по запросу.</p></div>
  <div class="dishes">
-  <div class="dish" data-rise><div><h3>Стейк рибай на вишнёвых углях</h3><small>300 г, соус из печёного перца</small></div><span class="price">3 400 ₽</span></div>
-  <div class="dish" data-rise><div><h3>Томлёная утиная ножка</h3><small>груша, красное вино, пюре из сельдерея</small></div><span class="price">1 900 ₽</span></div>
-  <div class="dish" data-rise><div><h3>Форель горячего копчения</h3><small>ольховая щепа, сливочный хрен</small></div><span class="price">1 450 ₽</span></div>
-  <div class="dish" data-rise><div><h3>Печёная свёкла с козьим сыром</h3><small>фундук, гречишный мёд</small></div><span class="price">890 ₽</span></div>
-  <div class="dish" data-rise><div><h3>Яблоко из печи</h3><small>карамель, мороженое на сливках</small></div><span class="price">650 ₽</span></div>
+  <div class="dish" data-img="f-steak.jpg" data-rise><div><h3>Стейк рибай на вишнёвых углях</h3><small>300 г, соус из печёного перца</small></div><span class="price">3 400 ₽</span></div>
+  <div class="dish" data-img="f-grill.jpg" data-rise><div><h3>Томлёная утиная ножка</h3><small>груша, красное вино, пюре из сельдерея</small></div><span class="price">1 900 ₽</span></div>
+  <div class="dish" data-img="f-flame.jpg" data-rise><div><h3>Форель горячего копчения</h3><small>ольховая щепа, сливочный хрен</small></div><span class="price">1 450 ₽</span></div>
+  <div class="dish" data-img="f-tongs.jpg" data-rise><div><h3>Печёная свёкла с козьим сыром</h3><small>фундук, гречишный мёд</small></div><span class="price">890 ₽</span></div>
+  <div class="dish" data-img="f-flare.jpg" data-rise><div><h3>Яблоко из печи</h3><small>карамель, мороженое на сливках</small></div><span class="price">650 ₽</span></div>
  </div>
  <div class="menu-cta" data-rise><span>Полное меню и винная карта — по запросу</span><a class="btn dark" href="#reserve">Забронировать стол</a></div>
+ <figure class="dish-peek" aria-hidden="true"><img alt=""></figure>
 </section>
 
 <section class="events" id="events">
@@ -320,8 +344,8 @@ form .btn{margin-top:34px;height:62px}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.11/dist/lenis.min.js" defer></script>
 <script src="shared.js?v=5" defer></script>
-<script src="fire.js?v=7" defer></script>
-<script src="motion.js?v=10" defer></script>
+
+<script src="motion.js?v=11" defer></script>
 <script>
 addEventListener('DOMContentLoaded', () => {
   const TZ = 'Europe/Moscow', OPEN = 12, CLOSE = 24;
