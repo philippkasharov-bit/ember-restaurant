@@ -22,10 +22,16 @@ addEventListener('DOMContentLoaded', () => {
 
   // активный пункт меню
   const links = [...document.querySelectorAll('.hd nav a')];
-  const nio = new IntersectionObserver(es => es.forEach(e => {
-    if (e.isIntersecting) links.forEach(a => a.getAttribute('href') === '#' + e.target.id ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current'));
-  }), { rootMargin: '-45% 0px -50% 0px' });
-  links.forEach(a => { const s = document.querySelector(a.getAttribute('href')); s && nio.observe(s); });
+  const navSecs = links.map(a => document.querySelector(a.getAttribute('href')));
+  const markNav = () => {
+    const mid = innerHeight / 2;
+    navSecs.forEach((s, i) => {
+      if (!s) return;
+      const box = (s.closest('.pin-spacer') || s).getBoundingClientRect();
+      box.top <= mid && box.bottom > mid ? links[i].setAttribute('aria-current', 'true') : links[i].removeAttribute('aria-current');
+    });
+  };
+  addEventListener('scroll', markNav, { passive: true }); markNav();
 
   // --- видео первого экрана: на ПК и хорошей сети, иначе остаётся кадр-постер ---
   const hv = document.getElementById('hero-video');
@@ -96,14 +102,14 @@ addEventListener('DOMContentLoaded', () => {
 
   // --- первый экран: вход ---
   intro.from('.hero-media', { scale: 1.25, duration: 2.4 })
-       .from('.wordmark span', { yPercent: 110, duration: 1.6, stagger: 0.07 }, 0.2)
+       .from('.hero .wordmark span', { yPercent: 110, duration: 1.6, stagger: 0.07 }, 0.2)
        .from('.hero .ln > span', { yPercent: 110, duration: 1.3, stagger: 0.08 }, 0.7)
        .from('.hero [data-rise]', { y: 30, autoAlpha: 0, duration: 1.2, stagger: 0.12 }, 0.9);
 
   // --- первый экран: камера отъезжает, слово распадается ---
   gsap.timeline({ scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } })
     .to('.hero-media', { scale: 1.2, yPercent: 8, filter: 'brightness(.45) saturate(.6)', ease: 'none' }, 0)
-    .to('.wordmark', { yPercent: -35, scale: .92, opacity: 0, filter: 'blur(8px)', ease: 'power1.in' }, 0)
+    .to('.hero .wordmark', { yPercent: -35, scale: .92, opacity: 0, filter: 'blur(8px)', ease: 'power1.in' }, 0)
     .to('.hero-top', { y: -80, autoAlpha: 0, ease: 'none' }, 0);
 
   // --- строки заголовков выезжают из-под маски ---
