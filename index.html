@@ -65,12 +65,12 @@ em{font-style:italic;font-family:var(--serif)}
 /* Manifesto */
 .light{background:var(--cream);color:var(--ink)}
 .manifesto{padding:clamp(90px,12vw,190px) var(--pad)}
-.manifesto p{font-family:var(--serif);font-size:clamp(34px,5.4vw,92px);line-height:1.06;letter-spacing:-.01em;max-width:21ch;text-wrap:balance}
+.mf-grid{display:grid;grid-template-columns:1.6fr 1fr;gap:clamp(40px,6vw,110px);align-items:end}.manifesto .mf-text{font-family:var(--serif);font-size:clamp(40px,4.9vw,86px);line-height:1.04;letter-spacing:-.015em;text-wrap:balance}.mf-photo{margin:0}.mf-photo img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:2px}.mf-photo figcaption{margin-top:14px;color:#7a6d5e}
 .manifesto p em{color:var(--rust)}
-.pill{display:inline-block;vertical-align:-.1em;width:1.9em;height:.8em;border-radius:999px;background:#2a1f16 center/cover;margin:0 .08em}
-.manifesto-foot{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:clamp(60px,8vw,120px);padding-top:26px;border-top:1px solid #1b151022}
-.stat b{display:block;font-family:var(--serif);font-weight:400;font-size:clamp(56px,7vw,120px);line-height:.9;font-variant-numeric:tabular-nums}
-.stat span{display:block;margin-top:12px;color:#5c5044;font-size:15px}
+.pill{display:inline-block;vertical-align:-.08em;width:2.3em;height:.86em;border-radius:999px;background:#2a1f16 center/cover;margin:0 .1em}
+.manifesto-foot{display:grid;grid-template-columns:repeat(3,1fr);margin-top:clamp(70px,9vw,140px);border-top:1px solid #1b151033}.stat{padding:28px 24px 0 0}.stat+.stat{padding-left:clamp(20px,3vw,48px);border-left:1px solid #1b151033}
+.stat b{display:block;font-family:var(--sans);font-weight:500;font-size:clamp(52px,6vw,104px);line-height:1;letter-spacing:-.04em;font-variant-numeric:lining-nums tabular-nums}
+.stat span{display:block;margin-top:14px;color:#5c5044;font-size:15px;max-width:22ch}
 
 /* Chef */
 .chef{display:grid;grid-template-columns:1.05fr 1fr;min-height:92svh}
@@ -171,7 +171,7 @@ form .btn{margin-top:34px;height:62px}
  .hd-cta{display:none}.burger{display:block;position:relative;z-index:2}.logo{position:relative;z-index:2}
  html:has(.hd nav.open){overflow:hidden}
  .hero-top{grid-template-columns:1fr;gap:18px}.hero-note{justify-self:start}.hero-act{justify-self:start;align-items:flex-start}
- .manifesto-foot,.menu-head{grid-template-columns:1fr}.menu-head p{justify-self:start}
+ .manifesto-foot,.menu-head,.mf-grid{grid-template-columns:1fr}.stat+.stat{padding-left:0;border-left:0;border-top:1px solid #1b151033}.mf-photo img{aspect-ratio:16/10}.menu-head p{justify-self:start}
  .chef,.reserve{grid-template-columns:1fr}.chef-photo{min-height:70svh}
  .events-head{flex-direction:column;align-items:flex-start}
  form{grid-template-columns:1fr}
@@ -262,7 +262,10 @@ form .btn{margin-top:34px;height:62px}
 </section>
 
 <section class="light manifesto" aria-label="О ресторане">
- <p data-rise>Мы отказались от газа <span class="pill" style="background-image:url(f-flame.jpg)" aria-hidden="true"></span> и плит. Всё, что попадает на тарелку, <em>знает огонь</em> вишни <span class="pill" style="background-image:url(f-steak.jpg)" aria-hidden="true"></span> и дуба.</p>
+ <div class="mf-grid">
+ <p class="mf-text" data-rise>Мы отказались от газа <span class="pill" style="background-image:url(f-flame.jpg)" aria-hidden="true"></span> и плит. Всё, что попадает на тарелку, <em>знает огонь</em> вишни <span class="pill" style="background-image:url(f-steak.jpg)" aria-hidden="true"></span> и дуба.</p>
+ <figure class="mf-photo" data-rise><img src="f-flare.jpg" alt="Пламя над решёткой гриля" loading="lazy"><figcaption class="meta">Печь разогревается с 8 утра</figcaption></figure>
+ </div>
  <div class="manifesto-foot">
   <div class="stat" data-rise><b data-count="6">6</b><span>лет у огня</span></div>
   <div class="stat" data-rise><b data-count="200">200</b><span>вин в карте</span></div>
