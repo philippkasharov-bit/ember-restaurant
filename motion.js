@@ -49,19 +49,6 @@ addEventListener('DOMContentLoaded', () => {
     new IntersectionObserver(([e]) => e.isIntersecting ? hv.play().catch(() => {}) : hv.pause()).observe(hv);
   }
 
-  // --- превью блюда рядом с курсором ---
-  const peek = document.querySelector('.dish-peek');
-  if (peek && matchMedia('(hover: hover)').matches) {
-    const pi = peek.querySelector('img');
-    let x = 0, y = 0, cx = 0, cy = 0, raf = 0;
-    const loop = () => { cx += (x - cx) * 0.18; cy += (y - cy) * 0.18; peek.style.left = cx + 'px'; peek.style.top = cy + 'px'; raf = peek.classList.contains('on') ? requestAnimationFrame(loop) : 0; };
-    document.querySelectorAll('.dish[data-img]').forEach(d => {
-      d.addEventListener('mouseenter', e => { pi.src = d.dataset.img; x = cx = e.clientX + 180; y = cy = e.clientY; peek.classList.add('on'); if (!raf) raf = requestAnimationFrame(loop); });
-      d.addEventListener('mousemove', e => { x = e.clientX + 180; y = e.clientY; });
-      d.addEventListener('mouseleave', () => peek.classList.remove('on'));
-    });
-  }
-
   if (reduce || !window.gsap || !window.ScrollTrigger) { document.querySelector('.loader')?.remove(); return; }
   gsap.registerPlugin(ScrollTrigger);
 
