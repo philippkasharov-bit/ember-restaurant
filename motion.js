@@ -118,7 +118,7 @@ addEventListener('DOMContentLoaded', () => {
   gsap.from('.pill', { width: 0, duration: 1.4, ease: E, stagger: 0.15, scrollTrigger: { trigger: '.manifesto p', start: 'top 70%' } });
 
   // --- линии статистики прорисовываются, ромбы вспыхивают ---
-  gsap.fromTo('.stat', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 1.4, ease: 'expo.inOut', stagger: 0.18, scrollTrigger: { trigger: '.manifesto-foot', start: 'top 85%' } });
+  gsap.fromTo('.stat', { clipPath: 'inset(-20px 100% -20px -20px)' }, { clipPath: 'inset(-20px -20px -20px -20px)', duration: 1.4, ease: 'expo.inOut', stagger: 0.18, scrollTrigger: { trigger: '.manifesto-foot', start: 'top 85%' } });
 
   // --- счётчики ---
   document.querySelectorAll('[data-count]').forEach(b => {
