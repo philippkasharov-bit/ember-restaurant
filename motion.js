@@ -16,7 +16,12 @@ addEventListener('DOMContentLoaded', () => {
     if (!menuOpen) header.dataset.hidden = y > vh && y > lastY + 3 ? 'true' : (y < lastY - 3 || y < vh ? 'false' : header.dataset.hidden);
     lastY = y;
     header.style.setProperty('--p', max > 0 ? (y / max).toFixed(4) : 0);
-    if (dock) dock.dataset.show = y > hero.offsetHeight * 0.7 && reserve.getBoundingClientRect().top > vh * 0.9 && !menuOpen;
+    const inlineCta = [...document.querySelectorAll('a[href="#reserve"]')].some(a => {
+      if (a.closest('.hd') || a.closest('.dock')) return false;
+      const r = a.getBoundingClientRect();
+      return r.bottom > 0 && r.top < vh;
+    });
+    if (dock) dock.dataset.show = y > hero.offsetHeight * 0.7 && reserve.getBoundingClientRect().top > vh * 0.9 && !menuOpen && !inlineCta;
   };
   addEventListener('scroll', onScroll, { passive: true }); onScroll();
 
@@ -136,7 +141,7 @@ addEventListener('DOMContentLoaded', () => {
   gsap.utils.toArray('.kitchen figure').forEach((f, i) => {
     gsap.fromTo(f, { clipPath: 'inset(0 0 100% 0)' }, { clipPath: 'inset(0 0 0% 0)', duration: 1.6, ease: 'expo.inOut', delay: i * 0.1, scrollTrigger: { trigger: f, start: 'top 85%' } });
     const img = f.querySelector('img');
-    gsap.fromTo(img, { yPercent: -+img.dataset.drift }, { yPercent: +img.dataset.drift, ease: 'none', scrollTrigger: { trigger: f, start: 'top bottom', end: 'bottom top', scrub: true } });
+    gsap.fromTo(f, { y: -6 * +img.dataset.drift }, { y: 6 * +img.dataset.drift, ease: 'none', scrollTrigger: { trigger: f, start: 'top bottom', end: 'bottom top', scrub: true } });
   });
 
   // --- фото шефа: занавес + параллакс ---
@@ -155,7 +160,7 @@ addEventListener('DOMContentLoaded', () => {
     const dist = () => Math.max(0, track.scrollWidth - innerWidth);
     const tw = gsap.to(track, { x: () => -dist(), ease: 'none', scrollTrigger: { trigger: sec, start: 'top top', end: () => '+=' + dist(), pin: true, scrub: 1, invalidateOnRefresh: true } });
     track.querySelectorAll('figure img').forEach(img => {
-      gsap.fromTo(img, { xPercent: -6 }, { xPercent: 6, ease: 'none', scrollTrigger: { trigger: img, containerAnimation: tw, start: 'left right', end: 'right left', scrub: true } });
+      gsap.fromTo(img.closest('figure'), { xPercent: -3 }, { xPercent: 3, ease: 'none', scrollTrigger: { trigger: img, containerAnimation: tw, start: 'left right', end: 'right left', scrub: true } });
     });
     return () => { gsap.set(track, { clearProps: 'all' }); gsap.set(track.children, { clearProps: 'all' }); };
   });

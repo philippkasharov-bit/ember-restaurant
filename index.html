@@ -281,6 +281,20 @@ main>section+section,.ft{border-radius:0!important;margin-top:0!important;box-sh
 .chef-photo.orn>img{aspect-ratio:4/5!important}
 .ev figure.orn>img,.reserve-img.orn>img{aspect-ratio:1/1!important}
 .reserve-form.orn{aspect-ratio:auto!important;padding-block:clamp(70px,8vw,120px)!important}
+/* ритм: одинаковые вертикальные интервалы, без лишних пустот */
+.manifesto,.menu,.kitchen{padding-block:clamp(88px,9vw,132px)!important}
+.quote{min-height:88svh!important;padding-block:clamp(88px,9vw,132px)!important}
+.reserve{align-items:center!important}
+.reserve-form.orn{padding-block:clamp(56px,5vw,80px)!important;align-self:center;height:auto!important}
+@media(max-width:860px){.reserve-form.orn{margin-inline:var(--pad)}}
+.ft{padding-top:clamp(72px,7vw,104px)!important}
+.manifesto-foot{margin-top:clamp(56px,6vw,84px)}
+@media(max-width:860px){
+ .kitchen{grid-template-columns:1fr!important}
+ .kitchen figure.orn{grid-column:1/-1!important;grid-row:auto!important;width:100%;min-width:0;margin-top:0!important;align-self:auto!important}
+ .k-cap{grid-column:1/-1!important;grid-row:auto!important;margin-top:8px}
+ .orn{min-width:0}
+}
 </style></head><body>
 <div class="loader" aria-hidden="true"><div class="loader-glow"></div><span class="loader-word">EMBER</span><div class="loader-temp"><span class="loader-num">20</span><span class="loader-unit">°C</span><span class="loader-cap">Разогреваем печь</span></div><i class="loader-bar"></i></div>
 <a class="skip-link" href="#main">Перейти к содержанию</a>
@@ -408,7 +422,7 @@ main>section+section,.ft{border-radius:0!important;margin-top:0!important;box-sh
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.11/dist/lenis.min.js" defer></script>
 <script src="shared.js?v=5" defer></script>
 
-<script src="motion.js?v=16" defer></script>
+<script src="motion.js?v=18" defer></script>
 <script>
 addEventListener('DOMContentLoaded', () => {
   const TZ = 'Europe/Moscow', OPEN = 12, CLOSE = 24;
