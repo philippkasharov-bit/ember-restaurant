@@ -186,7 +186,7 @@ form .btn{margin-top:34px;height:62px}
 .craft b{display:block;font-family:var(--serif);font-weight:400;font-size:clamp(24px,2.1vw,34px);line-height:1.05;color:var(--bone)}
 .craft span{display:block;margin-top:6px;font-size:13px;color:var(--ash)}
 .chef-foot{display:flex;align-items:center;gap:20px;padding-top:8px}
-.chef-foot img{width:72px;height:72px;border-radius:50%;object-fit:cover}
+.chef-foot img{width:72px;height:72px;border-radius:50%;object-fit:cover;object-position:46% 12%;transform:scale(1.001)}
 .sign span{font-family:var(--sans);font-style:normal;font-size:13px;color:var(--ash);letter-spacing:.04em}
 .reserve-info{justify-content:space-between}.reserve-img{flex:1;min-height:240px;aspect-ratio:auto!important}
 .reserve-img{overflow:hidden;aspect-ratio:16/10;margin:0}
@@ -225,7 +225,21 @@ form .btn{margin-top:34px;height:62px}
 .dish-peek img{width:100%;height:100%;object-fit:cover}
 @media(hover:none),(max-width:860px){.dish-peek{display:none}}
 @media(max-width:860px){.kitchen{grid-template-columns:1fr 1fr}.k1{grid-column:1/-1}.k2{grid-column:1/2;margin-top:0!important}.k3{grid-column:2/3;margin-top:0!important;aspect-ratio:4/5}.k-cap{grid-column:1/-1}}
+/* прелоадер */
+.loader{display:none}
+.js .loader{position:fixed;inset:0;z-index:200;display:flex;align-items:flex-end;justify-content:space-between;padding:var(--pad);background:var(--night);color:var(--bone)}
+.loader-word{font-family:var(--serif);font-size:clamp(40px,6vw,96px);letter-spacing:.32em}
+.loader-num{font-family:var(--serif);font-size:clamp(80px,14vw,220px);line-height:.8;font-variant-numeric:tabular-nums;color:var(--ember)}
+.loader.done{transform:translateY(-100%);transition:transform 1.1s cubic-bezier(.77,0,.18,1)}
+/* зерно */
+.grain{position:fixed;inset:-50%;z-index:90;pointer-events:none;opacity:.07;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 1.2s steps(6) infinite}
+@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-4%,3%)}40%{transform:translate(3%,-5%)}60%{transform:translate(-2%,6%)}80%{transform:translate(5%,2%)}100%{transform:translate(0,0)}}
+/* листы: светлые главы наезжают на тёмные */
+.manifesto,.menu{position:relative;z-index:2;border-radius:clamp(20px,2.4vw,36px) clamp(20px,2.4vw,36px) 0 0;margin-top:calc(-1 * clamp(20px,2.4vw,36px))}
+.kitchen,.events{position:relative;z-index:1}
+@media(prefers-reduced-motion:reduce){.grain{animation:none}.js .loader{display:none}}
 </style></head><body>
+<div class="loader" aria-hidden="true"><span class="loader-word">EMBER</span><span class="loader-num">0</span></div>
 <a class="skip-link" href="#main">Перейти к содержанию</a>
 
 <header class="hd" data-solid="false">
@@ -266,7 +280,7 @@ form .btn{margin-top:34px;height:62px}
    <li><b>72 часа</b><span>сухое вызревание мяса</span></li>
    <li><b>4 сезона</b><span>меню меняется каждый квартал</span></li>
   </ul>
-  <div class="chef-foot" data-rise><img src="event-chef.jpg" alt="" loading="lazy"><p class="sign">Артём Волков<br><span>шеф-повар EMBER</span></p></div>
+  <div class="chef-foot" data-rise><img src="chef.jpg" alt="" loading="lazy"><p class="sign">Артём Волков<br><span>шеф-повар EMBER</span></p></div>
  </div>
 </section>
 
@@ -339,6 +353,7 @@ form .btn{margin-top:34px;height:62px}
  <div class="ft-row"><span>© 2026 EMBER</span><span>Концепт-проект · дизайн и разработка PCash · <a href="case-study.html">Кейс</a></span></div>
  <div class="wordmark" aria-hidden="true">EMBER</div>
 </footer>
+<div class="grain" aria-hidden="true"></div>
 <a class="dock" href="#reserve" aria-hidden="true" tabindex="-1">Забронировать стол</a>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" defer></script>
@@ -346,7 +361,7 @@ form .btn{margin-top:34px;height:62px}
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.11/dist/lenis.min.js" defer></script>
 <script src="shared.js?v=5" defer></script>
 
-<script src="motion.js?v=11" defer></script>
+<script src="motion.js?v=12" defer></script>
 <script>
 addEventListener('DOMContentLoaded', () => {
   const TZ = 'Europe/Moscow', OPEN = 12, CLOSE = 24;

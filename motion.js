@@ -51,7 +51,7 @@ addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  if (reduce || !window.gsap || !window.ScrollTrigger) return;
+  if (reduce || !window.gsap || !window.ScrollTrigger) { document.querySelector('.loader')?.remove(); return; }
   gsap.registerPlugin(ScrollTrigger);
 
   // --- плавная прокрутка: только мышь на ПК ---
@@ -73,6 +73,18 @@ addEventListener('DOMContentLoaded', () => {
 
   const E = 'expo.out';
 
+  // --- прелоадер: счёт до 100, затем занавес уезжает вверх и стартует вход ---
+  const loader = document.querySelector('.loader');
+  const num = loader && loader.querySelector('.loader-num');
+  const intro = gsap.timeline({ paused: true, defaults: { ease: E } });
+  if (loader) {
+    const c = { v: 0 };
+    gsap.to(c, { v: 100, duration: 1.4, ease: 'power2.inOut', onUpdate: () => num.textContent = Math.round(c.v), onComplete: () => {
+      loader.classList.add('done'); intro.play(0.001);
+      setTimeout(() => loader.remove(), 1200);
+    } });
+  } else intro.play();
+
   // --- разбивка заголовков на строки ---
   document.querySelectorAll('[data-split]').forEach(el => {
     const parts = el.innerHTML.split(/<br\s*\/?>/i);
@@ -80,7 +92,6 @@ addEventListener('DOMContentLoaded', () => {
   });
 
   // --- первый экран: вход ---
-  const intro = gsap.timeline({ defaults: { ease: E } });
   intro.from('.hero-media', { scale: 1.25, duration: 2.4 })
        .from('.wordmark span', { yPercent: 110, duration: 1.6, stagger: 0.07 }, 0.2)
        .from('.hero .ln > span', { yPercent: 110, duration: 1.3, stagger: 0.08 }, 0.7)
