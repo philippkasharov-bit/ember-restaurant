@@ -78,8 +78,11 @@ addEventListener('DOMContentLoaded', () => {
   const num = loader && loader.querySelector('.loader-num');
   const intro = gsap.timeline({ paused: true, defaults: { ease: E } });
   if (loader) {
+    // температура 20 → 450 °C; цвет металла: тёмный → вишнёвый → оранжевый → соломенно-белый
+    const stops = [[0, [90, 74, 60]], [.35, [150, 32, 12]], [.6, [224, 88, 24]], [.85, [255, 170, 70]], [1, [255, 236, 190]]];
+    const heat = k => { let i = 1; while (i < stops.length - 1 && k > stops[i][0]) i++; const [a0, c0] = stops[i - 1], [a1, c1] = stops[i]; const f = (k - a0) / (a1 - a0); return `rgb(${c0.map((v, n) => Math.round(v + (c1[n] - v) * f)).join(',')})`; };
     const c = { v: 0 };
-    gsap.to(c, { v: 100, duration: 1.4, ease: 'power2.inOut', onUpdate: () => num.textContent = Math.round(c.v), onComplete: () => {
+    gsap.to(c, { v: 1, duration: 2.2, ease: 'power2.in', onUpdate: () => { num.textContent = Math.round(20 + c.v * 430); loader.style.setProperty('--h', c.v.toFixed(3)); loader.style.setProperty('--heat', heat(c.v)); }, onComplete: () => {
       loader.classList.add('done'); intro.play(0.001);
       setTimeout(() => loader.remove(), 1200);
     } });
@@ -100,7 +103,7 @@ addEventListener('DOMContentLoaded', () => {
   // --- первый экран: камера отъезжает, слово распадается ---
   gsap.timeline({ scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } })
     .to('.hero-media', { scale: 1.2, yPercent: 8, filter: 'brightness(.45) saturate(.6)', ease: 'none' }, 0)
-    .to('.wordmark span', { yPercent: (i) => -30 - i * 18, ease: 'none' }, 0)
+    .to('.wordmark', { yPercent: -35, scale: .92, opacity: 0, filter: 'blur(8px)', ease: 'power1.in' }, 0)
     .to('.hero-top', { y: -80, autoAlpha: 0, ease: 'none' }, 0);
 
   // --- строки заголовков выезжают из-под маски ---
