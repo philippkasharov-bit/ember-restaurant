@@ -73,10 +73,10 @@ em{font-style:italic;font-family:var(--serif)}
 .stat span{display:block;margin-top:12px;color:#5c5044;font-size:15px}
 
 /* Chef */
-.chef{display:grid;grid-template-columns:1.1fr 1fr;min-height:100svh}
+.chef{display:grid;grid-template-columns:1.05fr 1fr;min-height:92svh}
 .chef-photo{position:relative;overflow:hidden;background:#1a120c}
 .chef-photo img{position:absolute;inset:-10% 0;width:100%;height:120%;object-fit:cover}
-.chef-text{display:flex;flex-direction:column;justify-content:space-between;gap:48px;padding:clamp(40px,6vw,96px) var(--pad);background:var(--coal)}
+.chef-text{display:flex;flex-direction:column;justify-content:center;gap:clamp(28px,3vw,44px);padding:clamp(60px,7vw,110px) var(--pad);background:var(--coal)}
 .chef-text h2{font-family:var(--serif);font-weight:400;font-size:clamp(48px,5.6vw,100px);line-height:.96}
 .chef-text h2 em{color:var(--ember)}
 .chef-text p{color:var(--ash);max-width:44ch;font-size:17px}
@@ -180,6 +180,34 @@ form .btn{margin-top:34px;height:62px}
  .ft{padding-bottom:100px}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+/* доработка */
+.craft{list-style:none;padding:0;display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #eee3d01f}
+.craft li{padding:22px 18px 0 0}.craft li+li{padding-left:18px;border-left:1px solid #eee3d01f}
+.craft b{display:block;font-family:var(--serif);font-weight:400;font-size:clamp(24px,2.1vw,34px);line-height:1.05;color:var(--bone)}
+.craft span{display:block;margin-top:6px;font-size:13px;color:var(--ash)}
+.chef-foot{display:flex;align-items:center;gap:20px;padding-top:8px}
+.chef-foot img{width:72px;height:72px;border-radius:50%;object-fit:cover}
+.sign span{font-family:var(--sans);font-style:normal;font-size:13px;color:var(--ash);letter-spacing:.04em}
+.reserve-info{justify-content:flex-start}
+.reserve-img{overflow:hidden;aspect-ratio:16/10;margin:0}
+.reserve-img img{width:100%;height:100%;object-fit:cover}
+.contacts{grid-template-columns:repeat(3,1fr);gap:20px;align-items:start}
+.contacts .meta{color:#7a6d5e;display:block;margin-bottom:8px}
+.contacts p{font-size:16px;line-height:1.45}
+.contacts a{border-bottom:1px solid #1b151040;padding:0}
+.contacts .status{grid-column:1/-1}
+.ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:32px;padding-bottom:clamp(40px,5vw,70px);border-bottom:1px solid #eee3d01a;margin-bottom:24px}
+.ft-lead{font-family:var(--serif);font-size:clamp(34px,3.8vw,62px);line-height:1.02}
+.ft-lead em{color:var(--ember)}
+.ft-grid>div{display:flex;flex-direction:column;gap:8px;font-size:15px}
+.ft-grid .meta{color:var(--ash-d);margin-bottom:6px}
+.ft-grid a{padding:4px 0;justify-self:start;align-self:flex-start;transition:color .3s}.ft-grid a:hover{color:var(--ember)}
+@media(max-width:860px){
+ .craft,.contacts{grid-template-columns:1fr}.craft li,.craft li+li{padding:16px 0;border-left:0;border-bottom:1px solid #eee3d01f}
+ .ft-grid{grid-template-columns:1fr}
+ .wordmark{font-size:clamp(80px,25vw,440px)}
+ .hero{min-height:560px}
+}
 </style></head><body>
 <a class="skip-link" href="#main">Перейти к содержанию</a>
 
@@ -215,10 +243,13 @@ form .btn{margin-top:34px;height:62px}
  <div class="chef-photo"><img src="chef.jpg" alt="Шеф ресторана у дровяной печи" data-parallax loading="lazy"></div>
  <div class="chef-text">
   <h2 data-split>Огонь —<br><em>главный</em><br>ингредиент</h2>
-  <div data-rise>
-   <p>Продукты привозим от фермеров Тульской и Калужской областей, а меню меняется четыре раза в год. На кухне нет ни одной электрической плиты: только дровяная печь и открытые угли.</p>
-   <p class="sign" style="margin-top:28px">Артём Волков, шеф</p>
-  </div>
+  <p data-rise>Продукты привозим от фермеров Тульской и Калужской областей, а меню меняется четыре раза в год. На кухне нет ни одной электрической плиты: только дровяная печь и открытые угли.</p>
+  <ul class="craft" data-rise>
+   <li><b>Вишня и дуб</b><span>дрова для печи и гриля</span></li>
+   <li><b>72 часа</b><span>сухое вызревание мяса</span></li>
+   <li><b>4 сезона</b><span>меню меняется каждый квартал</span></li>
+  </ul>
+  <div class="chef-foot" data-rise><img src="event-chef.jpg" alt="" loading="lazy"><p class="sign">Артём Волков<br><span>шеф-повар EMBER</span></p></div>
  </div>
 </section>
 
@@ -251,9 +282,11 @@ form .btn{margin-top:34px;height:62px}
 <section class="reserve" id="reserve">
  <div class="light reserve-info">
   <h2 data-split>Ждём вас<br><em>у огня</em></h2>
+  <figure class="reserve-img" data-rise><img src="interior.jpg" alt="Зал ресторана с открытым очагом" loading="lazy"></figure>
   <div class="contacts" data-rise>
-   <span>ул. Пятницкая, 18</span><span>Ежедневно 12:00–00:00</span>
-   <a href="tel:+74950000000">+7 (495) 000-00-00</a>
+   <div><span class="meta">Адрес</span><p>ул. Пятницкая, 18<br>м. Новокузнецкая</p></div>
+   <div><span class="meta">Часы</span><p>Ежедневно<br>12:00–00:00</p></div>
+   <div><span class="meta">Телефон</span><p><a href="tel:+74950000000">+7 (495) 000-00-00</a></p></div>
    <p class="status" id="open-status" aria-live="polite"></p>
   </div>
  </div>
@@ -273,7 +306,12 @@ form .btn{margin-top:34px;height:62px}
 </main>
 
 <footer class="ft">
- <div class="ft-row"><span>© 2026 EMBER · Пятницкая, 18</span><span>Концепт-проект · дизайн и разработка PCash · <a href="case-study.html">Кейс</a></span></div>
+ <div class="ft-grid">
+  <p class="ft-lead">Ужин у живого огня<br>начинается <em>с брони</em></p>
+  <div><span class="meta">Разделы</span><a href="#chef">Шеф</a><a href="#menu">Меню</a><a href="#events">События</a><a href="#reserve">Бронь</a></div>
+  <div><span class="meta">Контакты</span><a href="tel:+74950000000">+7 (495) 000-00-00</a><span>ул. Пятницкая, 18</span><span>Ежедневно 12:00–00:00</span></div>
+ </div>
+ <div class="ft-row"><span>© 2026 EMBER</span><span>Концепт-проект · дизайн и разработка PCash · <a href="case-study.html">Кейс</a></span></div>
  <div class="wordmark" aria-hidden="true">EMBER</div>
 </footer>
 <a class="dock" href="#reserve" aria-hidden="true" tabindex="-1">Забронировать стол</a>
