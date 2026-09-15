@@ -272,6 +272,15 @@ main>section+section,.ft{border-radius:0!important;margin-top:0!important;box-sh
 .menu-head,.events-head{position:relative}
 .menu-head::after,.events-head::after{content:"";position:absolute;left:var(--pad-l,0);right:0;bottom:calc(-1 * clamp(20px,3vw,44px));height:14px;background:var(--orn);opacity:.8;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 14'%3E%3Cpath d='M0 7h46M74 7h46' stroke='%23000' stroke-width='.9'/%3E%3Cpath d='M46 7c4-6 10-6 14 0 4-6 10-6 14 0-4 6-10 6-14 0-4 6-10 6-14 0z' fill='none' stroke='%23000' stroke-width='1'/%3E%3Ccircle cx='60' cy='7' r='1.8'/%3E%3Ccircle cx='40' cy='7' r='1'/%3E%3Ccircle cx='80' cy='7' r='1'/%3E%3C/svg%3E") left center/120px 14px repeat-x;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 14'%3E%3Cpath d='M0 7h46M74 7h46' stroke='%23000' stroke-width='.9'/%3E%3Cpath d='M46 7c4-6 10-6 14 0 4-6 10-6 14 0-4 6-10 6-14 0-4 6-10 6-14 0z' fill='none' stroke='%23000' stroke-width='1'/%3E%3Ccircle cx='60' cy='7' r='1.8'/%3E%3Ccircle cx='40' cy='7' r='1'/%3E%3Ccircle cx='80' cy='7' r='1'/%3E%3C/svg%3E") left center/120px 14px repeat-x}
 .events-head{--pad-l:var(--pad)}.events-head::after{right:var(--pad)}
+/* фото целиком внутри рамки: рамка по пропорции самого снимка */
+.orn{box-sizing:border-box;padding:calc(var(--orn-in,12px) + var(--orn-w,30px) - 3px);aspect-ratio:auto!important;height:auto!important;min-height:0!important}
+.orn::before{border:0!important;box-shadow:none!important}
+.orn>img{display:block;width:100%!important;height:auto!important;max-height:none!important;max-width:100%!important;object-fit:cover!important;position:static!important;inset:auto!important;margin:0!important;border-radius:0}
+.mf-photo .orn>img,.kitchen .orn>img{aspect-ratio:16/9!important}
+.chef-photo.orn{align-self:center;overflow:visible}
+.chef-photo.orn>img{aspect-ratio:4/5!important}
+.ev figure.orn>img,.reserve-img.orn>img{aspect-ratio:1/1!important}
+.reserve-form.orn{aspect-ratio:auto!important;padding-block:clamp(70px,8vw,120px)!important}
 </style></head><body>
 <div class="loader" aria-hidden="true"><div class="loader-glow"></div><span class="loader-word">EMBER</span><div class="loader-temp"><span class="loader-num">20</span><span class="loader-unit">°C</span><span class="loader-cap">Разогреваем печь</span></div><i class="loader-bar"></i></div>
 <a class="skip-link" href="#main">Перейти к содержанию</a>
@@ -309,7 +318,7 @@ main>section+section,.ft{border-radius:0!important;margin-top:0!important;box-sh
 </section>
 
 <section class="chef" id="chef">
- <div class="chef-photo orn"><img src="chef.jpg" alt="Шеф ресторана у дровяной печи" data-parallax loading="lazy"></div>
+ <div class="chef-photo orn"><img src="chef.jpg" alt="Шеф ресторана у дровяной печи" loading="lazy"></div>
  <div class="chef-text">
   <h2 data-split>Огонь —<br><em>главный</em><br>ингредиент</h2>
   <p data-rise>Продукты привозим от фермеров Тульской и Калужской областей, а меню меняется четыре раза в год. На кухне нет ни одной электрической плиты: только дровяная печь и открытые угли.</p>
