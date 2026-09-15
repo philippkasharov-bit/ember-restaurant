@@ -1,231 +1,123 @@
-// EMBER: шапка, главы и анимации. Один язык движения — всё поднимается, как тепло.
-(() => {
+// EMBER editorial: Lenis + GSAP ScrollTrigger по официальному рецепту.
+// Базовое состояние страницы видимое — анимации только добавляются поверх.
+addEventListener('DOMContentLoaded', () => {
+  const header = document.querySelector('.hd');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const header = document.querySelector('.site-header');
-
-  // --- заголовки: каждая строка поднимается из-под маски ---
-  document.querySelectorAll('[data-anim=lines]').forEach(h => {
-    const parts = h.innerHTML.split(/<br\s*\/?>/i);
-    h.innerHTML = parts.map((p, i) => `<span class="ln" style="--ld:${i * 0.12}s"><span>${p.trim()}</span></span>`).join('');
-  });
-
-  // --- цитата: слова «загораются» по мере прокрутки ---
-  const quote = document.querySelector('[data-anim=words]');
-  let words = [];
-  if (quote) {
-    quote.innerHTML = quote.textContent.trim().split(/\s+/).map(w => `<span class="w">${w}</span>`).join(' ');
-    words = [...quote.querySelectorAll('.w')];
-  }
-
-  // --- задержки для списков ---
-  document.querySelectorAll('[data-anim=item]').forEach((el, i) => el.style.setProperty('--d', `${i * 0.08}s`));
-  document.querySelectorAll('[data-anim=card]').forEach((el, i) => el.style.setProperty('--d', `${i * 0.12}s`));
-
-  // --- счётчики ---
-  const count = el => {
-    const to = parseFloat(el.dataset.count), dec = String(el.dataset.count).includes('.') ? 1 : 0;
-    if (reduce) return;
-    const t0 = performance.now(), dur = 1600;
-    const step = now => {
-      const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 4);
-      el.textContent = (to * e).toFixed(dec);
-      if (k < 1) requestAnimationFrame(step);
-    };
-    el.textContent = (0).toFixed(dec);
-    requestAnimationFrame(step);
-  };
-
-  // --- появление при прокрутке ---
-  const io = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (!e.isIntersecting) return;
-      e.target.classList.add('in');
-      pending = pending.filter(x => x !== e.target);
-      e.target.querySelectorAll?.('[data-count]').forEach(count);
-      io.unobserve(e.target);
-    });
-  }, { threshold: 0.18, rootMargin: '0px 0px -8% 0px' });
-  let pending = [...document.querySelectorAll('[data-anim], .ornament')];
-  pending.forEach(el => io.observe(el));
-
-  // --- активный раздел в навигации ---
-  const links = [...document.querySelectorAll('header nav a')];
-  const secs = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
-  const navIo = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (!e.isIntersecting) return;
-      links.forEach(a => a.toggleAttribute('aria-current', a.getAttribute('href') === '#' + e.target.id));
-      links.forEach(a => a.hasAttribute('aria-current') && a.setAttribute('aria-current', 'true'));
-    });
-  }, { rootMargin: '-45% 0px -50% 0px' });
-  secs.forEach(s => navIo.observe(s));
-
-  // --- горизонтальная лента событий (ПК, без «уменьшить движение») ---
-  const evSec = document.getElementById('events');
-  const evList = evSec && evSec.querySelector('.events-list');
-  let evCount = null;
-  const desktop = matchMedia('(min-width: 1024px)');
-  const setupEvents = () => {
-    if (!evSec) return;
-    const on = desktop.matches && !reduce && !window.ScrollTrigger;
-    if (on && !evSec.classList.contains('hscroll')) {
-      const pin = document.createElement('div'); pin.className = 'pin';
-      while (evSec.firstChild) pin.appendChild(evSec.firstChild);
-      evSec.appendChild(pin);
-      evCount = document.createElement('div'); evCount.className = 'ev-count';
-      evCount.innerHTML = '<span>01</span><i></i><span>0' + evList.children.length + '</span>';
-      pin.querySelector('.wrap').appendChild(evCount);
-      evSec.classList.add('hscroll');
-    }
-    if (!on && evSec.classList.contains('hscroll')) {
-      const pin = evSec.querySelector('.pin');
-      evCount && evCount.remove();
-      while (pin.firstChild) evSec.insertBefore(pin.firstChild, pin);
-      pin.remove(); evSec.classList.remove('hscroll'); evSec.style.height = ''; evList.style.removeProperty('--tx');
-    }
-    if (on) {
-      const travel = Math.max(0, evList.scrollWidth - innerWidth);
-      evSec.style.height = (innerHeight + travel) + 'px';
-      evSec.dataset.travel = travel;
-    }
-  };
-  addEventListener('load', setupEvents);
-  desktop.addEventListener('change', () => { setupEvents(); onScroll(); });
-
-  // --- кнопка брони на телефоне ---
   const dock = document.querySelector('.dock');
   const reserve = document.getElementById('reserve');
-  const heroEl = document.querySelector('.hero');
+  const hero = document.querySelector('.hero');
 
-  // --- прокрутка: шапка, прогресс, параллакс, цитата ---
-  const photo = document.querySelector('[data-parallax]');
-  const bandBg = document.querySelector('[data-parallax-bg]');
-  const band = bandBg && bandBg.parentElement;
-  let lastY = scrollY, ticking = false;
-
-  // плавная лента: позиция догоняет прокрутку с инерцией, фото внутри карточек смещаются медленнее
-  let evTarget = 0, evCur = 0, evRaf = 0;
-  const evTick = () => {
-    evRaf = 0;
-    const travel = +evSec.dataset.travel || 0;
-    evCur += (evTarget - evCur) * 0.16;
-    if (Math.abs(evTarget - evCur) < 0.0005) evCur = evTarget;
-    evList.style.setProperty('--tx', (-evCur * travel).toFixed(1) + 'px');
-    const mid = innerWidth / 2;
-    [...evList.children].forEach(card => {
-      const r = card.getBoundingClientRect();
-      const d = (r.left + r.width / 2 - mid) / innerWidth;
-      card.style.setProperty('--ix', (d * -90).toFixed(1) + 'px');
-      card.style.setProperty('--s', (1 - Math.min(.08, Math.abs(d) * .12)).toFixed(3));
-      card.style.setProperty('--o', (1 - Math.min(.55, Math.abs(d) * .9)).toFixed(3));
-    });
-    if (evCur !== evTarget) evRaf = requestAnimationFrame(evTick);
-  };
-
+  // --- шапка, прогресс, кнопка на телефоне (работает всегда) ---
+  let lastY = scrollY;
   const onScroll = () => {
-    ticking = false;
-    const y = scrollY, vh = innerHeight;
-    const max = document.documentElement.scrollHeight - vh;
-
-    header.dataset.state = y > 40 ? 'solid' : 'top';
-    const menuOpen = document.querySelector('header nav.open');
-    header.dataset.hidden = (!reduce && !menuOpen && y > vh * 0.9 && y > lastY + 4) ? 'true' : (y < lastY - 4 || y < vh * 0.9 ? 'false' : header.dataset.hidden);
+    const y = scrollY, vh = innerHeight, max = document.documentElement.scrollHeight - vh;
+    const menuOpen = !!document.querySelector('.hd nav.open');
+    header.dataset.solid = y > vh * 0.85;
+    if (!menuOpen) header.dataset.hidden = y > vh && y > lastY + 3 ? 'true' : (y < lastY - 3 || y < vh ? 'false' : header.dataset.hidden);
     lastY = y;
     header.style.setProperty('--p', max > 0 ? (y / max).toFixed(4) : 0);
-
-    // страховка: всё, что уже выше низа экрана, показываем даже при очень быстрой прокрутке
-    pending = pending.filter(el => {
-      if (el.getBoundingClientRect().top < vh * 0.92) { el.classList.add('in'); el.querySelectorAll?.('[data-count]').forEach(count); io.unobserve(el); return false; }
-      return true;
-    });
-
-    if (dock) {
-      const rr = reserve.getBoundingClientRect();
-      const show = y > heroEl.offsetHeight * 0.7 && rr.top > vh * 0.9 && !menuOpen;
-      dock.dataset.show = show;
-    }
-
-    if (reduce) return;
-
-    // 1. остывание первого экрана
-    if (!window.ScrollTrigger) { const cool = Math.min(1, Math.max(0, y / (heroEl.offsetHeight * 0.9))); heroEl.style.setProperty('--cool', cool.toFixed(3)); }
-
-    // 3. горизонтальная лента
-    if (evSec && evSec.classList.contains('hscroll')) {
-      const travel = +evSec.dataset.travel || 0;
-      const r = evSec.getBoundingClientRect();
-      evTarget = Math.min(1, Math.max(0, -r.top / Math.max(1, travel)));
-      if (!evRaf) evRaf = requestAnimationFrame(evTick);
-      const k = evTarget;
-      if (evCount) {
-        evCount.querySelector('i').style.setProperty('--ep', k.toFixed(3));
-        evCount.firstElementChild.textContent = '0' + (1 + Math.min(evList.children.length - 1, Math.floor(k * evList.children.length)));
-      }
-    }
-
-
-    if (photo && !window.ScrollTrigger) {
-      const r = photo.getBoundingClientRect();
-      const k = (r.top + r.height / 2 - vh / 2) / vh;
-      photo.style.setProperty('--py', `${(k * -40).toFixed(1)}px`);
-    }
-    if (band) {
-      const r = band.getBoundingClientRect();
-      const k = (r.top + r.height / 2 - vh / 2) / vh;
-      if (!window.ScrollTrigger) bandBg.style.setProperty('--by', `${(k * 90).toFixed(1)}px`);
-      // слова загораются, пока полоса проходит через центр экрана
-      const prog = Math.min(1, Math.max(0, (vh * 0.9 - r.top) / (vh * 0.6)));
-      const lit = Math.round(prog * words.length);
-      words.forEach((w, i) => w.classList.toggle('lit', i < lit));
-    }
+    if (dock) dock.dataset.show = y > hero.offsetHeight * 0.7 && reserve.getBoundingClientRect().top > vh * 0.9 && !menuOpen;
   };
-  addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
 
-  // --- кинематографичная прокрутка: Lenis на ПК с мышью ---
-  const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  // активный пункт меню
+  const links = [...document.querySelectorAll('.hd nav a')];
+  const nio = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) links.forEach(a => a.getAttribute('href') === '#' + e.target.id ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current'));
+  }), { rootMargin: '-45% 0px -50% 0px' });
+  links.forEach(a => { const s = document.querySelector(a.getAttribute('href')); s && nio.observe(s); });
+
+  if (reduce || !window.gsap || !window.ScrollTrigger) return;
+  gsap.registerPlugin(ScrollTrigger);
+
+  // --- плавная прокрутка: только мышь на ПК ---
   let lenis = null;
-  if (false && !reduce && fine && window.Lenis) {
-    lenis = new Lenis({ lerp: 0.075, wheelMultiplier: 0.9, smoothWheel: true });
-    const root = document.documentElement;
-    let vel = 0;
-    const raf = time => {
-      lenis.raf(time);
-      vel += ((lenis.velocity || 0) - vel) * 0.1;
-      root.style.setProperty('--vel', Math.max(-6, Math.min(6, vel / 12)).toFixed(3));
-      requestAnimationFrame(raf);
-    };
-    requestAnimationFrame(raf);
-    lenis.on('scroll', onScroll);
-    // меню на телефоне и прочие оверлеи: блокируем прокрутку
-    new MutationObserver(() => document.querySelector('header nav.open') ? lenis.stop() : lenis.start())
-      .observe(document.querySelector('header nav'), { attributes: true, attributeFilter: ['class'] });
+  if (window.Lenis && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    lenis = new Lenis({ lerp: 0.1 });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(t => lenis.raf(t * 1000));
+    gsap.ticker.lagSmoothing(0);
+    const nav = document.querySelector('.hd nav');
+    new MutationObserver(() => nav.classList.contains('open') ? lenis.stop() : lenis.start()).observe(nav, { attributes: true, attributeFilter: ['class'] });
+  }
+  document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+    const id = a.getAttribute('href'); const el = id.length > 1 && document.querySelector(id);
+    if (!el) return;
+    e.preventDefault(); header.dataset.hidden = 'false';
+    lenis ? lenis.scrollTo(el, { duration: 1.6 }) : el.scrollIntoView({ behavior: 'smooth' });
+  }));
+
+  const E = 'expo.out';
+
+  // --- разбивка заголовков на строки ---
+  document.querySelectorAll('[data-split]').forEach(el => {
+    const parts = el.innerHTML.split(/<br\s*\/?>/i);
+    el.innerHTML = parts.map(p => `<span class="ln"><span>${p.trim()}</span></span>`).join('');
+  });
+
+  // --- первый экран: вход ---
+  const intro = gsap.timeline({ defaults: { ease: E } });
+  intro.from('.hero-media img', { scale: 1.3, duration: 2.4 })
+       .from('.wordmark span', { yPercent: 110, duration: 1.6, stagger: 0.07 }, 0.2)
+       .from('.hero .ln > span', { yPercent: 110, duration: 1.3, stagger: 0.08 }, 0.7)
+       .from('.hero [data-rise]', { y: 30, autoAlpha: 0, duration: 1.2, stagger: 0.12 }, 0.9);
+
+  // --- первый экран: камера отъезжает, слово распадается ---
+  gsap.timeline({ scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } })
+    .to('.hero-media img', { scale: 1.25, yPercent: 8, filter: 'brightness(.45) saturate(.6)', ease: 'none' }, 0)
+    .to('.wordmark span', { yPercent: (i) => -30 - i * 18, ease: 'none' }, 0)
+    .to('.hero-top', { y: -80, autoAlpha: 0, ease: 'none' }, 0);
+
+  // --- строки заголовков выезжают из-под маски ---
+  gsap.utils.toArray('[data-split]').filter(el => !el.closest('.hero')).forEach(el => {
+    gsap.from(el.querySelectorAll('.ln > span'), { yPercent: 110, duration: 1.4, ease: E, stagger: 0.1, scrollTrigger: { trigger: el, start: 'top 85%' } });
+  });
+  gsap.utils.toArray('[data-rise]').filter(el => !el.closest('.hero')).forEach(el => {
+    gsap.from(el, { y: 50, autoAlpha: 0, duration: 1.3, ease: E, scrollTrigger: { trigger: el, start: 'top 90%' } });
+  });
+
+  // --- манифест: фото-«таблетки» раскрываются ---
+  gsap.from('.pill', { width: 0, duration: 1.4, ease: E, stagger: 0.15, scrollTrigger: { trigger: '.manifesto p', start: 'top 70%' } });
+
+  // --- счётчики ---
+  document.querySelectorAll('[data-count]').forEach(b => {
+    const to = parseFloat(b.dataset.count), dec = b.dataset.count.includes('.') ? 1 : 0, o = { v: 0 };
+    gsap.to(o, { v: to, duration: 2, ease: 'power3.out', scrollTrigger: { trigger: b, start: 'top 90%' }, onUpdate: () => b.textContent = o.v.toFixed(dec) });
+  });
+
+  // --- фото шефа: занавес + параллакс ---
+  gsap.fromTo('.chef-photo', { clipPath: 'inset(100% 0 0 0)' }, { clipPath: 'inset(0% 0 0 0)', duration: 1.8, ease: 'expo.inOut', scrollTrigger: { trigger: '.chef', start: 'top 70%' } });
+  gsap.utils.toArray('[data-parallax]').forEach(img => {
+    gsap.fromTo(img, { yPercent: -8 }, { yPercent: 8, ease: 'none', scrollTrigger: { trigger: img.parentElement, start: 'top bottom', end: 'bottom top', scrub: true } });
+  });
+
+
+  const mm = gsap.matchMedia();
+  // --- события: горизонтальная лента на ПК ---
+  mm.add('(min-width: 1024px)', () => {
+    const sec = document.getElementById('events'), track = sec.querySelector('.track');
+    gsap.set(track, { display: 'flex', width: 'max-content' });
+    gsap.set(track.children, { width: 'min(46vw, 680px)' });
+    const dist = () => Math.max(0, track.scrollWidth - innerWidth);
+    const tw = gsap.to(track, { x: () => -dist(), ease: 'none', scrollTrigger: { trigger: sec, start: 'top top', end: () => '+=' + dist(), pin: true, scrub: 1, invalidateOnRefresh: true } });
+    track.querySelectorAll('figure img').forEach(img => {
+      gsap.fromTo(img, { xPercent: -6 }, { xPercent: 6, ease: 'none', scrollTrigger: { trigger: img, containerAnimation: tw, start: 'left right', end: 'right left', scrub: true } });
+    });
+    return () => { gsap.set(track, { clearProps: 'all' }); gsap.set(track.children, { clearProps: 'all' }); };
+  });
+
+  // --- цитата: слова загораются по прокрутке ---
+  const q = document.querySelector('[data-words]');
+  if (q) {
+    q.innerHTML = q.textContent.trim().split(/\s+/).map(w => `<span class="w" style="display:inline-block">${w}</span>`).join(' ');
+    gsap.fromTo(q.querySelectorAll('.w'), { opacity: 0.12 }, { opacity: 1, stagger: 0.1, ease: 'none', scrollTrigger: { trigger: '.quote', start: 'top 60%', end: 'center 45%', scrub: true } });
   }
 
-  // лёгкий параллакс заголовков глав
-  const heads = [...document.querySelectorAll('.chapter h2')];
-  const headTick = () => {
-    const vh = innerHeight;
-    heads.forEach(h => {
-      const r = h.getBoundingClientRect();
-      if (r.bottom < -100 || r.top > vh + 100) return;
-      h.style.setProperty('--hy', (((r.top + r.height / 2) - vh / 2) * -0.08).toFixed(1));
-    });
-  };
-  if (!reduce) { addEventListener('scroll', () => requestAnimationFrame(headTick), { passive: true }); headTick(); }
-  addEventListener('resize', () => { setupEvents(); onScroll(); });
-  onScroll();
+  // --- бронь: светлая половина приезжает, форма проявляется ---
+  gsap.from('.reserve-info', { clipPath: 'inset(0 100% 0 0)', duration: 1.6, ease: 'expo.inOut', scrollTrigger: { trigger: '.reserve', start: 'top 70%' } });
 
-  // якорные ссылки: учитываем высоту шапки
-  document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
-    const id = a.getAttribute('href');
-    if (id.length < 2) return;
-    const el = document.querySelector(id); if (!el) return;
-    e.preventDefault();
-    header.dataset.hidden = 'false';
-    const top = el.getBoundingClientRect().top + scrollY - 60;
-    if (window.__lenis) window.__lenis.scrollTo(top, { duration: 1.4 });
-    else if (lenis) lenis.scrollTo(top, { duration: 1.6 });
-    else scrollTo({ top, behavior: reduce ? 'auto' : 'smooth' });
-    history.replaceState(null, '', id);
-  }));
-})();
+  // --- футер: огромное слово поднимается ---
+  gsap.from('.ft .wordmark', { yPercent: 40, ease: 'none', scrollTrigger: { trigger: '.ft', start: 'top bottom', end: 'bottom bottom', scrub: true } });
+
+  addEventListener('load', () => ScrollTrigger.refresh());
+});
