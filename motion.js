@@ -38,15 +38,25 @@ addEventListener('DOMContentLoaded', () => {
   };
   addEventListener('scroll', markNav, { passive: true }); markNav();
 
-  // --- видео первого экрана: на ПК и хорошей сети, иначе остаётся кадр-постер ---
-  const hv = document.getElementById('hero-video');
+  // --- живые петли (Magnific): <video data-src> поверх своего фото ---
+  // Источник подставляется, только когда ролик подъезжает к экрану (первый экран — после load,
+  // чтобы не спорить с LCP). Играет только в кадре и при открытой вкладке; проявляется по
+  // 'playing', до этого и при reduce / save-data / 2g виден исходный кадр.
   const conn = navigator.connection;
-  if (hv && !reduce && matchMedia('(min-width: 861px)').matches && !(conn && (conn.saveData || /2g/.test(conn.effectiveType)))) {
-    hv.innerHTML = '<source src="hero.webm" type="video/webm"><source src="hero.mp4" type="video/mp4">';
-    hv.addEventListener('playing', () => hv.classList.add('on'), { once: true });
-    const go = () => { hv.load(); hv.play().catch(() => {}); };
-    document.readyState === 'complete' ? go() : addEventListener('load', go);
-    new IntersectionObserver(([e]) => e.isIntersecting ? hv.play().catch(() => {}) : hv.pause()).observe(hv);
+  if (!reduce && !(conn && (conn.saveData || /2g/.test(conn.effectiveType)))) {
+    const seen = new Set();
+    const sync = v => seen.has(v) && !document.hidden ? v.play().catch(() => {}) : v.pause();
+    const io = new IntersectionObserver(es => es.forEach(({ target: v, isIntersecting }) => {
+      if (isIntersecting && !v.src) {
+        v.addEventListener('playing', () => v.classList.add('on'), { once: true });
+        v.src = v.dataset.src;
+      }
+      isIntersecting ? seen.add(v) : seen.delete(v);
+      sync(v);
+    }), { rootMargin: '200px 0px' });
+    const watch = () => document.querySelectorAll('video[data-src]').forEach(v => io.observe(v));
+    document.readyState === 'complete' ? watch() : addEventListener('load', watch, { once: true });
+    document.addEventListener('visibilitychange', () => document.querySelectorAll('video[data-src]').forEach(sync));
   }
 
   if (reduce || !window.gsap || !window.ScrollTrigger) { document.querySelector('.loader')?.remove(); return; }
