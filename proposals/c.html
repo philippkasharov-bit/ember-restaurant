@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EMBER · C — В устье печи</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Forum&family=Geologica:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* C · «В устье печи»: кино. Арка печи — единственная форма; фильм в ней на прокрутке заполняет экран */
+:root{--void:#060504;--bone:#efe6d6;--ash:#9c9284;--ember:#ff7b2e;
+ --display:'Forum',Georgia,serif;--text:'Geologica',system-ui,sans-serif;--pad:clamp(18px,3vw,48px)}
+*{margin:0;box-sizing:border-box}
+html{background:var(--void);color:var(--bone)}
+body{font:300 16px/1.6 var(--text);-webkit-font-smoothing:antialiased;overflow-x:clip}
+a{color:inherit;text-decoration:none}video,img{display:block}
+:focus-visible{outline:2px solid var(--ember);outline-offset:4px}
+.sm{font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--ash)}
+.film{height:220svh;position:relative}
+.stage{position:sticky;top:0;height:100svh;overflow:hidden;display:grid;place-items:center}
+.hd{position:absolute;inset:0 0 auto;display:flex;justify-content:space-between;align-items:center;padding:22px var(--pad);z-index:5}
+.hd .logo{font-family:var(--display);font-size:20px;letter-spacing:.5em;color:var(--bone)}
+.hd a.res{display:inline-flex;align-items:center;min-height:44px;border-bottom:1px solid var(--ember);color:var(--bone)}
+/* слово за аркой: огромные разреженные капители, уходят за края */
+.word{position:absolute;inset:auto 0 50% 0;transform:translateY(50%);display:flex;justify-content:space-between;padding:0 1vw;font-family:var(--display);font-size:min(24vw,40vh);line-height:1;color:#1a1410;user-select:none;opacity:calc(1 - var(--k,0)*1.4)}
+/* арка: устье печи; на прокрутке растёт до полного кадра, свод уплощается */
+.arch{position:relative;z-index:2;width:calc(30vw + var(--k,0)*70vw);height:calc(62svh + var(--k,0)*38svh);max-width:none;border-radius:calc((1 - var(--k,0))*50vw) calc((1 - var(--k,0))*50vw) 0 0;overflow:hidden;background:#140d08;box-shadow:0 40px 90px -30px rgba(0,0,0,.9)}
+.arch video,.arch img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.arch::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,#060504cc)}
+.sub{position:absolute;z-index:4;left:50%;bottom:calc(6svh + 20px);transform:translateX(-50%);width:min(92vw,760px);text-align:center}
+.sub h1{font-family:var(--display);font-weight:400;font-size:clamp(28px,3vw,46px);line-height:1.15;color:var(--bone);text-shadow:0 2px 24px #000}
+.sub h1 em{font-style:normal;color:var(--ember)}
+.sub p{margin-top:14px}
+.tc{position:absolute;left:var(--pad);bottom:24px;z-index:5}.loc{position:absolute;right:var(--pad);bottom:24px;z-index:5;text-align:right}
+@media(max-width:860px){
+ .arch{width:calc(64vw + var(--k,0)*36vw);height:calc(56svh + var(--k,0)*44svh);border-radius:calc((1 - var(--k,0))*64vw) calc((1 - var(--k,0))*64vw) 0 0}
+ .word{font-size:27vw;inset:28svh 0 auto 0;transform:none}
+ .sub{bottom:76px}.tc{bottom:22px}.loc{display:none}
+}
+@media(prefers-reduced-motion:reduce){.film{height:auto}.stage{position:relative}}
+</style>
+</head>
+<body>
+<main>
+<section class="film" aria-label="Первый экран">
+ <div class="stage">
+  <header class="hd"><a class="logo" href="#">EMBER</a><a class="res sm" href="#">Забронировать</a></header>
+  <div class="word" aria-hidden="true"><span>E</span><span>M</span><span>B</span><span>E</span><span>R</span></div>
+  <div class="arch" aria-hidden="true"><img src="../hero-poster.jpg" alt=""><video muted loop playsinline preload="none" data-src="../media/hero-embers"></video></div>
+  <div class="sub"><h1>Каждое утро печь разогревается <em>четыре часа</em></h1><p class="sm">Глава I · Розжиг</p></div>
+  <span class="tc sm" aria-hidden="true">00:00:04</span>
+  <span class="loc sm">Москва · Пятницкая 18</span>
+ </div>
+</section>
+</main>
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) return;
+  document.querySelectorAll('video[data-src]').forEach(v => {
+    const b = v.dataset.src + (innerWidth <= 860 ? '-sm' : '');
+    v.innerHTML = `<source src="${b}.av1.mp4" type='video/mp4; codecs="av01.0.08M.10"'><source src="${b}.mp4" type="video/mp4">`;
+    v.load(); v.play().catch(() => {});
+  });
+  // камера въезжает в устье: k 0 → 1 за первый экран прокрутки
+  const film = document.querySelector('.film'), tc = document.querySelector('.tc');
+  const tick = () => {
+    const k = Math.min(1, Math.max(0, scrollY / (film.offsetHeight - innerHeight)));
+    film.style.setProperty('--k', k.toFixed(3));
+    tc.textContent = '00:00:' + String(4 + Math.round(k * 20)).padStart(2, '0');
+  };
+  addEventListener('scroll', () => requestAnimationFrame(tick), { passive: true }); tick();
+})();
+</script>
+</body>
+</html>

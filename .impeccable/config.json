@@ -1,0 +1,26 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "proposals/c.html"
+        ],
+        "createdAt": "2026-11-19T12:19:21.392Z",
+        "reason": "agent: only low-contrast text is the aria-hidden decorative EMBER letters behind the arch (#1a1410 on #060504)"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "proposals/b.html"
+        ],
+        "createdAt": "2026-11-19T12:19:21.605Z",
+        "reason": "agent: aria-hidden folio set on the photo with mix-blend-mode:difference; detector reads it against paper"
+      }
+    ]
+  }
+}
