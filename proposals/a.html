@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EMBER · A — Шкала жара</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&family=Golos+Text:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* A · «Шкала жара»: ресторан как прибор. Температура — сетка, навигация и заголовок. */
+:root{
+ --soot:#0b0a09;--ash:#e8e2d8;--smoke:#948b81;--rule:#2b2724;--heat:#ff5a1f;
+ --display:'Unbounded',sans-serif;--text:'Golos Text',system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,monospace;
+ --rail:clamp(56px,6vw,96px);--pad:clamp(18px,3vw,44px);--ease:cubic-bezier(.2,.9,.1,1)
+}
+*{margin:0;box-sizing:border-box}
+html{background:var(--soot);color:var(--ash);scrollbar-color:#3a332d var(--soot)}
+body{font:400 16px/1.55 var(--text);-webkit-font-smoothing:antialiased;overflow-x:clip}
+a{color:inherit;text-decoration:none}img,video{display:block;max-width:100%}
+::selection{background:var(--heat);color:var(--soot)}
+:focus-visible{outline:2px solid var(--heat);outline-offset:3px}
+.mono{font-family:var(--mono);font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+
+/* шкала-навигация по левому краю */
+.rail{position:fixed;inset:0 auto 0 0;width:var(--rail);border-right:1px solid var(--rule);display:flex;flex-direction:column;justify-content:space-between;padding:22px 0;z-index:20;background:var(--soot)}
+.rail a{position:relative;display:block;padding:10px 0 10px 14px;color:var(--smoke)}
+.rail a::before{content:"";position:absolute;right:0;top:50%;width:14px;height:1px;background:currentColor}
+.rail a[aria-current]{color:var(--heat)}.rail a[aria-current]::before{width:28px}
+.rail .brand{font-family:var(--display);font-weight:700;font-size:13px;letter-spacing:.12em;color:var(--ash);writing-mode:vertical-rl;transform:rotate(180deg);padding:0;margin-left:16px}
+.rail .brand::before{display:none}
+.mercury{position:absolute;right:-1px;bottom:0;width:2px;height:calc(var(--p,0)*100%);background:var(--heat)}
+
+main{margin-left:var(--rail)}
+
+/* первый экран */
+.hero{position:relative;min-height:100svh;display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:auto 1fr auto;column-gap:var(--pad);padding:22px var(--pad) 28px;border-bottom:1px solid var(--rule)}
+.hero-top{grid-column:1/-1;display:flex;justify-content:space-between;gap:24px;align-items:baseline;padding-bottom:18px;border-bottom:1px solid var(--rule)}
+.hero-top nav{display:flex;gap:28px}.hero-top nav a{color:var(--smoke);transition:color .3s}.hero-top nav a:hover{color:var(--ash)}
+.reading{grid-column:1/-1;position:relative;align-self:center;margin:2vh 0}
+/* видео видно только сквозь цифры: тёмный слой с белым текстом в режиме multiply */
+.num{position:relative;isolation:isolate;overflow:hidden;line-height:.8}
+.num video,.num img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.num .ink{position:relative;z-index:1;display:block;background:var(--soot);color:#fff;mix-blend-mode:multiply;font-family:var(--display);font-weight:var(--w,800);font-size:min(31vw,46vh);letter-spacing:-.06em;line-height:.8;padding:.04em 0 .02em;white-space:nowrap;font-variation-settings:'wght' var(--w,800)}
+.num .ink sup{font-size:.36em;vertical-align:top;letter-spacing:0;margin-left:.04em;position:relative;top:.12em}
+.scale{display:flex;justify-content:space-between;margin-top:14px;color:var(--smoke)}
+.scale span{position:relative;padding-top:12px}.scale span::before{content:"";position:absolute;left:0;top:0;width:1px;height:8px;background:currentColor}
+.scale span.on{color:var(--heat)}
+.hero-copy{grid-column:1/7;align-self:end}
+.hero-copy h1{font-family:var(--display);font-weight:500;font-size:clamp(26px,2.6vw,44px);line-height:1.04;letter-spacing:-.02em;max-width:16ch}
+.hero-copy h1 em{font-style:normal;color:var(--heat)}
+.hero-meta{grid-column:8/-1;align-self:end;display:grid;grid-template-columns:repeat(3,auto);justify-content:end;gap:10px 34px;text-align:left}
+.hero-meta dt{color:var(--smoke)}.hero-meta dd{font-family:var(--mono);font-size:15px;margin-top:4px}
+.cta{grid-column:8/-1;justify-self:end;margin-top:22px;display:inline-flex;align-items:center;gap:16px;height:56px;padding:0 26px;background:var(--heat);color:var(--soot);font-family:var(--display);font-weight:600;font-size:14px;letter-spacing:.02em;transition:gap .5s var(--ease)}
+.cta:hover{gap:26px}.cta svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.6}
+
+/* ключевая секция: меню как индекс жара */
+.index{padding:clamp(80px,9vw,140px) var(--pad);display:grid;grid-template-columns:repeat(12,1fr);column-gap:var(--pad)}
+.index-head{grid-column:1/-1;display:grid;grid-template-columns:subgrid;align-items:end;margin-bottom:clamp(36px,4vw,56px)}
+.index-head h2{grid-column:1/8;font-family:var(--display);font-weight:300;font-size:clamp(44px,6.4vw,104px);line-height:.92;letter-spacing:-.04em}
+.index-head h2 b{font-weight:800;color:var(--heat)}
+.index-head p{grid-column:9/-1;color:var(--smoke);max-width:38ch}
+.rows{grid-column:1/9;border-top:1px solid var(--ash)}
+.row{display:grid;grid-template-columns:7.5ch 1fr auto;gap:0 24px;align-items:baseline;padding:20px 0 18px;border-bottom:1px solid var(--rule);cursor:default;transition:background .4s,padding .4s var(--ease)}
+.row .t{font-family:var(--mono);font-size:clamp(20px,1.8vw,28px);color:var(--smoke);transition:color .3s}
+.row h3{font-family:var(--display);font-weight:400;font-size:clamp(20px,1.9vw,30px);line-height:1.1;letter-spacing:-.02em}
+.row p{grid-column:2;color:var(--smoke);font-size:14px;margin-top:6px}
+.row .price{font-family:var(--mono);font-size:16px;white-space:nowrap}
+.row:hover,.row:focus-within,.row.is-on{background:linear-gradient(90deg,#ff5a1f14,transparent 60%)}
+.row:hover .t,.row.is-on .t{color:var(--heat)}
+.plate{grid-column:9/-1;position:sticky;top:24px;align-self:start;margin-left:8px}
+.plate figure{position:relative;aspect-ratio:4/5;overflow:hidden;background:#15110e}
+.plate img,.plate video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .6s}
+.plate figcaption{display:flex;justify-content:space-between;margin-top:12px;color:var(--smoke)}
+.plate .gauge{position:absolute;left:14px;bottom:14px;right:14px;height:2px;background:#ffffff26}
+.plate .gauge i{display:block;height:100%;width:var(--g,50%);background:var(--heat);transition:width .8s var(--ease)}
+.foot{grid-column:1/-1;display:flex;justify-content:space-between;gap:24px;margin-top:28px;color:var(--smoke)}
+
+@media(max-width:860px){
+ :root{--rail:0px}
+ .rail{inset:auto 0 0 0;width:auto;height:54px;flex-direction:row;align-items:center;padding:0 12px;border-right:0;border-top:1px solid var(--rule)}
+ .rail .brand{display:none}.rail a{padding:14px 6px}.rail a::before{display:none}
+ .mercury{right:auto;left:0;top:0;bottom:auto;height:2px;width:calc(var(--p,0)*100%)}
+ .hero{grid-template-columns:1fr;padding-bottom:84px}
+ .hero-top nav{display:none}
+ .num .ink{font-size:38vw}
+ .hero-copy,.hero-meta,.cta{grid-column:1/-1}
+ .hero-meta{justify-content:start;grid-template-columns:repeat(2,auto);margin-top:24px}
+ .cta{justify-self:stretch;justify-content:space-between}
+ .index{grid-template-columns:1fr;padding-bottom:110px}
+ .index-head{grid-template-columns:1fr}.index-head h2,.index-head p{grid-column:1}.index-head p{margin-top:18px}
+ .rows,.plate{grid-column:1}.plate{position:relative;top:0;margin:0 0 28px;order:-1}
+ .row{grid-template-columns:6ch 1fr;}.row .price{grid-column:2;margin-top:8px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<nav class="rail" aria-label="Шкала разделов">
+ <a class="brand" href="#top">EMBER</a>
+ <div>
+  <a class="mono" href="#index">900°</a>
+  <a class="mono" href="#index" aria-current="true">450°</a>
+  <a class="mono" href="#index">220°</a>
+  <a class="mono" href="#book">20°</a>
+ </div>
+ <i class="mercury" aria-hidden="true"></i>
+</nav>
+
+<main>
+<section class="hero" id="top">
+ <div class="hero-top mono">
+  <span>EMBER · Москва, Пятницкая 18</span>
+  <nav aria-label="Разделы"><a href="#index">Меню</a><a href="#index">Шеф</a><a href="#index">События</a><a href="#book">Бронь</a></nav>
+  <span>12:00–00:00</span>
+ </div>
+
+ <div class="reading">
+  <div class="num" aria-hidden="true">
+   <img src="../hero-poster.jpg" alt="">
+   <video muted loop playsinline preload="none" data-src="../media/hero-embers"></video>
+   <span class="ink" id="temp">450<sup>°</sup></span>
+  </div>
+  <div class="scale mono" aria-hidden="true"><span>20°</span><span>220°</span><span class="on">450°</span><span>650°</span><span>900°</span></div>
+ </div>
+
+ <div class="hero-copy">
+  <h1>Кухня, где главный прибор&nbsp;— <em>огонь</em>. Ни газа, ни плит.</h1>
+ </div>
+ <dl class="hero-meta mono">
+  <div><dt>Дрова</dt><dd>вишня, дуб</dd></div>
+  <div><dt>Печь</dt><dd>до 450°</dd></div>
+  <div><dt>С</dt><dd>2019</dd></div>
+ </dl>
+ <a class="cta" href="#book">Забронировать стол <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg></a>
+</section>
+
+<section class="index" id="index" aria-labelledby="index-h">
+ <div class="index-head">
+  <h2 id="index-h">Меню по <b>температуре</b></h2>
+  <p>Каждое блюдо — своя точка на шкале: от жара открытых углей до мягкого томления в остывающей печи.</p>
+ </div>
+ <div class="rows" role="list">
+  <div class="row is-on" role="listitem" tabindex="0" data-img="../hero.jpg" data-g="92%"><span class="t">450°</span><div><h3>Стейк рибай на вишнёвых углях</h3><p>300 г, соус из печёного перца</p></div><span class="price">3 400 ₽</span></div>
+  <div class="row" role="listitem" tabindex="0" data-img="../f-flame.jpg" data-g="74%"><span class="t">380°</span><div><h3>Форель горячего копчения</h3><p>ольховая щепа, сливочный хрен</p></div><span class="price">1 450 ₽</span></div>
+  <div class="row" role="listitem" tabindex="0" data-img="../f-coals.jpg" data-g="52%"><span class="t">260°</span><div><h3>Печёная свёкла с козьим сыром</h3><p>фундук, гречишный мёд</p></div><span class="price">890 ₽</span></div>
+  <div class="row" role="listitem" tabindex="0" data-img="../f-meat.jpg" data-g="34%"><span class="t">160°</span><div><h3>Томлёная утиная ножка</h3><p>груша, красное вино, пюре из сельдерея</p></div><span class="price">1 900 ₽</span></div>
+  <div class="row" role="listitem" tabindex="0" data-img="../f-grill.jpg" data-g="22%"><span class="t">120°</span><div><h3>Яблоко из печи</h3><p>карамель, мороженое на сливках</p></div><span class="price">650 ₽</span></div>
+ </div>
+ <aside class="plate" aria-label="Кадр блюда">
+  <figure>
+   <img id="plate-img" src="../hero.jpg" alt="Стейк на решётке над открытым огнём">
+   <div class="gauge" aria-hidden="true"><i id="gauge"></i></div>
+  </figure>
+  <figcaption class="mono"><span id="plate-t">450°</span><span>угли вишни</span></figcaption>
+ </aside>
+ <div class="foot mono" id="book"><span>Полная карта и винный лист — по запросу</span><a href="#top">+7 (495) 000-00-00</a></div>
+</section>
+</main>
+
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // видео в цифрах: AV1 → H.264, только без «уменьшить движение»
+  document.querySelectorAll('video[data-src]').forEach(v => {
+    if (reduce) return;
+    const b = v.dataset.src;
+    v.innerHTML = `<source src="${b}.av1.mp4" type='video/mp4; codecs="av01.0.08M.10"'><source src="${b}.mp4" type="video/mp4">`;
+    v.load(); v.play().catch(() => {});
+  });
+  // розжиг: цифры «нагреваются» — 20° → 450°, вес Unbounded 200 → 800; прокрутка поднимает ртуть на шкале
+  const ink = document.getElementById('temp'), root = document.documentElement;
+  if (!reduce) {
+    const t0 = performance.now(), D = 1800, sup = ink.querySelector('sup').outerHTML;
+    const ignite = now => {
+      const k = Math.min(1, (now - t0) / D), e = 1 - Math.pow(1 - k, 3);
+      ink.innerHTML = Math.round(20 + e * 430) + sup;
+      ink.style.setProperty('--w', Math.round(200 + e * 600));
+      if (k < 1) requestAnimationFrame(ignite);
+    };
+    requestAnimationFrame(ignite);
+  }
+  const tick = () => root.style.setProperty('--p', Math.min(1, scrollY / (document.body.scrollHeight - innerHeight)).toFixed(3));
+  addEventListener('scroll', () => requestAnimationFrame(tick), { passive: true }); tick();
+  // строки меню: кадр и стрелка жара справа
+  const img = document.getElementById('plate-img'), g = document.getElementById('gauge'), t = document.getElementById('plate-t');
+  document.querySelectorAll('.row').forEach(r => {
+    const on = () => { document.querySelectorAll('.row').forEach(x => x.classList.toggle('is-on', x === r)); img.src = r.dataset.img; g.style.setProperty('--g', r.dataset.g); t.textContent = r.querySelector('.t').textContent; };
+    r.addEventListener('mouseenter', on); r.addEventListener('focus', on);
+  });
+  g.style.setProperty('--g', '92%');
+})();
+</script>
+</body>
+</html>
