@@ -1,17 +1,17 @@
 <!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>EMBER — ресторан на открытом огне</title><meta name="description" content="Ресторан EMBER в Москве: мясо и овощи на углях, сезонное меню от шефа, винная карта из 200 позиций.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>">
-<script>document.documentElement.classList.add('js')</script><meta name="theme-color" content="#0d0b09">
-<meta property="og:type" content="website"><meta property="og:title" content="EMBER — ресторан на открытом огне"><meta property="og:description" content="Ресторан EMBER в Москве: мясо и овощи на углях, сезонное меню от шефа, винная карта из 200 позиций."><meta property="og:image" content="https://philippkasharov-bit.github.io/ember-restaurant/og.jpg"><meta property="og:url" content="https://philippkasharov-bit.github.io/ember-restaurant/"><meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lenis@1.3.11/dist/lenis.css">
-<link rel="preload" as="image" href="hero-poster.jpg" fetchpriority="high"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="canonical" href="https://philippkasharov-bit.github.io/ember-restaurant/">
+<script>document.documentElement.classList.add('js');try{sessionStorage.getItem('ember-lit')&&document.documentElement.classList.add('lit')}catch(e){}</script><meta name="theme-color" content="#0d0b09">
+<meta property="og:type" content="website"><meta property="og:locale" content="ru_RU"><meta property="og:site_name" content="EMBER"><meta property="og:title" content="EMBER — ресторан на открытом огне"><meta property="og:description" content="Ресторан EMBER в Москве: мясо и овощи на углях, сезонное меню от шефа, винная карта из 200 позиций."><meta property="og:image" content="https://philippkasharov-bit.github.io/ember-restaurant/og.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="EMBER — мясо на углях у открытого огня"><meta property="og:url" content="https://philippkasharov-bit.github.io/ember-restaurant/"><meta name="twitter:card" content="summary_large_image">
+<style>html.lenis,html.lenis body{height:auto}.lenis:not(.lenis-autoToggle).lenis-stopped{overflow:clip}.lenis [data-lenis-prevent],.lenis [data-lenis-prevent-wheel],.lenis [data-lenis-prevent-touch]{overscroll-behavior:contain}.lenis.lenis-smooth iframe{pointer-events:none}.lenis.lenis-autoToggle{transition-property:overflow;transition-duration:1ms;transition-behavior:allow-discrete}</style>
+<link rel="preload" as="image" href="hero-poster.jpg" fetchpriority="high"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
  --night:#0d0b09;--coal:#16110d;--cream:#efe6d6;--ink:#1b1510;
  --bone:#eee3d0;--ash:#a89c88;--ash-d:#857866;--ember:#e8a85c;--rust:#a8481a;--gold:#c9a15b;
  --serif:'Cormorant Garamond',Georgia,serif;--sans:Manrope,system-ui,sans-serif;
- --pad:clamp(20px,4.2vw,64px);--ease:cubic-bezier(.16,1,.3,1)
+ --pad:clamp(20px,4.2vw,64px);--h2:clamp(60px,8.6vw,140px);--ease:cubic-bezier(.16,1,.3,1)
 }
 *{margin:0;box-sizing:border-box}[hidden]{display:none!important}
 html{scroll-behavior:smooth}html.lenis{scroll-behavior:auto}
@@ -65,12 +65,12 @@ em{font-style:italic;font-family:var(--serif)}
 /* Manifesto */
 .light{background:var(--cream);color:var(--ink)}
 .manifesto{padding:clamp(90px,12vw,190px) var(--pad)}
-.mf-grid{display:grid;grid-template-columns:1.7fr 1fr;gap:clamp(40px,5vw,90px);align-items:end}.manifesto .mf-text{font-family:var(--serif);font-weight:400;font-size:clamp(64px,8.6vw,150px);line-height:.92;letter-spacing:-.025em}.mf-text .i1{display:inline-block;padding-left:1.1em}.mf-text .i2{display:inline-block;padding-left:.4em;color:var(--rust)}.mf-sub{margin-top:clamp(28px,3vw,44px);max-width:34ch;font-size:clamp(17px,1.3vw,20px);color:#5c5044}.mf-photo{margin:0}.mf-photo img{width:100%;aspect-ratio:4/5;max-height:70vh;object-fit:cover;border-radius:2px}.mf-photo figcaption{margin-top:14px;color:#7a6d5e}
+.mf-grid{display:grid;grid-template-columns:1.7fr 1fr;gap:clamp(40px,5vw,90px);align-items:end}.manifesto .mf-text{font-family:var(--serif);font-weight:400;font-size:var(--h2);line-height:.9;letter-spacing:-.025em}.mf-text .i1{display:inline-block;padding-left:1.1em}.mf-text .i2{display:inline-block;padding-left:.4em;color:var(--rust)}.mf-sub{margin-top:clamp(28px,3vw,44px);max-width:34ch;font-size:clamp(17px,1.3vw,20px);color:#5c5044}.mf-photo{margin:0}.mf-photo img{width:100%;aspect-ratio:4/5;max-height:70vh;object-fit:cover;border-radius:2px}.mf-photo figcaption{margin-top:14px;color:#6b5e4f}
 .manifesto p em{color:var(--rust)}
 .pill{display:inline-block;vertical-align:-.08em;width:2.3em;height:.86em;border-radius:999px;background:#2a1f16 center/cover;margin:0 .1em}
-.manifesto-foot{position:relative;display:grid;grid-template-columns:repeat(3,1fr);margin-top:clamp(70px,9vw,140px)}.manifesto-foot::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,#a8481a 0,#c9a15b 18%,#1b151033 45%,#1b151033 70%,transparent)}.stat{position:relative;padding:34px 24px 6px 0}.stat+.stat{padding-left:clamp(20px,3vw,48px)}.stat::before{content:"";position:absolute;left:0;top:-4px;width:9px;height:9px;background:var(--cream);border:1px solid #a8481a;transform:rotate(45deg)}.stat:first-child::before{background:#a8481a}.stat+.stat::after{content:"";position:absolute;left:0;top:10px;bottom:0;width:1px;background:linear-gradient(180deg,#a8481a88,#1b151014)}.stat span::before{content:"";display:inline-block;width:18px;height:1px;background:#a8481a;vertical-align:middle;margin-right:10px}
-.stat b{display:block;font-family:var(--sans);font-weight:500;font-size:clamp(52px,6vw,104px);line-height:1;letter-spacing:-.04em;font-variant-numeric:lining-nums tabular-nums}
-.stat span{display:block;margin-top:14px;color:#5c5044;font-size:15px;max-width:22ch}
+.manifesto-foot{position:relative;display:grid;grid-template-columns:repeat(3,1fr);margin-top:clamp(70px,9vw,140px)}.manifesto-foot::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,#a8481a 0,#c9a15b 18%,#1b151033 45%,#1b151033 70%,transparent)}.stat{position:relative;padding:34px 24px 6px 0}.stat+.stat{padding-left:clamp(20px,3vw,48px)}.stat::before{content:"";position:absolute;left:0;top:-4px;width:9px;height:9px;background:var(--cream);border:1px solid #a8481a;transform:rotate(45deg)}.stat:first-child::before{background:#a8481a}.stat+.stat::after{content:"";position:absolute;left:0;top:10px;bottom:0;width:1px;background:linear-gradient(180deg,#a8481a88,#1b151014)}
+.stat b{display:block;font-family:var(--serif);font-weight:400;font-size:clamp(56px,5.6vw,92px);line-height:.9;letter-spacing:-.01em;font-variant-numeric:lining-nums}
+.stat span{display:block;margin-top:12px;font-family:var(--serif);font-style:italic;font-size:clamp(20px,1.8vw,26px);line-height:1.2;color:#5c5044;max-width:22ch}
 
 /* Chef */
 .chef{display:grid;grid-template-columns:1.05fr 1fr;min-height:92svh}
@@ -85,22 +85,22 @@ em{font-style:italic;font-family:var(--serif)}
 /* Menu */
 .menu{padding:clamp(90px,11vw,170px) var(--pad)}
 .menu-head{display:grid;grid-template-columns:1fr 1fr;align-items:end;gap:24px;margin-bottom:clamp(40px,6vw,90px)}
-.menu-head h2{font-family:var(--serif);font-weight:400;font-size:clamp(64px,10vw,180px);line-height:.86;letter-spacing:-.02em}
+.menu-head h2{font-family:var(--serif);font-weight:400;font-size:var(--h2);line-height:.9;letter-spacing:-.02em}
 .menu-head h2 em{color:var(--rust)}
 .menu-head p{justify-self:end;max-width:34ch;color:#5c5044}
 .dish{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:baseline;padding:clamp(20px,2.4vw,34px) 0;border-top:1px solid #1b151026}
 .dish:last-child{border-bottom:1px solid #1b151026}
-.dish h3{font-family:var(--serif);font-weight:400;font-size:clamp(30px,3.8vw,62px);line-height:1;transition:transform .6s var(--ease),color .4s}
+.dish h3{font-family:var(--serif);font-weight:400;font-size:clamp(26px,2.9vw,44px);line-height:1.05;transition:transform .6s var(--ease),color .4s}
 .dish small{display:block;font-family:var(--sans);font-size:14px;color:#6e6254;margin-top:8px}
-.dish .price{font-family:var(--serif);font-size:clamp(24px,2.6vw,42px);white-space:nowrap}
-.dish:hover h3{transform:translateX(18px);color:var(--rust)}
+.dish .price{font-family:var(--serif);font-size:clamp(22px,2.1vw,32px);white-space:nowrap;font-variant-numeric:lining-nums}
+.dish:hover h3{transform:translateX(10px);color:var(--rust)}
 .menu-cta{display:flex;justify-content:space-between;align-items:center;margin-top:40px;color:#5c5044;font-size:15px;gap:20px;flex-wrap:wrap}
 .btn.dark{background:var(--ink);color:var(--cream)}.btn.dark:hover{color:var(--night)}
 
 /* Events */
 .events{position:relative;padding:clamp(90px,10vw,150px) 0;overflow:hidden}
 .events-head{padding:0 var(--pad);display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:clamp(40px,5vw,70px)}
-.events-head h2{font-family:var(--serif);font-weight:400;font-size:clamp(56px,8.5vw,150px);line-height:.88}
+.events-head h2{font-family:var(--serif);font-weight:400;font-size:var(--h2);line-height:.9;letter-spacing:-.02em}
 .events-head h2 em{color:var(--ember)}
 .events-head p{color:var(--ash);max-width:30ch}
 .track{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2vw,28px);padding:0 var(--pad)}
@@ -122,7 +122,7 @@ em{font-style:italic;font-family:var(--serif)}
 /* Reserve */
 .reserve{display:grid;grid-template-columns:1fr 1fr;align-items:stretch}
 .reserve-info{padding:clamp(90px,10vw,150px) var(--pad);display:flex;flex-direction:column;justify-content:space-between;gap:48px}
-.reserve-info h2{font-family:var(--serif);font-weight:400;font-size:clamp(56px,8vw,140px);line-height:.88}
+.reserve-info h2{font-family:var(--serif);font-weight:400;font-size:var(--h2);line-height:.9;letter-spacing:-.02em}
 .reserve-info h2 em{color:var(--rust)}
 .contacts{display:grid;gap:10px;font-size:17px}
 .contacts a{border-bottom:1px solid #1b151033;justify-self:start;padding:6px 0}
@@ -134,16 +134,16 @@ em{font-style:italic;font-family:var(--serif)}
 form{display:grid;grid-template-columns:1fr 1fr;gap:0 28px;color-scheme:dark}
 form>*{min-width:0}
 label.f{display:block;padding-top:16px}
-label.f span{display:block;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ash-d)}
+label.f span{display:block;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--ash-d)}
 input,select{width:100%;min-width:0;background:transparent;border:0;border-bottom:1px solid #eee3d033;color:var(--bone);padding:12px 0 14px;font:500 18px/1.2 var(--sans);transition:border-color .3s}
 input::placeholder{color:#857866}
-input:focus,select:focus{outline:none;border-bottom-color:var(--ember)}
+input:focus,select:focus{outline:none;border-bottom-color:var(--ember);box-shadow:0 1px 0 var(--ember)}
 select option{background:var(--night)}
 input[aria-invalid]{border-bottom-color:#e0795a}
 .full{grid-column:1/-1}
 .guests{display:flex;align-items:center;gap:16px;padding:22px 0 18px;border-bottom:1px solid #eee3d033;flex-wrap:wrap}
-.guests>span{flex:1;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ash-d)}
-.g-btn{width:44px;height:44px;border-radius:50%;border:1px solid #eee3d044;background:none;color:var(--bone);font-size:18px;cursor:pointer;transition:border-color .3s}
+.guests>span{flex:1;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--ash-d)}
+.g-btn{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;border:1px solid #eee3d044;background:none;color:var(--bone);cursor:pointer;transition:border-color .3s,background-color .3s}.g-btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round}.g-btn:active:not(:disabled){background:#eee3d00f}
 .g-btn:hover{border-color:var(--ember)}.g-btn:disabled{opacity:.3;cursor:not-allowed}
 #g-val{min-width:2ch;text-align:center;font-family:var(--serif);font-size:30px}
 .guests small{flex-basis:100%;color:var(--gold);font-size:13px}
@@ -155,7 +155,7 @@ form .btn{margin-top:34px;height:62px}
 .ft{padding:clamp(60px,8vw,110px) var(--pad) 0;overflow:hidden}
 .ft-row{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;color:var(--ash);font-size:14px}
 .ft-row a{text-decoration:underline;text-underline-offset:4px;display:inline-block;padding:10px 0}
-.ft .wordmark{font-size:clamp(90px,25vw,420px);color:transparent;-webkit-text-stroke:1px rgba(201,161,91,.38);background:linear-gradient(180deg,rgba(201,161,91,.16),transparent 85%);-webkit-background-clip:text;background-clip:text;margin:40px 0 -.1em;user-select:none}
+.ft .wordmark{font-size:clamp(90px,25vw,420px);margin:40px 0 -.1em;user-select:none}
 .dock{display:none}
 
 .js [data-split] .ln{display:block;overflow:hidden;padding-bottom:.08em;margin-bottom:-.08em}
@@ -192,7 +192,7 @@ form .btn{margin-top:34px;height:62px}
 .reserve-img{overflow:hidden;aspect-ratio:16/10;margin:0}
 .reserve-img img{width:100%;height:100%;object-fit:cover}
 .contacts{grid-template-columns:repeat(3,1fr);gap:20px;align-items:start}
-.contacts .meta{color:#7a6d5e;display:block;margin-bottom:8px}
+.contacts .meta{color:#6b5e4f;display:block;margin-bottom:8px}
 .contacts p{font-size:16px;line-height:1.45}
 .contacts a{border-bottom:1px solid #1b151040;padding:0}
 .contacts .status{grid-column:1/-1}
@@ -256,7 +256,7 @@ main>section:nth-of-type(2){z-index:2}main>section:nth-of-type(3){z-index:3}main
 .mf-photo .orn{display:block;line-height:0}
 @media(max-width:860px){.orn{--orn-w:20px;--orn-in:8px}.chef-photo.orn{--orn-in:30px}}
 
-.reserve-form.orn{--orn-in:clamp(16px,2vw,28px);--orn-w:26px}.reserve-form.orn::before{box-shadow:none}.reserve-form.orn{padding-inline:clamp(56px,6vw,100px)!important}@media(max-width:860px){.reserve-form.orn{padding-inline:40px!important}}
+.reserve-form.orn{--orn-in:clamp(16px,2vw,28px);--orn-w:26px}.reserve-form.orn::before{box-shadow:none}.reserve-form.orn{padding-inline:calc(var(--orn-in) + var(--orn-w) + clamp(18px,3vw,44px))!important}@media(max-width:860px){.reserve-form.orn{--orn-in:6px;--orn-w:20px}}
 .menu .dish:first-of-type{border-top:0}
 /* стыки секций: ровная резная полоса вместо скруглённых листов */
 main>section+section,.ft{border-radius:0!important;margin-top:0!important;box-shadow:none!important;border-top:22px solid #0d0b09;border-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='22' viewBox='0 0 60 22'%3E%3Crect width='60' height='22' fill='%230d0b09'/%3E%3Cg fill='%23c9a15b' stroke='%23c9a15b'%3E%3Cpath d='M0 2.5H60M0 19.5H60' stroke-width='1'/%3E%3Cpath d='M0 11C10 4 20 4 30 11S50 18 60 11' fill='none' stroke-width='1.3'/%3E%3Cpath d='M13 7c-3-3-1-6 3-6 0 3-1 5-3 6zM47 15c3 3 1 6-3 6 0-3 1-5 3-6z' stroke='none'/%3E%3Ccircle cx='30' cy='11' r='1.8' stroke='none'/%3E%3C/g%3E%3C/svg%3E") 22 0 0 0 / 22px 0 0 0 round}
@@ -266,7 +266,7 @@ main>section+section,.ft{border-radius:0!important;margin-top:0!important;box-sh
 .stat:first-child::before{background:#a8481a}
 .stat+.stat::before{left:-11px}
 .manifesto-foot::before{height:14px;top:-7px;background:linear-gradient(90deg,#a8481a,#c9a15b 40%,#a8481a88 80%,transparent);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 14'%3E%3Cpath d='M0 7h46M74 7h46' stroke='%23000' stroke-width='.9'/%3E%3Cpath d='M46 7c4-6 10-6 14 0 4-6 10-6 14 0-4 6-10 6-14 0-4 6-10 6-14 0z' fill='none' stroke='%23000' stroke-width='1'/%3E%3Ccircle cx='60' cy='7' r='1.8'/%3E%3Ccircle cx='40' cy='7' r='1'/%3E%3Ccircle cx='80' cy='7' r='1'/%3E%3C/svg%3E") left center/120px 14px repeat-x;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 14'%3E%3Cpath d='M0 7h46M74 7h46' stroke='%23000' stroke-width='.9'/%3E%3Cpath d='M46 7c4-6 10-6 14 0 4-6 10-6 14 0-4 6-10 6-14 0-4 6-10 6-14 0z' fill='none' stroke='%23000' stroke-width='1'/%3E%3Ccircle cx='60' cy='7' r='1.8'/%3E%3Ccircle cx='40' cy='7' r='1'/%3E%3Ccircle cx='80' cy='7' r='1'/%3E%3C/svg%3E") left center/120px 14px repeat-x}
-.stat span::before{width:26px;height:8px;background:#a8481a;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 14'%3E%3Cpath d='M0 7h46M74 7h46' stroke='%23000' stroke-width='.9'/%3E%3Cpath d='M46 7c4-6 10-6 14 0 4-6 10-6 14 0-4 6-10 6-14 0-4 6-10 6-14 0z' fill='none' stroke='%23000' stroke-width='1'/%3E%3Ccircle cx='60' cy='7' r='1.8'/%3E%3Ccircle cx='40' cy='7' r='1'/%3E%3Ccircle cx='80' cy='7' r='1'/%3E%3C/svg%3E") center/cover no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 14'%3E%3Cpath d='M0 7h46M74 7h46' stroke='%23000' stroke-width='.9'/%3E%3Cpath d='M46 7c4-6 10-6 14 0 4-6 10-6 14 0-4 6-10 6-14 0-4 6-10 6-14 0z' fill='none' stroke='%23000' stroke-width='1'/%3E%3Ccircle cx='60' cy='7' r='1.8'/%3E%3Ccircle cx='40' cy='7' r='1'/%3E%3Ccircle cx='80' cy='7' r='1'/%3E%3C/svg%3E") center/cover no-repeat}
+
 
 /* резной разделитель под заголовками меню и событий */
 .menu-head,.events-head{position:relative}
@@ -286,7 +286,7 @@ main>section+section,.ft{border-radius:0!important;margin-top:0!important;box-sh
 .manifesto,.menu,.kitchen{padding-block:clamp(88px,9vw,132px)!important}
 .quote{min-height:88svh!important;padding-block:clamp(88px,9vw,132px)!important}
 .reserve{align-items:center!important}
-.reserve-form.orn{padding-block:clamp(56px,5vw,80px)!important;align-self:center;height:auto!important}
+.reserve-form.orn{padding-block:calc(var(--orn-in) + var(--orn-w) + clamp(26px,3.4vw,52px))!important;align-self:center;height:auto!important}
 @media(max-width:860px){.reserve-form.orn{margin-inline:var(--pad)}}
 .ft{padding-top:clamp(72px,7vw,104px)!important}
 .manifesto-foot{margin-top:clamp(56px,6vw,84px)}
@@ -303,13 +303,18 @@ main>section+section,.ft{border-radius:0!important;margin-top:0!important;box-sh
 .orn{--orn-in:2px}
 .chef-photo.orn{--orn-in:4px}
 /* меню: тихая реакция строки вместо превью */
-.menu .dish{transition:background .45s var(--ease),padding-left .45s var(--ease)}
-.menu .dish:hover{background:linear-gradient(90deg,rgba(168,72,26,.07),transparent 70%);padding-left:14px}
+.menu .dish{transition:background .45s var(--ease)}
+.menu .dish:hover{background:linear-gradient(90deg,rgba(168,72,26,.07),transparent 70%)}
 .menu .dish:hover .price{color:var(--rust)}
 @media(max-width:860px){
  .hero-media img,.hero-media video{object-position:64% 58%}
  .hero::after{background:linear-gradient(180deg,rgba(13,11,9,.55) 0,rgba(13,11,9,.12) 26%,rgba(13,11,9,.62) 62%,var(--night) 100%)!important}
 }
+/* финиш: поверхности браузера, переносы, прелоадер один раз за визит */
+html{scrollbar-color:#3b2e23 var(--night)}
+input,select{caret-color:var(--ember)}.reserve-form{color-scheme:dark}
+h1,h2,h3,blockquote,.k-cap{text-wrap:balance}p,li,small,figcaption{text-wrap:pretty}
+.lit .loader{display:none!important}
 </style></head><body>
 <div class="loader" aria-hidden="true"><div class="loader-glow"></div><span class="loader-word">EMBER</span><div class="loader-temp"><span class="loader-num">20</span><span class="loader-unit">°C</span><span class="loader-cap">Разогреваем печь</span></div><i class="loader-bar"></i></div>
 <a class="skip-link" href="#main">Перейти к содержанию</a>
@@ -340,9 +345,9 @@ main>section+section,.ft{border-radius:0!important;margin-top:0!important;box-sh
  <figure class="mf-photo" data-rise><span class="orn"><img src="f-steak.jpg" alt="Стейк на решётке в дыму от углей" loading="lazy"></span><figcaption class="meta">Печь разогревается с 8 утра</figcaption></figure>
  </div>
  <div class="manifesto-foot">
-  <div class="stat" data-rise><b data-count="6">6</b><span>лет у огня</span></div>
-  <div class="stat" data-rise><b data-count="200">200</b><span>вин в карте</span></div>
-  <div class="stat" data-rise><b data-count="4.9">4.9</b><span>рейтинг гостей</span></div>
+  <div class="stat" data-rise><b>6</b><span>лет у огня</span></div>
+  <div class="stat" data-rise><b>200</b><span>вин в карте</span></div>
+  <div class="stat" data-rise><b>4,9</b><span>рейтинг гостей</span></div>
  </div>
 </section>
 
@@ -411,7 +416,7 @@ main>section+section,.ft{border-radius:0!important;margin-top:0!important;box-sh
    <label class="f"><span>Телефон</span><input name="phone" aria-label="Телефон" required type="tel" autocomplete="tel" inputmode="tel" pattern="[\d\s()+-]{10,}" placeholder="+7"></label>
    <label class="f"><span>Дата</span><input name="date" id="b-date" required type="date" aria-label="Дата"></label>
    <label class="f"><span>Время</span><select name="time" id="b-time" required aria-label="Время"></select></label>
-   <div class="guests full" role="group" aria-label="Количество гостей"><span>Гостей</span><button type="button" class="g-btn" data-d="-1" aria-label="Меньше гостей">−</button><output id="g-val" aria-live="polite">2</output><button type="button" class="g-btn" data-d="1" aria-label="Больше гостей">+</button><small id="g-note"></small></div>
+   <div class="guests full" role="group" aria-label="Количество гостей"><span>Гостей</span><button type="button" class="g-btn" data-d="-1" aria-label="Меньше гостей"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg></button><output id="g-val" aria-live="polite">2</output><button type="button" class="g-btn" data-d="1" aria-label="Больше гостей"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12M12 6v12"/></svg></button><small id="g-note"></small></div>
    <input type="hidden" name="guests" id="g-hidden" value="2 гостей"><input type="hidden" name="when" id="b-when">
    <button class="btn full" type="submit">Забронировать</button>
   </form>
@@ -436,7 +441,7 @@ main>section+section,.ft{border-radius:0!important;margin-top:0!important;box-sh
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.11/dist/lenis.min.js" defer></script>
 <script src="shared.js?v=5" defer></script>
 
-<script src="motion.js?v=21" defer></script>
+<script src="motion.js?v=22" defer></script>
 <script>
 addEventListener('DOMContentLoaded', () => {
   const TZ = 'Europe/Moscow', OPEN = 12, CLOSE = 24;

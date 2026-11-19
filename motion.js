@@ -101,8 +101,10 @@ addEventListener('DOMContentLoaded', () => {
 
   const E = 'expo.out';
 
-  // --- прелоадер: счёт до 100, затем занавес уезжает вверх и стартует вход ---
-  const loader = document.querySelector('.loader');
+  // --- прелоадер: печь разогревается до 450 °C, затем занавес уезжает вверх и стартует вход ---
+  // Один раз за визит: при переходах и перезагрузках сайт открывается сразу.
+  let loader = document.querySelector('.loader');
+  if (loader && document.documentElement.classList.contains('lit')) { loader.remove(); loader = null; }
   const num = loader && loader.querySelector('.loader-num');
   const intro = gsap.timeline({ paused: true, defaults: { ease: E } });
   if (loader) {
@@ -112,6 +114,7 @@ addEventListener('DOMContentLoaded', () => {
     const c = { v: 0 };
     gsap.to(c, { v: 1, duration: 2.2, ease: 'power2.in', onUpdate: () => { num.textContent = Math.round(20 + c.v * 430); loader.style.setProperty('--h', c.v.toFixed(3)); loader.style.setProperty('--heat', heat(c.v)); }, onComplete: () => {
       loader.classList.add('done'); intro.play(0.001);
+      try { sessionStorage.setItem('ember-lit', '1'); } catch (e) {}
       setTimeout(() => loader.remove(), 1200);
     } });
   } else intro.play();
@@ -130,8 +133,9 @@ addEventListener('DOMContentLoaded', () => {
 
   // --- первый экран: камера отъезжает, слово распадается ---
   gsap.timeline({ scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } })
-    .to('.hero-media', { scale: 1.2, yPercent: 8, filter: 'brightness(.45) saturate(.6)', ease: 'none' }, 0)
-    .to('.hero .wordmark', { yPercent: -35, scale: .92, opacity: 0, filter: 'blur(8px)', ease: 'power1.in' }, 0)
+    // затемнение — прозрачностью над ночным фоном: без filter на видео и на объёмных буквах
+    .to('.hero-media', { scale: 1.2, yPercent: 8, opacity: .45, ease: 'none' }, 0)
+    .to('.hero .wordmark', { yPercent: -35, scale: .92, opacity: 0, ease: 'power1.in' }, 0)
     .to('.hero-top', { y: -80, autoAlpha: 0, ease: 'none' }, 0);
 
   // --- строки заголовков выезжают из-под маски ---
@@ -142,17 +146,8 @@ addEventListener('DOMContentLoaded', () => {
     gsap.from(el, { y: 50, autoAlpha: 0, duration: 1.3, ease: E, scrollTrigger: { trigger: el, start: 'top 90%' } });
   });
 
-  // --- манифест: фото-«таблетки» раскрываются ---
-  gsap.from('.pill', { width: 0, duration: 1.4, ease: E, stagger: 0.15, scrollTrigger: { trigger: '.manifesto p', start: 'top 70%' } });
-
-  // --- линии статистики прорисовываются, ромбы вспыхивают ---
+  // --- резная линия статистики прорисовывается слева направо (цифры не «считаются») ---
   gsap.fromTo('.stat', { clipPath: 'inset(-20px 100% -20px -20px)' }, { clipPath: 'inset(-20px -20px -20px -20px)', duration: 1.4, ease: 'expo.inOut', stagger: 0.18, scrollTrigger: { trigger: '.manifesto-foot', start: 'top 85%' } });
-
-  // --- счётчики ---
-  document.querySelectorAll('[data-count]').forEach(b => {
-    const to = parseFloat(b.dataset.count), dec = b.dataset.count.includes('.') ? 1 : 0, o = { v: 0 };
-    gsap.to(o, { v: to, duration: 2, ease: 'power3.out', scrollTrigger: { trigger: b, start: 'top 90%' }, onUpdate: () => b.textContent = o.v.toFixed(dec) });
-  });
 
   // --- кадры кухни: разная скорость и раскрытие ---
   gsap.utils.toArray('.kitchen figure').forEach((f, i) => {
@@ -168,19 +163,9 @@ addEventListener('DOMContentLoaded', () => {
   });
 
 
-  const mm = gsap.matchMedia();
-  // --- события: горизонтальная лента на ПК ---
-  mm.add('(min-width: 1024px)', () => {
-    const sec = document.getElementById('events'), track = sec.querySelector('.track');
-    gsap.set(track, { display: 'flex', width: 'max-content' });
-    gsap.set(track.children, { width: 'min(46vw, 680px)' });
-    const dist = () => Math.max(0, track.scrollWidth - innerWidth);
-    const tw = gsap.to(track, { x: () => -dist(), ease: 'none', scrollTrigger: { trigger: sec, start: 'top top', end: () => '+=' + dist(), pin: true, scrub: 1, invalidateOnRefresh: true } });
-    track.querySelectorAll('figure img').forEach(img => {
-      gsap.fromTo(img.closest('figure'), { xPercent: -3 }, { xPercent: 3, ease: 'none', scrollTrigger: { trigger: img, containerAnimation: tw, start: 'left right', end: 'right left', scrub: true } });
-    });
-    return () => { gsap.set(track, { clearProps: 'all' }); gsap.set(track.children, { clearProps: 'all' }); };
-  });
+  // --- события: три формата одним разворотом, карточки поднимаются лесенкой ---
+  // (раньше — горизонтальная лента с закреплением: ~700px «пустой» прокрутки ради трёх карточек)
+  gsap.from('#events .ev', { y: 60, autoAlpha: 0, duration: 1.3, ease: E, stagger: 0.12, scrollTrigger: { trigger: '#events .track', start: 'top 85%' } });
 
   // --- цитата: слова загораются по прокрутке ---
   const q = document.querySelector('[data-words]');
