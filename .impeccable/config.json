@@ -20,6 +20,33 @@
         ],
         "createdAt": "2026-11-19T12:19:21.605Z",
         "reason": "agent: aria-hidden folio set on the photo with mix-blend-mode:difference; detector reads it against paper"
+      },
+      {
+        "rule": "cream-palette",
+        "value": "*",
+        "files": [
+          "proposals/b.html"
+        ],
+        "createdAt": "2026-11-19T12:46:29.806Z",
+        "reason": "agent: direction B is a deliberate print-editorial concept (paper stock, Didone + italic Spectral); cramped-padding = full-bleed masthead rule"
+      },
+      {
+        "rule": "italic-serif-display",
+        "value": "*",
+        "files": [
+          "proposals/b.html"
+        ],
+        "createdAt": "2026-11-19T12:46:29.984Z",
+        "reason": "agent: direction B is a deliberate print-editorial concept (paper stock, Didone + italic Spectral); cramped-padding = full-bleed masthead rule"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "proposals/b.html"
+        ],
+        "createdAt": "2026-11-19T12:46:30.166Z",
+        "reason": "agent: direction B is a deliberate print-editorial concept (paper stock, Didone + italic Spectral); cramped-padding = full-bleed masthead rule"
       }
     ]
   }
