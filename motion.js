@@ -38,15 +38,45 @@ addEventListener('DOMContentLoaded', () => {
   };
   addEventListener('scroll', markNav, { passive: true }); markNav();
 
-  // --- видео первого экрана: на ПК и хорошей сети, иначе остаётся кадр-постер ---
-  const hv = document.getElementById('hero-video');
+  // --- живое видео (Magnific): <video data-src="media/имя"> поверх своего фото ---
+  // Файлы: имя.av1.mp4 (AV1) → имя.mp4 (H.264), браузер берёт первый, что умеет; «-sm» — для
+  // маленьких кадров: портретный кроп первого экрана на телефоне, 960p для кадра в рамке.
+  // Источник подставляется на подлёте к экрану (первый экран — после load, чтобы не спорить
+  // с LCP). Петля играет, пока видна; data-once — один «вдох» огня при раскрытии рамки,
+  // замирает на последнем кадре и повторяется при следующем появлении. Вне экрана и на скрытой
+  // вкладке — пауза. При reduce / save-data / 2g видео не грузится, остаётся фото.
   const conn = navigator.connection;
-  if (hv && !reduce && matchMedia('(min-width: 861px)').matches && !(conn && (conn.saveData || /2g/.test(conn.effectiveType)))) {
-    hv.innerHTML = '<source src="hero.webm" type="video/webm"><source src="hero.mp4" type="video/mp4">';
-    hv.addEventListener('playing', () => hv.classList.add('on'), { once: true });
-    const go = () => { hv.load(); hv.play().catch(() => {}); };
-    document.readyState === 'complete' ? go() : addEventListener('load', go);
-    new IntersectionObserver(([e]) => e.isIntersecting ? hv.play().catch(() => {}) : hv.pause()).observe(hv);
+  if (!reduce && !(conn && (conn.saveData || /2g/.test(conn.effectiveType)))) {
+    const vids = [...document.querySelectorAll('video[data-src]')], shown = new Set();
+    const small = v => {
+      const r = v.getBoundingClientRect();
+      return v.id === 'hero-video'
+        ? matchMedia('(max-width: 860px)').matches && r.width / r.height <= 608 / 1080 // кроп 608×1080 по той же точке 64%
+        : r.width * (devicePixelRatio || 1) <= 1000;
+    };
+    const arm = v => {
+      if (v.dataset.armed) return;
+      v.dataset.armed = 1;
+      const base = v.dataset.src + (small(v) ? '-sm' : '');
+      v.innerHTML = `<source src="${base}.av1.mp4" type='video/mp4; codecs="av01.0.08M.10"'><source src="${base}.mp4" type="video/mp4">`;
+      v.preload = 'auto';
+      v.addEventListener('playing', () => v.classList.add('on'), { once: true });
+      v.load();
+    };
+    const sync = v => shown.has(v) && !document.hidden && !(v.ended && 'once' in v.dataset) ? v.play().catch(() => {}) : v.pause();
+    // подгрузка заранее: следим за секцией — сам кадр до раскрытия закрыт clip-path и «невидим» для IO
+    const zone = v => v.closest('section') || v;
+    const near = new IntersectionObserver(es => es.forEach(e => e.isIntersecting && vids.forEach(v => zone(v) === e.target && arm(v))), { rootMargin: '300px 0px' });
+    const seen = new IntersectionObserver(es => es.forEach(({ target: v, isIntersecting, intersectionRatio }) => {
+      if ('once' in v.dataset) {
+        if (!isIntersecting) { shown.delete(v); v.pause(); if (v.readyState) v.currentTime = 0; return; } // перемотка, пока не видно
+        if (intersectionRatio < .35 || shown.has(v)) return; // огонь вспыхивает, когда рамка раскрылась на треть
+      } else if (!isIntersecting) { shown.delete(v); return sync(v); }
+      shown.add(v); arm(v); sync(v);
+    }), { threshold: [0, .35] });
+    const watch = () => vids.forEach(v => { near.observe(zone(v)); seen.observe(v); });
+    document.readyState === 'complete' ? watch() : addEventListener('load', watch, { once: true });
+    document.addEventListener('visibilitychange', () => vids.forEach(sync));
   }
 
   if (reduce || !window.gsap || !window.ScrollTrigger) { document.querySelector('.loader')?.remove(); return; }
