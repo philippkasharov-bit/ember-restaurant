@@ -80,7 +80,8 @@ main>section{position:relative;z-index:10;background:var(--black)}
 .h2{font-family:var(--serif);font-weight:300;font-size:clamp(46px,6vw,96px);line-height:1;letter-spacing:.5px;color:var(--title)}
 .h2 i{font-style:italic;color:var(--ember)}
 .lead{max-width:52ch;margin-top:28px;font-size:18px;color:var(--desc)}
-.js .reveal{clip-path:inset(0 0 100% 0)}.js .reveal.in{clip-path:inset(0);transition:clip-path 1.4s var(--ease)}
+/* шторка — на картинке, не на наблюдаемой фигуре: IntersectionObserver учитывает clip-path и иначе фото не появляются никогда */
+.js .reveal img{clip-path:inset(0 0 100% 0)}.js .reveal.in img{clip-path:inset(0);transition:clip-path 1.4s var(--ease)}
 figure{position:relative;overflow:hidden;background:var(--char)}figure img{width:100%;height:100%;object-fit:cover}
 
 .facts{display:grid;grid-template-columns:repeat(3,1fr);margin-top:64px;border-top:1px solid var(--line)}
@@ -184,5 +185,10 @@ output{font-family:var(--serif);font-size:26px;min-width:2ch;text-align:center}
  .slide .char,.slide-desc,.slide-act{opacity:1!important;transform:none!important;filter:none!important;transition:none}
  .mask{clip-path:none;opacity:1;width:auto!important;height:auto;aspect-ratio:16/9}.mask img{transform:none}
  .grid-lines{display:none}
- .js .reveal{clip-path:none}
+ .js .reveal img{clip-path:none}
 }
+/* фото в разделах без изображений (Magnific): занимают место заранее, раскрываются шторкой */
+.sec-photo{margin-top:56px}.sec-photo img{height:auto}
+.sec-photo.portrait{width:min(100%,520px);aspect-ratio:1000/1242}
+.sec-photo.wide{aspect-ratio:1600/904;margin-bottom:-16px}
+#reserve .sec-photo.portrait{width:min(100%,440px);margin-top:40px}
