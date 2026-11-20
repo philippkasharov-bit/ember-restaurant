@@ -1,0 +1,46 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ember · огонь B — настоящий огонь + шейдер</title><meta name="robots" content="noindex">
+<style>html,body{margin:0;height:100%;background:#050403;overflow:hidden}canvas{position:fixed;inset:0;width:100%;height:100%}
+video{display:none}h1{position:fixed;left:6vw;bottom:14vh;margin:0;font:300 clamp(48px,8vw,116px)/1 Georgia,serif;color:#fff6ed;z-index:2;text-shadow:0 2px 30px #000}</style></head>
+<body><video id="v" muted loop playsinline autoplay crossorigin src="../../media/hero-embers.mp4"></video><canvas id="c"></canvas><h1>Кухня<br>живого огня</h1>
+<script>
+// Мок B: реальное пламя из ролика Magnific как текстура; поверх — марево (смещение UV шумом, сильнее над огнём),
+// мягкое свечение (дешёвый bloom из 8 выборок), тёплая градуировка и искры, поднимающиеся с curl-подобным дрейфом.
+const c = document.getElementById('c'), gl = c.getContext('webgl'), v = document.getElementById('v');
+const fs = `precision mediump float;uniform vec2 R;uniform float T;uniform sampler2D V;
+float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+float n(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+1.),f.x),f.y);}
+vec3 tex(vec2 uv){return texture2D(V,clamp(uv,0.,1.)).rgb;}
+void main(){
+ vec2 uv=gl_FragCoord.xy/R;vec2 st=vec2(uv.x,1.-uv.y);
+ float va=1280./720.,sa=R.x/R.y;vec2 s=st;if(sa>va)s.y=(st.y-.5)*va/sa+.5;else s.x=(st.x-.5)*sa/va+.5; // object-fit:cover
+ float lum=dot(tex(s),vec3(.3,.5,.2));
+ vec2 hz=vec2(n(st*vec2(9.,5.)+vec2(0.,T*1.4)),n(st*vec2(7.,4.)+vec2(3.,T*1.1)))-.5;     // марево поднимается
+ s+=hz*.012*(.35+smoothstep(.15,.9,lum));
+ vec3 col=tex(s);
+ vec3 glow=vec3(0.);for(int i=0;i<8;i++){float a=float(i)*.785;glow+=tex(s+vec2(cos(a),sin(a))*.018);}
+ glow/=8.;col+=pow(glow,vec3(2.2))*1.4*vec3(1.,.55,.25);                                  // свечение только от ярких мест
+ col=pow(col*vec3(1.08,.96,.82),vec3(1.06));                                              // тёплая градуировка
+ // искры: ячейки, каждая со своей скоростью и фазой; уносятся вверх и гаснут
+ vec2 g=vec2(st.x*28.,st.y*14.+T*1.6);vec2 id=floor(g),f=fract(g)-.5;float r=h(id);
+ vec2 o=vec2(sin(T*2.+r*30.)*.25,0.);float d=length(f-o);float life=smoothstep(.0,.6,st.y)*step(.82,r);
+ col+=vec3(1.,.55,.18)*smoothstep(.07,.0,d)*life*(.6+.4*sin(T*9.+r*50.));
+ col*=1.-.25*dot(st-.5,st-.5)*2.;                                                         // виньетка
+ gl_FragColor=vec4(col,1.);
+}`;
+const vs = 'attribute vec2 a;void main(){gl_Position=vec4(a,0,1);}';
+const sh = (t, s) => { const o = gl.createShader(t); gl.shaderSource(o, s); gl.compileShader(o); return o; };
+const pr = gl.createProgram(); gl.attachShader(pr, sh(gl.VERTEX_SHADER, vs)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, fs)); gl.linkProgram(pr); gl.useProgram(pr);
+gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer()); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,3,-1,-1,3]), gl.STATIC_DRAW);
+gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+const tx = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, tx);
+[gl.TEXTURE_WRAP_S, gl.TEXTURE_WRAP_T].forEach(k => gl.texParameteri(gl.TEXTURE_2D, k, gl.CLAMP_TO_EDGE)); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+const uR = gl.getUniformLocation(pr, 'R'), uT = gl.getUniformLocation(pr, 'T');
+const fit = () => { const k = Math.min(devicePixelRatio, innerWidth < 861 ? 1.25 : 1.5); c.width = innerWidth * k; c.height = innerHeight * k; gl.viewport(0, 0, c.width, c.height); };
+fit(); addEventListener('resize', fit);
+const draw = now => {
+  if (v.readyState >= 2) { gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, v); gl.uniform2f(uR, c.width, c.height); gl.uniform1f(uT, now / 1000); gl.drawArrays(gl.TRIANGLES, 0, 3); }
+  requestAnimationFrame(draw);
+};
+v.play().catch(() => {}); requestAnimationFrame(draw);
+</script></body></html>
