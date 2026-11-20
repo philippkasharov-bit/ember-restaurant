@@ -1,159 +1,178 @@
 <!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>EMBER — ресторан на открытом огне</title><meta name="description" content="Ресторан EMBER в Москве: мясо и овощи на углях, сезонное меню от шефа, винная карта из 200 позиций.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="canonical" href="https://philippkasharov-bit.github.io/ember-restaurant/">
-<script>document.documentElement.classList.add('js')</script><meta name="theme-color" content="#0b0a09">
+<script>document.documentElement.classList.add('js')</script><meta name="theme-color" content="#050403">
 <meta property="og:type" content="website"><meta property="og:locale" content="ru_RU"><meta property="og:site_name" content="EMBER"><meta property="og:title" content="EMBER — ресторан на открытом огне"><meta property="og:description" content="Ресторан EMBER в Москве: мясо и овощи на углях, сезонное меню от шефа, винная карта из 200 позиций."><meta property="og:image" content="https://philippkasharov-bit.github.io/ember-restaurant/og.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="EMBER — мясо на углях у открытого огня"><meta property="og:url" content="https://philippkasharov-bit.github.io/ember-restaurant/"><meta name="twitter:card" content="summary_large_image">
-<link rel="preload" as="image" href="hero-poster.jpg" fetchpriority="high"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..800&family=Golos+Text:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="heat.css?v=1">
+<link rel="preload" as="image" href="hero-poster.jpg" fetchpriority="high"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;1,300&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="v2.css?v=1">
 </head>
 <body>
 <a class="skip-link" href="#main">Перейти к содержанию</a>
+<div class="cursor-outer" aria-hidden="true"></div><div class="cursor-inner" aria-hidden="true"></div>
+<img class="poster" src="hero-poster.jpg" alt="" fetchpriority="high">
+<canvas id="webgl" aria-hidden="true"></canvas>
+<div class="stage-fade" aria-hidden="true"></div>
 
-<nav class="rail" aria-label="Разделы">
- <a class="brand" href="#top" aria-label="EMBER — наверх">EMBER</a>
- <ul>
-  <li><a class="mono" href="#top">450°<span>Печь</span></a></li>
-  <li><a class="mono" href="#chef">300°<span>Шеф</span></a></li>
-  <li><a class="mono" href="#menu">220°<span>Меню</span></a></li>
-  <li><a class="mono" href="#events">90°<span>События</span></a></li>
-  <li><a class="mono" href="#reserve">20°<span>Бронь</span></a></li>
- </ul>
- <i class="mercury" aria-hidden="true"></i>
-</nav>
+<header class="main-header">
+ <a class="brand" href="#top" aria-label="EMBER — наверх">Ember</a>
+ <nav class="header-nav cap" aria-label="Разделы"><a class="nav-link" href="#chef">Шеф</a><span class="nav-dot"></span><a class="nav-link" href="#menu">Меню</a><span class="nav-dot"></span><a class="nav-link" href="#events">События</a><span class="nav-dot"></span><a class="nav-link" href="#reserve">Бронь</a></nav>
+ <a class="contact-btn" href="#reserve">Забронировать <span class="btn-circle"></span></a>
+</header>
+
+<section class="stage" id="top" aria-label="EMBER — ресторан на открытом огне">
+ <div class="overlay">
+  <div class="grid-lines" aria-hidden="true">
+   <div class="grid-line"><i class="grid-dot top"></i><i class="grid-dot bottom"></i></div>
+   <div class="grid-line"><i class="grid-dot top"></i><i class="grid-dot bottom"></i></div>
+   <div class="grid-line"><i class="grid-dot top"></i><i class="grid-dot bottom"></i></div>
+   <div class="grid-line"><i class="grid-dot top"></i><i class="grid-dot bottom"></i></div>
+   <div class="grid-line"><i class="grid-dot top"></i><i class="grid-dot bottom"></i><div class="story-dashes"><div class="story-dash"><i></i></div><div class="story-dash"><i></i></div><div class="story-dash"><i></i></div><div class="story-dash"><i></i></div></div></div>
+  </div>
+
+  <div class="slide active" id="slide-1">
+   <h1 class="slide-title">Кухня<br>живого огня</h1>
+   <div class="desc-row">
+    <p class="slide-desc col-1">Мясо и овощи на углях из вишни и дуба.</p>
+    <p class="slide-desc col-2">Сезонное меню от шефа и винная карта из 200 позиций. Москва, Пятницкая&nbsp;18 · с&nbsp;2019.</p>
+   </div>
+  </div>
+
+  <div class="mask" id="mask-2" aria-hidden="true"><img src="f-flare.jpg" alt="" loading="lazy"><video muted loop playsinline preload="none" data-src="media/flare-steak"></video></div>
+  <div class="slide" id="slide-2">
+   <h2 class="slide-title">Ни газа.<br>Ни плит.</h2>
+   <p class="slide-desc">Всё, что попадает на тарелку, готовится на углях вишни и дуба.</p>
+  </div>
+
+  <div class="slide" id="slide-3">
+   <h2 class="slide-title">Только огонь</h2>
+   <p class="slide-desc">Каждое утро печь разогревается четыре часа, прежде чем на решётку ляжет первый стейк.</p>
+  </div>
+  <div class="mask" id="mask-3" aria-hidden="true"><img src="hero-poster.jpg" alt="" loading="lazy"><video muted loop playsinline preload="none" data-src="media/hero-embers"></video></div>
+
+  <div class="slide" id="slide-4">
+   <h2 class="slide-title">Ждём вас<br>у огня</h2>
+   <p class="slide-desc">Ежедневно 12:00–00:00 · ул. Пятницкая, 18, м. Новокузнецкая.</p>
+   <div class="slide-act"><a class="contact-btn" href="#reserve">Забронировать стол <span class="btn-circle"></span></a><a class="ghost" href="#menu">Меню</a></div>
+  </div>
+ </div>
+</section>
 
 <main id="main">
-<section class="hero" id="top">
- <div class="hero-top mono">
-  <span>EMBER · Москва · с 2019</span>
-  <span class="hide-s dim">ул. Пятницкая, 18 · м. Новокузнецкая</span>
-  <a href="tel:+74950000000">+7 (495) 000-00-00</a>
- </div>
- <div class="reading">
-  <div class="num" aria-hidden="true">
-   <img src="hero-poster.jpg" alt="" fetchpriority="high">
-   <video id="hero-video" muted loop playsinline preload="none" data-src="media/hero-embers"></video>
-   <span class="ink" id="temp">450<sup>°</sup></span>
+<section class="sec" aria-labelledby="mf-h">
+ <p class="cap">О ресторане</p>
+ <div class="body">
+  <h2 class="h2" id="mf-h">Ни газа. Ни плит. <i>Только огонь</i></h2>
+  <p class="lead">Всё, что попадает на тарелку, готовится на углях вишни и дуба. Печь разогревается с 8 утра.</p>
+  <div class="facts">
+   <div><b>6</b><span class="cap">лет у огня</span></div>
+   <div><b>200</b><span class="cap">вин в карте</span></div>
+   <div><b>4,9</b><span class="cap">рейтинг гостей</span></div>
   </div>
-  <div class="scale mono dim" aria-hidden="true"><span>20°</span><span>90°</span><span>220°</span><span>300°</span><span class="on">450°</span></div>
- </div>
- <h1>Кухня <em>живого огня</em> на Пятницкой</h1>
- <p class="hero-note">Мясо и овощи на углях из вишни и дуба. Сезонное меню от шефа и винная карта из 200 позиций.</p>
- <dl class="hero-meta mono dim">
-  <div><dt>Дрова</dt><dd>вишня, дуб</dd></div>
-  <div><dt>Печь</dt><dd>450 °C</dd></div>
-  <div><dt>Часы</dt><dd>12:00–00:00</dd></div>
- </dl>
- <a class="btn" href="#reserve">Забронировать стол <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg></a>
-</section>
-
-<section class="sec mf" aria-labelledby="mf-h">
- <div class="zone mono dim"><span><b>450°</b> Печь</span><span>О ресторане</span></div>
- <h2 class="h2" id="mf-h">Ни газа. Ни плит. <b>Только огонь</b></h2>
- <p class="mf-sub">Всё, что попадает на тарелку, готовится на углях вишни и дуба.</p>
- <figure class="reveal"><img src="f-steak.jpg" alt="Стейк на решётке в дыму от углей" loading="lazy"></figure>
- <p class="cap mono dim">Печь разогревается с 8 утра</p>
- <div class="readouts">
-  <div><b>6</b><span class="mono dim">лет у огня</span></div>
-  <div><b>200</b><span class="mono dim">вин в карте</span></div>
-  <div><b>4,9</b><span class="mono dim">рейтинг гостей</span></div>
  </div>
 </section>
 
-<section class="sec chef" id="chef" aria-labelledby="chef-h">
- <div class="zone mono dim"><span><b>300°</b> Шеф</span><span>Кухня</span></div>
- <figure class="reveal"><img src="chef.jpg" alt="Шеф ресторана у дровяной печи" loading="lazy"></figure>
- <div class="chef-text">
-  <h2 class="h2" id="chef-h">Огонь — <b>главный</b> ингредиент</h2>
-  <p>Продукты привозим от фермеров Тульской и Калужской областей, а меню меняется четыре раза в год. На кухне нет ни одной электрической плиты: только дровяная печь и открытые угли.</p>
-  <ul class="spec">
-   <li><b>Вишня и дуб</b><span class="mono dim">дрова для печи и гриля</span></li>
-   <li><b>72 часа</b><span class="mono dim">сухое вызревание мяса</span></li>
-   <li><b>4 сезона</b><span class="mono dim">меню меняется каждый квартал</span></li>
-  </ul>
-  <p class="sign"><b>Артём Волков</b><span class="mono dim">шеф-повар EMBER</span></p>
+<section class="sec" id="chef" aria-labelledby="chef-h">
+ <p class="cap">Шеф</p>
+ <div class="body chef-grid">
+  <figure class="reveal"><img src="chef.jpg" alt="Шеф ресторана у дровяной печи" loading="lazy"></figure>
+  <div>
+   <h2 class="h2" id="chef-h">Огонь — <i>главный</i> ингредиент</h2>
+   <p class="lead">Продукты привозим от фермеров Тульской и Калужской областей, а меню меняется четыре раза в год. На кухне нет ни одной электрической плиты: только дровяная печь и открытые угли.</p>
+   <ul class="spec">
+    <li><b>Вишня и дуб</b><span>дрова для печи и гриля</span></li>
+    <li><b>72 часа</b><span>сухое вызревание мяса</span></li>
+    <li><b>4 сезона</b><span>меню меняется каждый квартал</span></li>
+   </ul>
+   <p class="sign"><b>Артём Волков</b>шеф-повар EMBER</p>
+  </div>
  </div>
 </section>
 
-<section class="sec kitchen" aria-label="Кухня">
- <figure class="k1 reveal"><img src="f-flare.jpg" alt="Пламя поднимается над стейком на гриле" loading="lazy"></figure>
- <figure class="k2 reveal"><img src="f-tongs.jpg" alt="Повар переворачивает стейк щипцами" loading="lazy"></figure>
- <figure class="k3 reveal"><img src="f-grill.jpg" alt="Мясо на решётке над раскалёнными углями" loading="lazy"></figure>
- <p class="k-cap">Каждое утро печь разогревается <em>четыре часа</em>, прежде чем на решётку ляжет первый стейк.</p>
-</section>
-
-<section class="sec menu" id="menu" aria-labelledby="menu-h">
- <div class="zone mono dim"><span><b>220°</b> Меню</span><span>Осень 2026</span></div>
- <div class="head"><h2 class="h2" id="menu-h">Из печи <b>и с углей</b></h2><p>Сезонное меню, осень 2026. Полную карту и винный лист пришлём по запросу.</p></div>
- <!-- Температуры у блюд — иллюстративные (образ «шкалы жара»), не технологическая карта: согласовать с шефом перед запуском. -->
- <div class="rows" role="list">
-  <div class="row is-on" role="listitem" tabindex="0" data-g="92%"><span class="t">450°</span><div><h3>Стейк рибай на вишнёвых углях</h3><small>300 г, соус из печёного перца</small></div><span class="price">3 400 ₽</span></div>
-  <div class="row" role="listitem" tabindex="0" data-shot="f-flame.jpg" data-g="74%"><span class="t">380°</span><div><h3>Форель горячего копчения</h3><small>ольховая щепа, сливочный хрен</small></div><span class="price">1 450 ₽</span></div>
-  <div class="row" role="listitem" tabindex="0" data-shot="f-coals.jpg" data-g="52%"><span class="t">260°</span><div><h3>Печёная свёкла с козьим сыром</h3><small>фундук, гречишный мёд</small></div><span class="price">890 ₽</span></div>
-  <div class="row" role="listitem" tabindex="0" data-shot="f-meat.jpg" data-g="34%"><span class="t">160°</span><div><h3>Томлёная утиная ножка</h3><small>груша, красное вино, пюре из сельдерея</small></div><span class="price">1 900 ₽</span></div>
-  <div class="row" role="listitem" tabindex="0" data-shot="f-grill.jpg" data-g="22%"><span class="t">120°</span><div><h3>Яблоко из печи</h3><small>карамель, мороженое на сливках</small></div><span class="price">650 ₽</span></div>
+<section class="sec" aria-label="Кухня">
+ <p class="cap">Кухня</p>
+ <div class="body">
+  <div class="kitchen-grid">
+   <figure class="reveal"><img src="f-flare.jpg" alt="Пламя поднимается над стейком на гриле" loading="lazy"></figure>
+   <figure class="reveal"><img src="f-tongs.jpg" alt="Повар переворачивает стейк щипцами" loading="lazy"></figure>
+   <figure class="reveal"><img src="f-grill.jpg" alt="Мясо на решётке над раскалёнными углями" loading="lazy"></figure>
+  </div>
+  <p class="k-cap">Каждое утро печь разогревается <i>четыре часа</i>, прежде чем на решётку ляжет первый стейк.</p>
  </div>
- <aside class="plate" aria-label="Кадр блюда">
-  <figure>
-   <img src="f-flare.jpg" alt="Пламя над стейком на гриле">
-   <video muted loop playsinline preload="none" data-src="media/flare-steak" aria-hidden="true"></video>
-   <img class="shot" id="plate-shot" src="f-flame.jpg" alt="" loading="lazy">
-   <div class="gauge" aria-hidden="true"><i id="gauge"></i></div>
-  </figure>
-  <figcaption class="mono dim"><span id="plate-t">450°</span><span>угли вишни и дуба</span></figcaption>
- </aside>
- <div class="foot"><span class="dim">Полное меню и винная карта — по запросу</span><a class="btn ghost" href="#reserve">Забронировать стол</a></div>
 </section>
 
-<section class="sec events" id="events" aria-labelledby="ev-h">
- <div class="zone mono dim"><span><b>90°</b> События</span><span>Вечера у огня</span></div>
- <div class="head"><h2 class="h2" id="ev-h">Больше, <b>чем ужин</b></h2><p>Три формата вечеров у открытого огня.</p></div>
- <article class="ev"><span class="when mono">Пятница</span><h3>Ужин с шефом</h3><p>Сет из 7 подач у открытой кухни, до 12 гостей.</p><figure class="reveal"><img src="event-chef.jpg" alt="Шеф выкладывает блюда у открытой кухни" loading="lazy"></figure></article>
- <article class="ev"><span class="when mono">Раз в две недели</span><h3>Винные вечера</h3><p>Дегустация с сомелье и закусками с углей.</p><figure class="reveal"><img src="event-wine.jpg" alt="Сомелье наливает красное вино при свечах" loading="lazy"></figure></article>
- <article class="ev"><span class="when mono">До 40 гостей</span><h3>Банкеты</h3><p>Закрытый зал для праздников и деловых встреч.</p><figure class="reveal"><img src="event-banquet.jpg" alt="Банкетный стол со свечами" loading="lazy"></figure></article>
+<section class="sec" id="menu" aria-labelledby="menu-h">
+ <p class="cap">Меню · осень 2026</p>
+ <div class="body">
+  <h2 class="h2" id="menu-h">Из печи <i>и с углей</i></h2>
+  <p class="lead">Сезонное меню, осень 2026. Полную карту и винный лист пришлём по запросу.</p>
+  <div class="dishes">
+   <div class="dish"><h3>Стейк рибай на вишнёвых углях</h3><small>300 г, соус из печёного перца</small><span class="price">3 400 ₽</span></div>
+   <div class="dish"><h3>Томлёная утиная ножка</h3><small>груша, красное вино, пюре из сельдерея</small><span class="price">1 900 ₽</span></div>
+   <div class="dish"><h3>Форель горячего копчения</h3><small>ольховая щепа, сливочный хрен</small><span class="price">1 450 ₽</span></div>
+   <div class="dish"><h3>Печёная свёкла с козьим сыром</h3><small>фундук, гречишный мёд</small><span class="price">890 ₽</span></div>
+   <div class="dish"><h3>Яблоко из печи</h3><small>карамель, мороженое на сливках</small><span class="price">650 ₽</span></div>
+  </div>
+  <div class="menu-foot"><span>Полное меню и винная карта — по запросу</span><a class="contact-btn" href="#reserve">Забронировать стол <span class="btn-circle"></span></a></div>
+ </div>
+</section>
+
+<section class="sec" id="events" aria-labelledby="ev-h">
+ <p class="cap">События</p>
+ <div class="body">
+  <h2 class="h2" id="ev-h">Больше, <i>чем ужин</i></h2>
+  <p class="lead">Три формата вечеров у открытого огня.</p>
+  <div class="events-list">
+   <article class="ev"><figure class="reveal"><img src="event-chef.jpg" alt="Шеф выкладывает блюда у открытой кухни" loading="lazy"></figure><div><span class="cap when">Пятница</span><h3>Ужин с шефом</h3><p>Сет из 7 подач у открытой кухни, до 12 гостей.</p></div></article>
+   <article class="ev"><figure class="reveal"><img src="event-wine.jpg" alt="Сомелье наливает красное вино при свечах" loading="lazy"></figure><div><span class="cap when">Раз в две недели</span><h3>Винные вечера</h3><p>Дегустация с сомелье и закусками с углей.</p></div></article>
+   <article class="ev"><figure class="reveal"><img src="event-banquet.jpg" alt="Банкетный стол со свечами" loading="lazy"></figure><div><span class="cap when">До 40 гостей</span><h3>Банкеты</h3><p>Закрытый зал для праздников и деловых встреч.</p></div></article>
+  </div>
+ </div>
 </section>
 
 <section class="quote" aria-label="Отзыв гостя">
  <img src="interior.jpg" alt="" loading="lazy">
- <div><blockquote>«Лучший стейк в Москве, и дело не в пафосе, а в огне. Уходишь с ощущением, что поужинал у костра, только очень вкусно».</blockquote><cite class="mono dim">Мария К. · гость</cite></div>
+ <div><blockquote>«Лучший стейк в Москве, и дело не в пафосе, а в огне. Уходишь с ощущением, что поужинал у костра, только очень вкусно».</blockquote><cite class="cap">Мария К. · гость</cite></div>
 </section>
 
-<section class="sec reserve" id="reserve" aria-labelledby="res-h">
- <div class="zone mono dim"><span><b>20°</b> Бронь</span><span>Стол у огня</span></div>
- <div class="info">
-  <h2 class="h2" id="res-h">Ждём вас <b>у огня</b></h2>
-  <div class="contacts">
-   <div><span class="mono dim">Адрес</span><p>ул. Пятницкая, 18<br>м. Новокузнецкая</p></div>
-   <div><span class="mono dim">Часы</span><p>Ежедневно<br>12:00–00:00</p></div>
-   <div><span class="mono dim">Телефон</span><p><a href="tel:+74950000000">+7 (495) 000-00-00</a></p></div>
-   <p class="status" id="open-status" aria-live="polite"></p>
+<section class="sec" id="reserve" aria-labelledby="res-h">
+ <p class="cap">Бронь</p>
+ <div class="body res-grid">
+  <div>
+   <h2 class="h2" id="res-h">Ждём вас <i>у огня</i></h2>
+   <div class="contacts">
+    <div><span class="cap">Адрес</span><p>ул. Пятницкая, 18<br>м. Новокузнецкая</p></div>
+    <div><span class="cap">Часы</span><p>Ежедневно<br>12:00–00:00</p></div>
+    <div><span class="cap">Телефон</span><p><a href="tel:+74951204518">+7 (495) 120-45-18</a></p></div>
+    <p class="status" id="open-status" aria-live="polite"></p>
+   </div>
   </div>
- </div>
- <div class="form">
-  <h3>Забронировать стол</h3>
-  <form id="book" data-success="{name}, стол на {guests} забронирован: {when}. Пришлём подтверждение по телефону.">
-   <label class="f"><span>Имя</span><input name="name" aria-label="Имя" required autocomplete="given-name" placeholder="Как к вам обращаться"></label>
-   <label class="f"><span>Телефон</span><input name="phone" aria-label="Телефон" required type="tel" autocomplete="tel" inputmode="tel" pattern="[\d\s()+-]{10,}" placeholder="+7"></label>
-   <label class="f"><span>Дата</span><input name="date" id="b-date" required type="date" aria-label="Дата"></label>
-   <label class="f"><span>Время</span><select name="time" id="b-time" required aria-label="Время"></select></label>
-   <div class="guests full" role="group" aria-label="Количество гостей"><span>Гостей</span><button type="button" class="g-btn" data-d="-1" aria-label="Меньше гостей"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg></button><output id="g-val" aria-live="polite">2</output><button type="button" class="g-btn" data-d="1" aria-label="Больше гостей"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12M12 6v12"/></svg></button><small id="g-note"></small></div>
-   <input type="hidden" name="guests" id="g-hidden" value="2 гостей"><input type="hidden" name="when" id="b-when">
-   <button class="btn full" type="submit">Забронировать</button>
-  </form>
+  <div class="form">
+   <h3>Забронировать стол</h3>
+   <form id="book" data-success="{name}, стол на {guests} забронирован: {when}. Пришлём подтверждение по телефону.">
+    <label class="f"><span>Имя</span><input name="name" aria-label="Имя" required autocomplete="given-name" placeholder="Как к вам обращаться"></label>
+    <label class="f"><span>Телефон</span><input name="phone" aria-label="Телефон" required type="tel" autocomplete="tel" inputmode="tel" pattern="[\d\s()+-]{10,}" placeholder="+7"></label>
+    <label class="f"><span>Дата</span><input name="date" id="b-date" required type="date" aria-label="Дата"></label>
+    <label class="f"><span>Время</span><select name="time" id="b-time" required aria-label="Время"></select></label>
+    <div class="guests full" role="group" aria-label="Количество гостей"><span>Гостей</span><button type="button" class="g-btn" data-d="-1" aria-label="Меньше гостей"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg></button><output id="g-val" aria-live="polite">2</output><button type="button" class="g-btn" data-d="1" aria-label="Больше гостей"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12M12 6v12"/></svg></button><small id="g-note"></small></div>
+    <input type="hidden" name="guests" id="g-hidden" value="2 гостей"><input type="hidden" name="when" id="b-when">
+    <button class="submit" type="submit">Забронировать</button>
+   </form>
+  </div>
  </div>
 </section>
 </main>
 
 <footer class="ft">
- <p class="ft-lead">Ужин у живого огня начинается <em>с брони</em></p>
- <nav aria-label="Разделы в подвале" class="mono dim"><a href="#chef">Шеф</a><a href="#menu">Меню</a><a href="#events">События</a><a href="#reserve">Бронь</a></nav>
- <address class="mono dim"><a href="tel:+74950000000">+7 (495) 000-00-00</a><span>ул. Пятницкая, 18</span><span>Ежедневно 12:00–00:00</span></address>
- <div class="ft-row mono dim"><span>© 2026 EMBER</span><span>Концепт-проект · дизайн и разработка PCash · <a href="case-study.html">Кейс</a></span></div>
- <div class="mark" aria-hidden="true">EMBER</div>
+ <p class="ft-lead">Ужин у живого огня начинается <i>с брони</i></p>
+ <nav class="cap" aria-label="Разделы в подвале"><a href="#chef">Шеф</a><a href="#menu">Меню</a><a href="#events">События</a><a href="#reserve">Бронь</a></nav>
+ <address><a href="tel:+74951204518">+7 (495) 120-45-18</a><span>ул. Пятницкая, 18</span><span>Ежедневно 12:00–00:00</span></address>
+ <p class="concept">Концепт-проект: ресторан EMBER, телефон и бронирование вымышлены, форма ничего не отправляет. Сцена — по мотивам шаблона GetLayers «Laocoön — Bronze and Time».</p>
+ <div class="ft-row"><span>© 2026 EMBER</span><span>Дизайн и разработка PCash · <a href="case-study.html">Кейс</a></span></div>
 </footer>
 
 <script src="shared.js?v=5" defer></script>
-<script src="heat.js?v=1" defer></script>
+<script src="v2.js?v=1" type="module"></script>
 <script>
 addEventListener('DOMContentLoaded', () => {
   const TZ = 'Europe/Moscow', OPEN = 12, CLOSE = 24;
