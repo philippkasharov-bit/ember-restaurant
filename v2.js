@@ -72,12 +72,13 @@ addEventListener('pointermove', e => {
 // --- 3. WebGL-сцена: лениво, только если есть WebGL и движение разрешено ---
 const hasGL = (() => { try { return !!document.createElement('canvas').getContext('webgl2'); } catch (e) { return false; } })();
 if (!reduce && hasGL) {
-  const start = () => import('https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js').then(initScene).catch(() => {});
+  const start = () => Promise.all([import('three'), import('three/addons/postprocessing/EffectComposer.js'), import('three/addons/postprocessing/RenderPass.js'), import('three/addons/postprocessing/UnrealBloomPass.js')])
+    .then(([THREE, a, b, c]) => initScene(THREE, { ...a, ...b, ...c })).catch(() => {});
   const idle = window.requestIdleCallback || (f => setTimeout(f, 200));
   document.readyState === 'complete' ? idle(start) : addEventListener('load', () => idle(start), { once: true });
 }
 
-function initScene(THREE) {
+function initScene(THREE, { EffectComposer, RenderPass, UnrealBloomPass }) {
   const canvas = document.getElementById('webgl');
   const small = innerWidth < 861;
   const scene = new THREE.Scene();
@@ -89,7 +90,8 @@ function initScene(THREE) {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: !small, alpha: false, powerPreference: 'high-performance' });
   renderer.setSize(innerWidth, innerHeight);
   renderer.setPixelRatio(Math.min(devicePixelRatio, small ? 1.5 : 2));
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMapping = THREE.NoToneMapping;
+  renderer.outputColorSpace = THREE.LinearSRGBColorSpace; // как при прямом рендере: композер иначе кодирует в sRGB и высвечивает тёмный фон
   renderer.toneMappingExposure = 2.2;
 
   const clock = new THREE.Clock();
@@ -122,33 +124,41 @@ function initScene(THREE) {
   }));
   bg.position.set(0, 0, -8); bg.renderOrder = -10; camera.add(bg);
 
-  // объект сцены: подушка раскалённых углей — клетки (Вороной) с тлеющими трещинами, мерцают
-  const coals = new THREE.Mesh(new THREE.CircleGeometry(1.8, small ? 64 : 128), new THREE.ShaderMaterial({
-    uniforms: U, transparent: true, depthWrite: false,
-    vertexShader: 'varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',
-    fragmentShader: `uniform float uTime;varying vec2 vUv;
-    vec2 h2(vec2 p){p=vec2(dot(p,vec2(127.1,311.7)),dot(p,vec2(269.5,183.3)));return fract(sin(p)*43758.5453);}
-    void main(){
-      vec2 p=(vUv-0.5)*2.0;float r=length(p);
-      vec2 x=p*4.2;vec2 n=floor(x),fr=fract(x);float md=8.0,md2=8.0;vec2 cell=vec2(0.0);
-      for(int j=-1;j<=1;j++)for(int i=-1;i<=1;i++){vec2 g=vec2(float(i),float(j));vec2 o=h2(n+g);o=0.5+0.42*sin(uTime*0.25+6.2831*o);
-        vec2 rr=g+o-fr;float d=dot(rr,rr);if(d<md){md2=md;md=d;cell=n+g;}else if(d<md2){md2=d;}}
-      float edge=sqrt(md2)-sqrt(md);
-      float id=fract(sin(dot(cell,vec2(12.9898,78.233)))*43758.5453);
-      float flick=0.62+0.38*sin(uTime*(0.8+id*1.6)+id*6.2831);
-      float crack=1.0-smoothstep(0.0,0.11,edge);
-      float body=(1.0-smoothstep(0.0,0.9,sqrt(md)))*0.35*flick;
-      float heat=clamp(crack*flick+body*0.6,0.0,1.4);
-      vec3 col=vec3(0.025,0.014,0.010);
-      col=mix(col,vec3(0.55,0.08,0.01),smoothstep(0.05,0.45,heat));
-      col=mix(col,vec3(1.0,0.36,0.06),smoothstep(0.35,0.85,heat));
-      col+=vec3(1.0,0.78,0.45)*pow(max(heat-0.75,0.0),2.0)*1.6;
-      float a=1.0-smoothstep(0.78,1.0,r);
-      gl_FragColor=vec4(col*a,a);
-    }`
-  }));
-  coals.rotation.x = -Math.PI / 2; coals.position.y = -0.6;
-  const pivot = new THREE.Group(); pivot.add(coals); scene.add(pivot);
+  // объект сцены: куча раскалённых углей в 3D — куски неправильной формы (икосаэдры со смещением),
+  // трещины светятся изнутри и мерцают у каждого куска по-своему, снизу куча жарче; ореол даёт Bloom
+  const lumpGeo = new THREE.IcosahedronGeometry(.16, small ? 1 : 2), lp = lumpGeo.attributes.position, tmp = new THREE.Vector3();
+  for (let i = 0; i < lp.count; i++) { tmp.fromBufferAttribute(lp, i).multiplyScalar(.75 + Math.random() * .45); lp.setXYZ(i, tmp.x, tmp.y * .7, tmp.z); }
+  lumpGeo.computeVertexNormals();
+  const coalMat = new THREE.MeshStandardMaterial({ color: '#1a1412', roughness: .95, metalness: 0 });
+  coalMat.onBeforeCompile = sh => {
+    sh.uniforms.uTime = U.uTime;
+    sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nattribute float aSeed;varying vec3 vW;varying float vSeed;')
+      .replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\nvW=(modelMatrix*instanceMatrix*vec4(transformed,1.)).xyz;vSeed=aSeed;');
+    sh.fragmentShader = sh.fragmentShader.replace('#include <common>', `#include <common>
+uniform float uTime;varying vec3 vW;varying float vSeed;
+float h3(vec3 p){return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453);}
+float n3(vec3 p){vec3 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
+ return mix(mix(mix(h3(i),h3(i+vec3(1,0,0)),f.x),mix(h3(i+vec3(0,1,0)),h3(i+vec3(1,1,0)),f.x),f.y),
+            mix(mix(h3(i+vec3(0,0,1)),h3(i+vec3(1,0,1)),f.x),mix(h3(i+vec3(0,1,1)),h3(i+1.),f.x),f.y),f.z);}`)
+      .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
+float cr=abs(n3(vW*9.+vSeed*10.)-.5);float crack=smoothstep(.07,.0,cr);
+float fl=.55+.45*sin(uTime*(1.+vSeed*2.)+vSeed*40.);float under=smoothstep(-.35,-.8,vW.y);
+float heat=(crack*.9+under*.35)*fl;
+totalEmissiveRadiance+=mix(vec3(.7,.08,.0),vec3(1.,.55,.15),heat)*heat*2.2;`);
+  };
+  const N = small ? 90 : 140, seeds = new Float32Array(N);
+  const coals = new THREE.InstancedMesh(lumpGeo, coalMat, N), mtx = new THREE.Matrix4(), qt = new THREE.Quaternion(), eu = new THREE.Euler();
+  for (let i = 0; i < N; i++) {
+    const a = Math.random() * Math.PI * 2, r = Math.sqrt(Math.random()) * 1.15, s = .7 + Math.random() * .8;
+    eu.set(Math.random() * 3, Math.random() * 3, Math.random() * 3); qt.setFromEuler(eu);
+    mtx.compose(new THREE.Vector3(Math.cos(a) * r, (1.2 - r) * .18 + Math.random() * .12, Math.sin(a) * r), qt, new THREE.Vector3(s, s, s));
+    coals.setMatrixAt(i, mtx); seeds[i] = Math.random();
+  }
+  lumpGeo.setAttribute('aSeed', new THREE.InstancedBufferAttribute(seeds, 1));
+  coals.position.y = -.75; coals.scale.setScalar(1.25);
+  const glow = new THREE.PointLight('#ff6a1f', 5, 5, 1.6); glow.position.set(0, -.3, 0);
+  scene.add(new THREE.HemisphereLight('#3a2418', '#000000', .4));
+  const pivot = new THREE.Group(); pivot.add(coals, glow); scene.add(pivot);
 
   // искры кузни: аддитивные точки, 70 % оранжевые, 30 % добела раскалённые (вместо ледяных голубых)
   const count = small ? 220 : 450, data = [];
@@ -165,9 +175,13 @@ function initScene(THREE) {
   const sparks = new THREE.Points(sg, new THREE.PointsMaterial({ size: .025, vertexColors: true, transparent: true, opacity: .85, blending: THREE.AdditiveBlending, depthWrite: false, map: tex }));
   scene.add(sparks);
 
+  // ореол только у ярких трещин и искр: порог выше фоновых волн
+  const composer = new EffectComposer(renderer);
+  composer.addPass(new RenderPass(scene, camera));
+  composer.addPass(new UnrealBloomPass(new THREE.Vector2(innerWidth * (small ? .5 : 1), innerHeight * (small ? .5 : 1)),   .8, .45, .92));
   addEventListener('resize', () => {
     camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
-    renderer.setSize(innerWidth, innerHeight); U.uResolution.value.set(innerWidth, innerHeight);
+    renderer.setSize(innerWidth, innerHeight); composer.setSize(innerWidth, innerHeight); U.uResolution.value.set(innerWidth, innerHeight);
   });
 
   // цикл: рисуем, только пока сцена на экране и вкладка видна
@@ -199,7 +213,8 @@ function initScene(THREE) {
     look.set(-.9 * ease, -.15, 0);
     camera.position.lerp(target, .025); camera.lookAt(look);
     U.uTime.value = t; U.uMouse.value.set(mx, -my); U.uScroll.value = cur;
-    renderer.render(scene, camera);
+    glow.intensity = 4.5 + Math.sin(t * 3.1) * .8 + Math.sin(t * 7.3) * .5; // свет от углей «дышит»
+    composer.render();
   };
   const setRun = on => { if (on === running) return; running = on; if (on) { clock.getDelta(); requestAnimationFrame(frame); } };
   new IntersectionObserver(([e]) => setRun(e.isIntersecting && !document.hidden)).observe(stage);
